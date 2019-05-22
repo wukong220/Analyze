@@ -211,7 +211,6 @@ int main()
 						<< msd[dt-1][i][2] << " " << msd[dt-1][i][2]/count[dt-1] << endl;*/
 					}
 				}
-				//cout << msd[dt-1][0][2]/count[dt-1] << endl;
 		}
 		for (int i = 0; i < Num_frame; i++)
 		{
