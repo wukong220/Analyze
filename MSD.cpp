@@ -19,15 +19,15 @@ const int Num_chains = 1;								//Number of the chains
 const int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 
 const int dimension = 2;
-const int Num_file = 1;
+const int Num_file = 20;
 std::vector<int> closefiles{};				//closefiles
-std::string finname = "0.07_";				//single input file
-std::string foutname = "MSD_0.4_3.0_1.0_1.0.txt";		
+std::string finname ;//= "0.07_";				//empty or single input file
+std::string foutname = "MSD_0.4_3.0_0.0_3.0.txt";		
 
 const double md_dt = 0.001;
-const int Num_frame = 90;
+const int Num_frame = 1000;
 const int Max_frame = Num_frame - 10;
-const int framestep = 500000;
+const int framestep = 100000;
 
 const int len = 2;
 using namespace std;
@@ -120,7 +120,8 @@ int main()
 				getline(fin, temp);
 			ss << temp;
 			ss >> timestep;
-			if (timestep != (i+1) * framestep)
+			//cout << temp << " !!! ";
+			if (timestep != i * framestep)
 			{
 				error = "\"ERROR\": TIMESTEP/FRAME(Line:123) -> ";
 				//fout << error << endl;
