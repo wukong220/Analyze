@@ -19,14 +19,15 @@ const int Num_chains = 1;								//Number of the chains
 const int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 
 const int dimension = 2;
-const int Num_file = 20;
+const int Num_file = 3;
 std::vector<int> closefiles{};				//closefiles
-std::string foutname = "msd_ave.txt";
+std::string format = "001";				//output format
+std::string foutname = "MSD_0.4_2.5_1.0_1.0.txt";		
 
 const double md_dt = 0.001;
-const int Num_frame = 1000;
-const int Max_frame = Num_frame - 50;
-const int framestep = 100000;
+const int Num_frame = 9400;
+const int Max_frame = Num_frame - 400;
+const int framestep = 5000;
 
 const int len = 2;
 using namespace std;
@@ -80,12 +81,11 @@ int main()
 		sl.clear();
 	}
 	
-	ofstream fout(foutname);	
-	for (int i = 0; i < foutname.size(); i++)
+	for (int i = 0; i < format.size(); i++)
 	{
-		if (foutname[i] >= '0' && foutname[i] <= '9')
+		if (format[i] >= '0' && format[i] <= '9')
 		{
-			filename[Num_file] += foutname[i];
+			filename[Num_file] += format[i];
 			files[1] = 1;
 			files[2] = 1;
 		}
@@ -115,7 +115,9 @@ int main()
 		
 		if(!fin.is_open())
 			error = "\"ERROR\": Cannot open ";
-		else if(error != "Right")
+		
+		//error information
+		if(error != "Right")
 		{
 			cout << error << str << endl;
 			files[2]--;
@@ -125,20 +127,6 @@ int main()
 		}
 		else
 			cout << "\"Opening\"" << str << "……" << endl;
-
-		
-		/*if(!fin.is_open())
-		{
-			error = "\"ERROR\": Cannot open ";
-			//fout << error << str << endl;
-			cout << error << str << endl;
-			files[2]--;
-			label[ifile] = "000";
-			error = "Right";
-			continue;
-		}
-		else 
-			cout << "Opening " << str << "……" << endl;*/
 			
 		int timestep = 0;
 		for (int i =0; i < Num_frame; i++)
@@ -225,10 +213,8 @@ int main()
 						<< msd[dt-1][i][2] << " " << msd[dt-1][i][2]/count[dt-1] << endl;*/
 					}
 				}
-			
-			//cout << msd[dt-1][0][2]/count[dt-1] << endl;
+				//cout << msd[dt-1][0][2]/count[dt-1] << endl;
 		}
-		
 		for (int i = 0; i < Num_frame; i++)
 		{
 			for (int j = 0; j < Num_chains; j++)
@@ -241,6 +227,7 @@ int main()
 	
 	//output 
 	//cout << 1 * framestep * md_dt<< " " << msd[0][0][2]/count[0] << endl;
+	ofstream fout(foutname);
 	fout << "time ";
 	cout << "time "; 
 	for (int i = 0; i < files[1]; i++)
@@ -261,8 +248,8 @@ int main()
 			int j = ifile * dimension + 1; 
 			for(int i = 0; i < Num_chains; i++)
 			{	
-				//if (label[ifile] != "000")
-					//fout << files[2] * (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";
+				if (label[ifile] != "000")
+					fout << files[2] * (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";
 				//cout << msd[iframe][i][j] << " " << msd[iframe][i][j+1] << " " 
 					cout << setw(len) << files[2] * (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";
 				if (ifile == files[1] - 1)
