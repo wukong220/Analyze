@@ -19,15 +19,15 @@ const int Num_chains = 1;								//Number of the chains
 const int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 
 const int dimension = 2;
-const int Num_file = 3;
+const int Num_file = 1;
 std::vector<int> closefiles{};				//closefiles
-std::string format = "ave";				//output format
-std::string foutname = "MSD_0.4_2.5_1.0_1.0.txt";		
+std::string finname = "004";				//single input file
+std::string foutname = "MSD_0.4_3.0_1.0_1.0.txt";		
 
 const double md_dt = 0.001;
-const int Num_frame = 9400;
-const int Max_frame = Num_frame - 400;
-const int framestep = 5000;
+const int Num_frame = 1000;
+const int Max_frame = Num_frame - 50;
+const int framestep = 100000;
 
 const int len = 2;
 using namespace std;
@@ -64,8 +64,15 @@ int main()
 	
 	for (int i = 0; i < Num_file; i++)
 	{
+		if (finname != "\0")
+		{
+			filename[i] = finname + "u.lammpstrj";
+			files[1] = 1;
+			files[2] = 1;
+			label[i] = "001";
+		}
 
-		if (i < 9)
+		else if (i < 9)
 		{
 			ss << "00" << i + 1 << "u.lammpstrj";
 			sl << "00" << i + 1;
@@ -81,32 +88,10 @@ int main()
 		sl.clear();
 	}
 	
-	for (int i = 0; i < format.size(); i++)
-	{
-		if (format[i] >= '0' && format[i] <= '9')
-		{
-			filename[Num_file] += format[i];
-			files[1] = 1;
-			files[2] = 1;
-		}
-	}
-	
 	for(int ifile = 0; ifile < files[1]; ifile++)
 	{
-		//input
-		ifstream fin;	
-		if (filename[Num_file] != "\0")
-		{
-			filename[Num_file] += "u.lammpstrj";
-			fin.open(filename[Num_file]);
-			str = filename[Num_file];
-		}
-		else 
-		{
-			fin.open(filename[ifile]);
-			str = filename[ifile];
-		}
-		
+		//input	
+		ifstream fin(filename[ifile]);
 		for (int j = 0; j < closefiles.size(); j++)
 		{
 			if (ifile == closefiles[j] - 1)
@@ -116,17 +101,17 @@ int main()
 		if(!fin.is_open())
 			error = "\"ERROR\": Cannot open ";
 		
-		//error information
+		//error infinnameion
 		if(error != "Right")
 		{
-			cout << error << str << endl;
+			cout << error << filename[ifile] << endl;
 			files[2]--;
 			label[ifile] = "000";
 			error = "Right";
 			continue;
 		}
 		else
-			cout << "\"Opening\"" << str << "……" << endl;
+			cout << "\"Opening\"" << filename[ifile] << "……" << endl;
 			
 		int timestep = 0;
 		for (int i =0; i < Num_frame; i++)
@@ -137,7 +122,7 @@ int main()
 			ss >> timestep;
 			if (timestep != i * framestep)
 			{
-				error = "\"ERROR\": TIMESTEP -> ";
+				error = "\"ERROR\": TIMESTEP(Line:140) -> ";
 				//fout << error << endl;
 				cout << error << timestep << " != " << i * framestep 
 				<< " (" << i << " * " << framestep << ")" << endl;
@@ -172,7 +157,7 @@ int main()
 		fin.close();
 		
 		if (files[2] == 0)
-			return 1;			//single file
+			return 1;								//single file
 		else if (error != "Right")
 		{
 			error = "Right";
@@ -227,7 +212,6 @@ int main()
 	
 	//output 
 	//cout << 1 * framestep * md_dt<< " " << msd[0][0][2]/count[0] << endl;
-	
 	ofstream fout(foutname);
 	fout << "time ";
 	cout << "time "; 
