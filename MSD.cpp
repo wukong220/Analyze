@@ -210,6 +210,9 @@ int main()
 		}
 	}
 	
+	if (files[2] == 0)
+		return 1;								//single file
+		
 	//output 
 	//cout << 1 * framestep * md_dt<< " " << msd[0][0][2]/count[0] << endl;
 	ofstream fout(foutname);
