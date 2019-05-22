@@ -21,7 +21,7 @@ const int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 const int dimension = 2;
 const int Num_file = 3;
 std::vector<int> closefiles{};				//closefiles
-std::string format = "001";				//output format
+std::string format = "ave";				//output format
 std::string foutname = "MSD_0.4_2.5_1.0_1.0.txt";		
 
 const double md_dt = 0.001;
@@ -227,6 +227,7 @@ int main()
 	
 	//output 
 	//cout << 1 * framestep * md_dt<< " " << msd[0][0][2]/count[0] << endl;
+	
 	ofstream fout(foutname);
 	fout << "time ";
 	cout << "time "; 
