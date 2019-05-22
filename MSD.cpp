@@ -21,13 +21,13 @@ const int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 const int dimension = 2;
 const int Num_file = 1;
 std::vector<int> closefiles{};				//closefiles
-std::string finname = "004";				//single input file
+std::string finname = "0.07_";				//single input file
 std::string foutname = "MSD_0.4_3.0_1.0_1.0.txt";		
 
 const double md_dt = 0.001;
-const int Num_frame = 1000;
-const int Max_frame = Num_frame - 50;
-const int framestep = 100000;
+const int Num_frame = 90;
+const int Max_frame = Num_frame - 10;
+const int framestep = 500000;
 
 const int len = 2;
 using namespace std;
@@ -120,9 +120,9 @@ int main()
 				getline(fin, temp);
 			ss << temp;
 			ss >> timestep;
-			if (timestep != i * framestep)
+			if (timestep != (i+1) * framestep)
 			{
-				error = "\"ERROR\": TIMESTEP(Line:140) -> ";
+				error = "\"ERROR\": TIMESTEP/FRAME(Line:123) -> ";
 				//fout << error << endl;
 				cout << error << timestep << " != " << i * framestep 
 				<< " (" << i << " * " << framestep << ")" << endl;
@@ -153,7 +153,6 @@ int main()
 			for (int clear = 0; clear < Num_obs; clear ++)	//the tail
 				getline(fin, temp);
 		}
-		//temp = " ";
 		fin.close();
 		
 		if (files[2] == 0)
@@ -236,14 +235,16 @@ int main()
 			int j = ifile * dimension + 1; 
 			for(int i = 0; i < Num_chains; i++)
 			{	
+				cout << setw(len) << files[2] * (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";
 				if (label[ifile] != "000")
 					fout << files[2] * (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";
 				//cout << msd[iframe][i][j] << " " << msd[iframe][i][j+1] << " " 
-					cout << setw(len) << files[2] * (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";
+
 				if (ifile == files[1] - 1)
 				{
-					fout << msd[iframe][i][0] / count[iframe] << " ";
 					cout << setw(len) << msd[iframe][i][0] / count[iframe] << " ";
+					if (files[1] != 1)
+						fout << msd[iframe][i][0] / count[iframe] << " ";
 				}
 			}
 		}
