@@ -261,8 +261,8 @@ int main()
 				output << setw(len) << files[2] * (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";
 				if (label[ifile] != "000")
 					fout << files[2] * (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";
-				else if (iframe < frames[ifile][1])
-					fout << (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";
+				//else if (iframe < frames[ifile][1])
+				//	fout << (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";	//for cutoff data
 				//cout << msd[iframe][i][j] << " " << msd[iframe][i][j+1] << " " 
 
 				if (ifile == files[1] - 1)
