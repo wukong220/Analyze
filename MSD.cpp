@@ -21,7 +21,7 @@ const int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 const int dimension = 2;
 const int Num_file = 20;
 std::vector<int> closefiles{};				//closefiles
-std::string finname = "012";				//empty or single input file
+std::string finname ;//= "015";				//empty or single input file
 std::string foutname = "MSD001_0.4_3.0_3.0_3.0.txt";		
 
 const double md_dt = 0.001;
@@ -232,6 +232,7 @@ int main()
 	ofstream fout(foutname);
 	fout << "time ";
 	cout << "time "; 
+	output << "time ";
 	for (int i = 0; i < files[1]; i++)
 	{
 		cout << "msd[" << label[i] << "] ";
