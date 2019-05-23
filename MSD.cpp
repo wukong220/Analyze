@@ -22,7 +22,7 @@ const int dimension = 2;
 const int Num_file = 20;
 std::vector<int> closefiles{};				//closefiles
 std::string finname ;//= "0.07_";				//empty or single input file
-std::string foutname = "MSD_0.4_3.0_0.0_3.0.txt";		
+std::string foutname = "MSD_0.4_3.0_3.0_3.0.txt";		
 
 const double md_dt = 0.001;
 const int Num_frame = 1000;
