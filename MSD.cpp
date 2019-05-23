@@ -21,13 +21,13 @@ const int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 const int dimension = 2;
 const int Num_file = 20;
 std::vector<int> closefiles{};				//closefiles
-std::string finname ;//= "0.07_";				//empty or single input file
-std::string foutname = "MSD_0.4_3.0_3.0_3.0.txt";		
+std::string finname ;//= "008";				//empty or single input file
+std::string foutname = "MSD001_0.4_3.0_3.0_3.0.txt";		
 
 const double md_dt = 0.001;
-const int Num_frame = 1000;
-const int Max_frame = Num_frame - 10;
-const int framestep = 100000;
+const int Num_frame = 20000;
+const int Max_frame = Num_frame - 2000;
+const int framestep = 5000;
 
 const int len = 2;
 using namespace std;
@@ -111,7 +111,7 @@ int main()
 			continue;
 		}
 		else
-			cout << "\"Opening\"" << filename[ifile] << "……" << endl;
+			cout << "\"Opening\": " << filename[ifile] << "……" << endl;
 			
 		int timestep = 0;
 		for (int i =0; i < Num_frame; i++)
@@ -216,6 +216,7 @@ int main()
 	//output 
 	//cout << 1 * framestep * md_dt<< " " << msd[0][0][2]/count[0] << endl;
 	ofstream fout(foutname);
+	ofstream output("output.txt");
 	fout << "time ";
 	cout << "time "; 
 	for (int i = 0; i < files[1]; i++)
@@ -229,14 +230,16 @@ int main()
 	for (int iframe = 0; iframe < Max_frame; iframe++)
 	{
 		time = (iframe + 1) * framestep * md_dt;
-		fout << time << " ";
 		cout << time << " ";
+		fout << time << " ";
+		output << time << " ";
 		for (int ifile = 0; ifile < files[1]; ifile++)
 		{
 			int j = ifile * dimension + 1; 
 			for(int i = 0; i < Num_chains; i++)
 			{	
 				cout << setw(len) << files[2] * (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";
+				output << setw(len) << files[2] * (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";
 				if (label[ifile] != "000")
 					fout << files[2] * (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";
 				//cout << msd[iframe][i][j] << " " << msd[iframe][i][j+1] << " " 
@@ -244,13 +247,17 @@ int main()
 				if (ifile == files[1] - 1)
 				{
 					cout << setw(len) << msd[iframe][i][0] / count[iframe] << " ";
+					output << setw(len) << msd[iframe][i][0] / count[iframe] << " ";
 					if (files[1] != 1)
 						fout << msd[iframe][i][0] / count[iframe] << " ";
 				}
 			}
 		}
-		fout << endl;
 		cout << endl;
+		output << endl;
+		fout << endl;
+		
 	}
 	fout.close();
+	output.close();
 }
