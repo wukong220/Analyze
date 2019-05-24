@@ -21,7 +21,7 @@ const int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 
 const int dimension = 2;
 const int Num_file = 4;
-std::vector<int> closefiles{1,2};				//closefiles
+std::vector<int> closefiles{};				//closefiles
 std::string finname;// = "003";				//empty or single input file
 std::string foutname = "MSD005_0.4_3.0_1.0_3.0.txt";		
 std::string outname = "output_001.txt";
@@ -115,7 +115,7 @@ int main()
 			cout << error << filename[ifile] << endl;
 			output << error << filename[ifile] << endl;
 			files[2]--;
-			label[ifile] = "   ";
+			label[ifile] = "  ";
 			frames[ifile][0] = 0;
 			frames[ifile][1] = 0;
 			error = "Right";
@@ -270,7 +270,7 @@ int main()
 					output << "nan ";
 					fout << "nan ";
 				}
-				else if (label[ifile]!= "   ")
+				else if (label[ifile]!= "  ")
 				{
 					cout << MSD/(count[ifile+1][iframe])<< " ";
 					output << MSD/(count[ifile+1][iframe])<< " ";
