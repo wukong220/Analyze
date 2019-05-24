@@ -8,6 +8,7 @@
 #include <vector>
 #include <cmath>
 #include <iomanip>
+#include <ctime>
 
 #define max(x, y)  ( x >= y? x : y )	//#include <cmath>
 #define min(x, y)  ( x <= y? x : y )	
@@ -22,7 +23,7 @@ const int dimension = 2;
 const int Num_file = 20;
 std::vector<int> closefiles{};				//closefiles
 std::string finname = "001";				//empty or single input file
-std::string foutname = "MSD003_0.4_3.0_1.0_3.0.txt";		
+std::string foutname = "MSD001_0.4_3.0_1.0_3.0.txt";		
 
 const double md_dt = 0.001;
 const int Num_frame = 35000;
@@ -66,6 +67,8 @@ int main()
 	double time;
 	ofstream output("output.txt");
 	
+	clock_t start = clock();
+
 	for (int i = 0; i < Num_file; i++)
 	{
 		if (finname != "\0")
@@ -193,6 +196,7 @@ int main()
 				//cout << center[i][j][0] << " " << center[i][j][1] << endl << endl;
 			}
 		}
+		
 		for (dt = 1; dt <= frames[ifile][1]; dt++)
 		{
 			for(Tstart = 0; Tstart < min(frames[ifile][1], frames[ifile][0] - dt); Tstart++)
@@ -223,7 +227,6 @@ int main()
 			}
 		}
 	}
-	
 	if (files[2] == 0)
 		files[2] = 1;								//single file
 	
@@ -281,4 +284,26 @@ int main()
 	}
 	fout.close();
 	output.close();
+	
+	//time
+	clock_t stop = clock();		//#include <ctime>
+	double Time = (double)(stop - start)/CLOCKS_PER_SEC;
+	vector<int> inter(4,Time);
+	inter[1] = inter[0]/3600;
+	inter[2] = inter[0]/60%60;
+	inter[3] = inter[0]%60;
+	string st = "\"Time\": ";    //#include <string>
+	for (int i = 0; i < 3; i++)
+		{
+			if (inter[i+1] < 9)
+				st += "0" + to_string(inter[i+1]);    //using std::to_string;
+			else
+				st += to_string(inter[i+1]);
+			if (i < 2)
+				st += ":";
+		}
+	cout << st << endl;
+	output << st << endl;
+	
+	return 0;
 }
