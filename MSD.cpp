@@ -21,8 +21,8 @@ const int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 const int dimension = 2;
 const int Num_file = 20;
 std::vector<int> closefiles{};				//closefiles
-std::string finname ;//= "015";				//empty or single input file
-std::string foutname = "MSD001_0.4_3.0_3.0_3.0.txt";		
+std::string finname = "001";				//empty or single input file
+std::string foutname = "MSD003_0.4_3.0_1.0_3.0.txt";		
 
 const double md_dt = 0.001;
 const int Num_frame = 35000;
@@ -261,8 +261,8 @@ int main()
 				output << setw(len) << files[2] * (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";
 				if (label[ifile] != "000")
 					fout << files[2] * (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";
-				//else if (iframe < frames[ifile][1])
-				//	fout << (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";	//for cutoff data
+				else //if (iframe < frames[ifile][1])
+					fout << (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";	//for cutoff data
 				//cout << msd[iframe][i][j] << " " << msd[iframe][i][j+1] << " " 
 
 				if (ifile == files[1] - 1)
