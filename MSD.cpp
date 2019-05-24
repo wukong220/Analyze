@@ -20,11 +20,11 @@ const int Num_chains = 1;								//Number of the chains
 const int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 
 const int dimension = 2;
-const int Num_file = 20;
-std::vector<int> closefiles{};				//closefiles
-std::string finname ;//= "001";				//empty or single input file
-std::string foutname = "MSD002_0.4_3.0_1.0_3.0.txt";		
-std::string outname = "output_000.txt";
+const int Num_file = 4;
+std::vector<int> closefiles{1,2};				//closefiles
+std::string finname;// = "003";				//empty or single input file
+std::string foutname = "MSD005_0.4_3.0_1.0_3.0.txt";		
+std::string outname = "output_001.txt";
 
 const double md_dt = 0.001;
 const int Num_frame = 35000;
@@ -43,7 +43,7 @@ int main()
 
 	vector<vector<vector<double> > > center(Num_frame, vector<vector<double> >(Num_chains, vector<double>(dimension,0)));			//each frame with centers of chain
 	
-	vector<int>count(Max_frame);		//count
+	vector<vector<int> >count(Num_file + 1, vector<int>(Max_frame));		//count 000
 	vector<vector<vector<double> > > msd(Max_frame, vector<vector<double> >(Num_chains, vector<double>(dimension*Num_file+1, 0))); //mean squared displacement of each chain
 	
 	vector<string> filename(Num_file + 1);				//input filename
@@ -115,7 +115,7 @@ int main()
 			cout << error << filename[ifile] << endl;
 			output << error << filename[ifile] << endl;
 			files[2]--;
-			label[ifile] = "000";
+			label[ifile] = "   ";
 			frames[ifile][0] = 0;
 			frames[ifile][1] = 0;
 			error = "Right";
@@ -173,7 +173,7 @@ int main()
 		}
 		fin.close();
 		
-		if (files[2] == 0)
+		if (files[2] == 0 && error == "Right")
 			files[2] = 1;								//single file	
 		else if (error != "Right")					
 		{
@@ -197,27 +197,29 @@ int main()
 				//cout << center[i][j][0] << " " << center[i][j][1] << endl << endl;
 			}
 		}
-		
+		//cout << frames[ifile][0] << " " << frames[ifile][1] << " " << endl;
 		for (dt = 1; dt <= frames[ifile][1]; dt++)
 		{
 			for(Tstart = 0; Tstart < min(frames[ifile][1], frames[ifile][0] - dt); Tstart++)
 				{
 					Tstop = Tstart + dt;
-					count[dt-1]++;
 					
 					for(int i = 0; i < Num_chains; i++)
 					{
 						int k = dimension * ifile + 1;
+						count[ifile+1][dt-1]++;
 						msd[dt-1][i][k] += (center[Tstop][i][0] - center[Tstart][i][0])*(center[Tstop][i][0] - center[Tstart][i][0]); 
 						msd[dt-1][i][k+1] += (center[Tstop][i][1] - center[Tstart][i][1])*(center[Tstop][i][1] - center[Tstart][i][1]);
-						if(Tstart == (min(frames[ifile][1], frames[ifile][0] - dt)-1))
+						if (label[ifile] != "000")
+							count[0][dt-1]++;
+						if(Tstart == (min(Max_frame, Num_frame - dt)-1) && label[ifile] != "000")
 							msd[dt-1][i][0] += msd[dt-1][i][k] + msd[dt-1][i][k+1];
 						/*cout << Tstart << " " << dt << " " << Tstop << " " 
 						<< (center[Tstop][i][0] - center[Tstart][i][0])*(center[Tstop][i][0] - center[Tstart][i][0])+(center[Tstop][i][1] - center[Tstart][i][1])*(center[Tstop][i][1] - center[Tstart][i][1]) << " "
-						<< msd[dt-1][i][2] << " " << msd[dt-1][i][2]/count[dt-1] << endl;*/
+						<< msd[dt-1][i][2] << " " << msd[dt-1][i][2]/count[0][dt-1] << endl;*/
 					}
 				}
-				//cout << msd[dt-1][0][2]/count[dt-1] << endl;
+				//cout << msd[dt-1][0][2]/count[0][dt-1] << endl;
 		}
 		for (int i = 0; i < frames[ifile][0]; i++)
 		{
@@ -232,7 +234,7 @@ int main()
 		files[2] = 1;								//single file
 	
 	//output 
-	//cout << 1 * framestep * md_dt<< " " << msd[0][0][2]/count[0] << endl;
+	//cout << 1 * framestep * md_dt<< " " << msd[0][0][2]/count[0][1] << endl;
 	ofstream fout(foutname);
 	fout << "time ";
 	cout << "time "; 
@@ -261,22 +263,26 @@ int main()
 			int j = ifile * dimension + 1; 
 			for(int i = 0; i < Num_chains; i++)
 			{	
-				cout << setw(len) << files[2] * (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";
-				output << setw(len) << files[2] * (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";
-				if (label[ifile] != "000")
-					fout << files[2] * (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";
-				else if (iframe < frames[ifile][1])
-					fout << (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";	//for cutoff data
-				else
+				double MSD = msd[iframe][i][j] + msd[iframe][i][j+1];
+				if (label[ifile] == "000" && iframe >= frames[ifile][1])
+				{
+					cout << "nan ";
+					output << "nan ";
 					fout << "nan ";
-				//cout << msd[iframe][i][j] << " " << msd[iframe][i][j+1] << " " 
-
+				}
+				else if (label[ifile]!= "   ")
+				{
+					cout << MSD/(count[ifile+1][iframe])<< " ";
+					output << MSD/(count[ifile+1][iframe])<< " ";
+					fout << MSD/(count[ifile+1][iframe])<< " ";
+				}
+				//cout << msd[iframe][i][j] << " " << msd[iframe][i][j+1] << " ";
 				if (ifile == files[1] - 1)
 				{
-					cout << setw(len) << msd[iframe][i][0] / count[iframe] << " ";
-					output << setw(len) << msd[iframe][i][0] / count[iframe] << " ";
+					cout << msd[iframe][i][0] / count[0][iframe] << " ";
+					output << msd[iframe][i][0] / count[0][iframe] << " ";
 					if (files[1] != 1)
-						fout << msd[iframe][i][0] / count[iframe] << " ";
+						fout << msd[iframe][i][0] / count[0][iframe] << " ";
 				}
 			}
 		}
@@ -286,7 +292,7 @@ int main()
 		
 	}
 	fout.close();
-	output.close();
+
 	
 	//time
 	clock_t stop = clock();		//#include <ctime>
@@ -313,8 +319,9 @@ int main()
 	
 	//reminding
 	//files
-	cout << "\"Writing\": " << foutname << endl;
-	cout << "\"Output\": " << outname << endl;
+	cout << "\"Writing\": " << foutname << endl << "\"Output\": " << outname << endl;
+	output << "\"Writing\": " << foutname << endl << "\"Output\": " << outname << endl;
+	output.close();
 	
 	return 0;
 }
