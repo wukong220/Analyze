@@ -22,9 +22,9 @@ const int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 const int dimension = 2;
 const int Num_file = 20;
 std::vector<int> closefiles{};				//closefiles
-std::string finname = "001";				//empty or single input file
-std::string foutname = "MSD001_0.4_3.0_1.0_3.0.txt";		
-std::string outname = "output.txt";
+std::string finname ;//= "001";				//empty or single input file
+std::string foutname = "MSD002_0.4_3.0_1.0_3.0.txt";		
+std::string outname = "output_000.txt";
 
 const double md_dt = 0.001;
 const int Num_frame = 35000;
@@ -265,8 +265,10 @@ int main()
 				output << setw(len) << files[2] * (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";
 				if (label[ifile] != "000")
 					fout << files[2] * (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";
-				else //if (iframe < frames[ifile][1])
+				else if (iframe < frames[ifile][1])
 					fout << (msd[iframe][i][j] + msd[iframe][i][j+1])/(count[iframe])<< " ";	//for cutoff data
+				else
+					fout << "nan ";
 				//cout << msd[iframe][i][j] << " " << msd[iframe][i][j+1] << " " 
 
 				if (ifile == files[1] - 1)
@@ -295,14 +297,17 @@ int main()
 	inter[3] = inter[0]%60;
 	string st = "\"Time\": ";    //#include <string>
 	for (int i = 0; i < 3; i++)
-		{
-			if (inter[i+1] < 9)
-				st += "0" + to_string(inter[i+1]);    //using std::to_string;
-			else
-				st += to_string(inter[i+1]);
-			if (i < 2)
-				st += ":";
-		}
+	{
+		ss << inter[i+1];
+		ss >> str;  
+		if (inter[i+1] < 9)
+			st += "0" + str;    //using std::to_string;
+		else
+			st += str;
+		if (i < 2)
+			st += ":";
+		ss.clear();
+	}
 	cout << st << endl;
 	output << st << endl;
 	
