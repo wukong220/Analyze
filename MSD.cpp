@@ -20,11 +20,11 @@ const int Num_chains = 1;								//Number of the chains
 const int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 
 const int dimension = 2;
-const int Num_file = 4;
+const int Num_file = 20;
 std::vector<int> closefiles{};				//closefiles
 std::string finname;// = "003";				//empty or single input file
-std::string foutname = "MSD005_0.4_3.0_1.0_3.0.txt";		
-std::string outname = "output_001.txt";
+std::string foutname = "MSD000_0.4_3.0_1.0_3.0.txt";		
+std::string outname = "MSD000.out";
 
 const double md_dt = 0.001;
 const int Num_frame = 35000;
