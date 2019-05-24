@@ -24,6 +24,7 @@ const int Num_file = 20;
 std::vector<int> closefiles{};				//closefiles
 std::string finname = "001";				//empty or single input file
 std::string foutname = "MSD001_0.4_3.0_1.0_3.0.txt";		
+std::string outname = "output.txt";
 
 const double md_dt = 0.001;
 const int Num_frame = 35000;
@@ -65,7 +66,7 @@ int main()
 	int Tstart = 0;
 	int Tstop = 0;
 	double time;
-	ofstream output("output.txt");
+	ofstream output(outname);
 	
 	clock_t start = clock();
 
@@ -304,6 +305,11 @@ int main()
 		}
 	cout << st << endl;
 	output << st << endl;
+	
+	//reminding
+	//files
+	cout << "\"Writing\": " << foutname << endl;
+	cout << "\"Output\": " << outname << endl;
 	
 	return 0;
 }
