@@ -24,7 +24,7 @@ const int Num_file = 20;
 std::vector<int> closefiles{};				//closefiles
 std::string finname;// = "003";				//empty or single input file
 std::string foutname = "MSD000_0.4_3.0_1.0_3.0.txt";		
-std::string outname = "MSD000.out";
+std::string outname = "MSD000.log";
 
 const double md_dt = 0.001;
 const int Num_frame = 35000;
