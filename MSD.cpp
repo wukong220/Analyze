@@ -1,6 +1,7 @@
 //msd
 //ave 
 //files
+//MSD of center of mass
 
 #include <iostream>
 #include <sstream>
@@ -8,7 +9,7 @@
 #include <vector>
 #include <cmath>
 #include <iomanip>
-#include <ctime>
+#include <ctime>  
 
 #define max(x, y)  ( x >= y? x : y )	//#include <cmath>
 #define min(x, y)  ( x <= y? x : y )	
@@ -20,7 +21,7 @@ const int Num_chains = 1;								//Number of the chains
 const int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 
 const int dimension = 2;
-const int Num_file = 20;
+const int Num_file = 1;
 std::vector<int> closefiles{};				//closefiles
 std::string finname;// = "003";				//empty or single input file
 std::string foutname = "MSD.000_0.4_3.0_1.0_3.0.txt";		
@@ -32,7 +33,6 @@ const int dNM = 3000;
 const int Max_frame = Num_frame - dNM;
 const int framestep = 5000;
 
-const int len = 2;
 using namespace std;
 
 int main() 
