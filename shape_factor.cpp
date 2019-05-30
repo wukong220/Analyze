@@ -12,10 +12,8 @@
 # include <math.h> 
 # include <iostream> 
 # include <fstream> 
-# include <string.h> 
 # include <iomanip>
-# include <vector>
-# include <ctype.h>
+//# include <ctype.h>
 
 using namespace std ; 
 
@@ -86,8 +84,8 @@ int main ( )
 		ifstream fp("polystat.xvg");  
 		if (fp)
 		{
-			while(!fp.eof())
-			{
+		while(!fp.eof())
+		{
 				//去掉文件头注释
 				if(k==0) 
 				{
@@ -103,8 +101,8 @@ int main ( )
 			//fprintf(stderr,"%s\n",id);
 			if(strcmp(id, mark) < 0)
 			{
-			   //cout<<strcmp(id,mark)<<" check data"<<endl; 
-			   break;	
+			 	 //cout<<strcmp(id,mark)<<" check data"<<endl; 
+				  break;	
 			} 
 			if( substrcpy( temp, id, 0, 9 ) )
 			    timestep = atof( temp );

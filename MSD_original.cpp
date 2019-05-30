@@ -15,57 +15,8 @@
 int main() 
 {
 		
-		for (int i = 0; i < frames[ifile][0]; i++)			//position of the center of mass
-		{
-			for (int j = 0; j < Num_chains; j++)
-			{
-				for (int k = N_chain * j; k < N_chain * (j + 1); k++)
-				{
-					rCM[i][j][0] += atom[i][k][2];		//i frame j atom x or y
-					rCM[i][j][1] += atom[i][k][3];
-					//cout << atom[i][k][2] << " " << atom[i][k][3] << " " << endl;
-				}
-				rCM[i][j][0] /= N_chain;
-				rCM[i][j][1] /= N_chain;
-				//cout << rCM[i][j][0] << " " << rCM[i][j][1] << endl << endl;
-			}
-		}
-		//cout << frames[ifile][0] << " " << frames[ifile][1] << " " << endl;
-		for (dt = 1; dt <= frames[ifile][1]; dt++)
-		{
-			for(Tstart = 0; Tstart < min(frames[ifile][1], frames[ifile][0] - dt); Tstart++)
-				{
-					Tstop = Tstart + dt;
-					
-					for(int i = 0; i < Num_chains; i++)
-					{
-						int k = dimension * ifile + 1;
-						count[ifile+1][dt-1]++;
-						msd[dt-1][i][k] += (rCM[Tstop][i][0] - rCM[Tstart][i][0])*(rCM[Tstop][i][0] - rCM[Tstart][i][0]); 
-						msd[dt-1][i][k+1] += (rCM[Tstop][i][1] - rCM[Tstart][i][1])*(rCM[Tstop][i][1] - rCM[Tstart][i][1]);
-						if (filename[ifile][1] != "000")
-							count[0][dt-1]++;
-						if(Tstart == (min(Max_frame, Num_frame - dt)-1) && filename[ifile][1] != "000")
-							msd[dt-1][i][0] += msd[dt-1][i][k] + msd[dt-1][i][k+1];
-						/*cout << Tstart << " " << dt << " " << Tstop << " " 
-						<< (rCM[Tstop][i][0] - rCM[Tstart][i][0])*(rCM[Tstop][i][0] - rCM[Tstart][i][0])+(rCM[Tstop][i][1] - rCM[Tstart][i][1])*(rCM[Tstop][i][1] - rCM[Tstart][i][1]) << " "
-						<< msd[dt-1][i][2] << " " << msd[dt-1][i][2]/count[0][dt-1] << endl;*/
-					}
-				}
-				//cout << msd[dt-1][0][2]/count[0][dt-1] << endl;
-		}
-		for (int i = 0; i < frames[ifile][0]; i++)
-		{
-			for (int j = 0; j < Num_chains; j++)
-			{
-				rCM[i][j][0] = 0;
-				rCM[i][j][1] = 0;
-			}
-		}
-	}
-	if (files[2] == 0)
-		files[2] = 1;								//single file
-	
+
+		
 	//output 
 	//cout << 1 * framestep * md_dt<< " " << msd[0][0][2]/count[0][1] << endl;
 	ofstream fout(foutname);
@@ -126,9 +77,6 @@ int main()
 	}
 	fout.close();
 
-	
-
-	
 	//reminding
 	//files
 	cout << "\"Writing\": " << foutname << endl << "\"Output\": " << outname << endl;

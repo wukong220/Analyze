@@ -6,14 +6,13 @@
 #include "paras.h"
 #include "files.h"
 
-#define max(x, y)  ( x >= y? x : y )	//#include <cmath>
-#define min(x, y)  ( x <= y? x : y )	
 
 const int Num_info = 15;		//id type xu yu zu vx vy vz c_orient[1] c_orient[2] c_orient[3] c_orient[4] c_shape[1] c_shape[2] c_shape[3]
+const double mass = 1.0;
 const int N_chain = 30;									//Polarization of single chain
 const int Num_chains = 1;								//Number of the chains
 const int Num_beeds = N_chain * Num_chains; 			//Number of beeds: atoms to read
-vector<string> type{1, 2};								//atom types to read
+vector<string> type{"1", "2"};								//atom types to read
 
 const int dimension = 2;
 const int Num_file = 20;
@@ -30,12 +29,15 @@ const int Max_frame = Num_frame - dNM;
 const int framestep = 5000;
 //atom[iframe] [id] [id,type,xu,yu,zu...]
 vector<vector<vector<double> > > atom(Num_frame, vector<vector<double> >(Num_beeds, vector<double>(Num_info,0))); 
+//msd_ave[iframe][x, y, z]
+vector<vector<double> > msd_ave(Max_frame, vector<double>(dimension * Num_file + 1, 0))); //average msd
+vector<vector<int> > index(Num_file + 1, vector<int>(Max_frame));		//count
 //rCM[iframe] [jchain] [x,y,z]
-vector<vector<vector<double> > > rCM(Num_frame, vector<vector<double> >(Num_chains, vector<double>(dimension,0)));	//each frame with centers of chain	
+vector<vector<vector<double> > > rCM(Num_frame, vector<vector<double> >(Num_chains, vector<double>(dimension + 1,0)));	//each frame with centers of chain	
 //count[0,ifile] [msd_frame]: 0 for sum of average
-vector<vector<int> >count(Num_file + 1, vector<int>(Max_frame));		//count 000
+vector<vector<int> > count(Num_file + 1, vector<int>(Max_frame));		//count 000
 //msd[iframe] [jchain] [0,x,y,z]: 0 for sum of average
-vector<vector<vector<double> > > msd(Max_frame, vector<vector<double> >(Num_chains, vector<double>(dimension*Num_file+1, 0))); 	//mean squared displacement of each chain
+vector<vector<vector<double> > > msdCM(Max_frame, vector<vector<double> >(Num_chains, vector<double>(dimension*Num_file+1, 0))); 	//msd of CM for each chain
 //input filename
 vector<vector<string> > fnamebel(Num_file, vector<string>(2));		//fnamebel[ifile][name,label,Num_info]
 //Num_file, max_file, files, 
@@ -46,13 +48,10 @@ vector<vector<int> > frames(Num_file + 1, vector<int>(2, Num_frame));
 int main() 
 {
 	string str;
+	stringstream ss;
+	int f = 1;
 
 
-	int t = 0;
-	int dt = 1;
-	int max_dt = 0;
-	int Tstart = 0;
-	int Tstop = 0;
 	double time;
 
 
@@ -61,19 +60,14 @@ int main()
 	//input filename
 	//LmpFile file;
 	LmpFile infiles(finname);		//fnamebel[ifile][name,label]; frames[ifile][Num_frame, Max_frame]
-	
-	for(int ifile = 0; ifile < infiles.files(); ifile++)
+	f = infiles.files();
+	for(int ifile = 0; ifile < f; ifile++)
 	{
-		atom = infiles.read_xyz(ifile, closefiles);		//read data from files
-		
+		atom = infiles.read_data(ifile, closefiles,output);		//read atom data from files, exluding closefiles
+		rCM = infiles.center(ifile, N_chain, atom);			//positiion of CM from atom data of files
+		msd = infiles.msdCM(ifile, N_chain, rCM, count);	//msd of CM
 	}
 		
-	
-
-
-
-
-
 
 	//time
 	clock_t stop = clock();		//#include <ctime>

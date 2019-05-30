@@ -136,11 +136,11 @@ ostream & operator<<(ostream & os, const LmpFile & file)
 		else
 			cout << file.m_head[i];
 	}
-	cout << endl;
+	cout << "\n\n";
 	return os;
 }
 
-vector<vector<vector<double> > > LmpFile::read(const int ifile, const vector<int> closefiles)
+vector<vector<vector<double> > > LmpFile::read_data(const int ifile, const vector<int> closefiles, ofstream &output)
 {
 	//input	
 	//extern const int Num_info = 15; Num_beeds = N_chain * Num_chains; 
@@ -220,33 +220,75 @@ vector<vector<vector<double> > > LmpFile::read(const int ifile, const vector<int
 	return atom;
 }
 
-//calcucate the center of mass 
-vector<vector<vector<double> > > center(const vector<vector<vector<double> > >)
+//calculate average msd of the atoms
+vector<vector<double> > LmpFile::msd_ave(const int ifile, const int nAtom, const vector<vector<vector<double> > > &vec, vector<vector<int> > &index)
+{
+}
 
+//calcucate position of the center of mass 
+vector<vector<vector<double> > > LmpFile::center(const int ifile, const int nChain, const vector<vector<vector<double> > > &vec)
+{
+	//extern int Num_beeds; dimension = 2
+	//extern double mass = 1.0
+	int NumChains = Num_beeds / nChain;
+	vector<vector<vector<double> > > rCM(m_NumFrame, vector<vector<double> >(NumChains, vector<double>(dimension + 1,0)));
+	for (int i = 0; i < m_frames[ifile][0]; i++)			
+	{
+		for (int j = 0; j < NumChains; j++)
+		{
+			for (int k = nChain * j; k < nChain * (j + 1); k++)
+			{
+				rCM[i][j][0] += vec[i][k][2] * mass;		//rCm[iframe][jchain][x, y, z]
+				rCM[i][j][1] += vec[i][k][3] * mass;
+				rCM[i][j][2] += vec[i][k][4] * mass;	
+				//cout << vec[i][k][2] << " " << vec[i][k][3] << " " << endl;
+			}
+			double TotMass = nChain * mass;
+			rCM[i][j][0] /= TotMass;
+			rCM[i][j][1] /= TotMass;
+			rCM[i][j][2] /= TotMass;
+			//cout << rCM[i][j][0] << " " << rCM[i][j][1] << " " << rCM[i][j][2] << endl << endl;
+		}
+	}
+	return rCM;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+vector<vector<vector<double> > > LmpFile::msd_com(const int ifile, const int nChain, const vector<vector<vector<double> > > &vec, vector<vector<int> > &count)
+{
+	int NumChains = Num_beeds / nChain;
+	//extern int Max_frame; int Num_file
+	vector<vector<vector<double> > > msd(Max_frame, vector<vector<double> >(NumChains, vector<double>(dimension * Num_file + 1, 0)));
+	for (int dt = 1; dt <= m_frames[ifile][1]; dt++)
+	{
+		for(int Tstart = 0; Tstart < min(m_frames[ifile][1], m_frames[ifile][0] - dt); Tstart++)
+			{
+				int Tstop = Tstart + dt;
+				
+				for(int i = 0; i < NumChains; i++)
+				{
+					//extern int dimension = 2
+					int k = dimension * ifile + 1;
+					count[ifile+1][dt-1]++;
+					msd[dt-1][i][k] += (vec[Tstop][i][0] - vec[Tstart][i][0])*(vec[Tstop][i][0] - vec[Tstart][i][0]); 
+					msd[dt-1][i][k+1] += (vec[Tstop][i][1] - vec[Tstart][i][1])*(vec[Tstop][i][1] - vec[Tstart][i][1]);
+					if (m_fnamebel[ifile][1] != "000" && m_fnamebel[ifile][1] != "  ")
+						count[0][dt-1]++;
+					//extern int Max_frame; Num_frame
+					if(Tstart == (min(Max_frame, Num_frame - dt)-1) && m_fnamebel[ifile][1] != "000")
+						msd[dt-1][i][0] += msd[dt-1][i][k] + msd[dt-1][i][k+1];
+					/*cout << Tstart << " " << dt << " " << Tstop << " " 
+					<< (vec[Tstop][i][0] - vec[Tstart][i][0])*(vec[Tstop][i][0] - vec[Tstart][i][0])+(vec[Tstop][i][1] - vec[Tstart][i][1])*(vec[Tstop][i][1] - vec[Tstart][i][1]) << " "
+					<< msd[dt-1][i][2] << " " << msd[dt-1][i][2]/count[0][dt-1] << endl;*/
+				}
+			}
+			//cout << msd[dt-1][0][2]/count[0][dt-1] << endl;
+	}
+	return msd;
+}
 
 
 //read atom information -> atom[iframe][jatom][kinfo]
-string read_atoms(ifstream &fin, int i, int nAtom, vector<vector<vector<double> > > &atom)
+string read_atoms(ifstream &fin, int i, int nAtom, vector<vector<vector<double> > > &vec)
 {
 	string temp;
 	stringstream ss;
@@ -271,7 +313,7 @@ string read_atoms(ifstream &fin, int i, int nAtom, vector<vector<vector<double> 
 		ss << temp;
 		//extern const int Num_info = 15
 		for (int k = 0; k < Num_info; k++)
-			ss >> atom[i][j][k];
+			ss >> vec[i][j][k];
 		ss.clear();
 	}
 
