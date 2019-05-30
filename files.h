@@ -22,7 +22,7 @@ public:
 	LmpFile(const vector<vector<string> >, const int);
 	LmpFile(const vector<vector<string> >, const vector<vector<int> >);
 	~LmpFile();
-	void show();
+	ostream & operator<<(ostream & os, const LmpFile & file);
 	int files(){return m_Files;};
 	//ifile, atom, center
 	vector<vector<vector<double> > > read_xyz(const int, const vector<int>);
