@@ -13,10 +13,10 @@ const int Num_info = 15;		//id type xu yu zu vx vy vz c_orient[1] c_orient[2] c_
 const int N_chain = 30;									//Polarization of single chain
 const int Num_chains = 1;								//Number of the chains
 const int Num_beeds = N_chain * Num_chains; 			//Number of beeds: atoms to read
-
+vector<string> type{1, 2};								//atom types to read
 
 const int dimension = 2;
-int Num_file = 20;
+const int Num_file = 20;
 vector<int> closefiles{};				//closefiles
 string finname;// = "003";				//empty or single input file
 string foutname = "MSD.000_0.4_2.5_1.0_3.0.txt";		
@@ -28,16 +28,16 @@ const int Num_frame = 35000;
 const int dNM = 3000;
 const int Max_frame = Num_frame - dNM;
 const int framestep = 5000;
-//chain[iframe] [id] [id,type,xu,yu,zu...]
+//atom[iframe] [id] [id,type,xu,yu,zu...]
 vector<vector<vector<double> > > atom(Num_frame, vector<vector<double> >(Num_beeds, vector<double>(Num_info,0))); 
-//center[iframe] [jchain] [x,y,z]
-vector<vector<vector<double> > > center(Num_frame, vector<vector<double> >(Num_chains, vector<double>(dimension,0)));	//each frame with centers of chain	
+//rCM[iframe] [jchain] [x,y,z]
+vector<vector<vector<double> > > rCM(Num_frame, vector<vector<double> >(Num_chains, vector<double>(dimension,0)));	//each frame with centers of chain	
 //count[0,ifile] [msd_frame]: 0 for sum of average
 vector<vector<int> >count(Num_file + 1, vector<int>(Max_frame));		//count 000
 //msd[iframe] [jchain] [0,x,y,z]: 0 for sum of average
 vector<vector<vector<double> > > msd(Max_frame, vector<vector<double> >(Num_chains, vector<double>(dimension*Num_file+1, 0))); 	//mean squared displacement of each chain
 //input filename
-vector<vector<string> > fnamebel(Num_file, vector<string>(2));		//fnamebel[ifile][name,label]
+vector<vector<string> > fnamebel(Num_file, vector<string>(2));		//fnamebel[ifile][name,label,Num_info]
 //Num_file, max_file, files, 
 vector<int> files(3, Num_file);					                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 //ifile: Num_frame, Max_frame
@@ -45,8 +45,6 @@ vector<vector<int> > frames(Num_file + 1, vector<int>(2, Num_frame));
 
 int main() 
 {
-	stringstream ss;
-	stringstream sl;
 	string str;
 
 
@@ -61,36 +59,12 @@ int main()
 	clock_t start = clock();		//start time
 
 	//input filename
-	for (int i = 0; i < Num_file; i++)
-	{
-		if (finname != "\0")
-		{
-			fnamebel[i][0] = finname + "u.lammpstrj";
-			fnamebel[i][1] = "000";
-			break;
-		}
-
-		else if (i < 9)
-		{
-			ss << "00" << i + 1 << "u.lammpstrj";
-			sl << "00" << i + 1;
-		}
-		else if (i >= 9)
-		{
-			ss << "0" << i + 1 << "u.lammpstrj";
-			sl << "0" << i + 1;
-		}
-		ss >> fnamebel[i][0];
-		sl >> fnamebel[i][1];
-		ss.clear();
-		sl.clear();
-	}
-	LmpFile files(fnamebel);		//fnamebel[ifile][name,label]; frames[ifile][Num_frame, Max_frame]
+	//LmpFile file;
+	LmpFile infiles(finname);		//fnamebel[ifile][name,label]; frames[ifile][Num_frame, Max_frame]
 	
-	for(int ifile = 0; ifile < files[1]; ifile++)
+	for(int ifile = 0; ifile < infiles.files(); ifile++)
 	{
-		atom = files.read_xyz(ifile, closefiles);		//read data from files
-		
+		atom = infiles.read_xyz(ifile, closefiles);		//read data from files
 		
 	}
 		

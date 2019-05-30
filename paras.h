@@ -5,6 +5,7 @@
 #include <vector>
 #include <iostream>						//for test #include <iostream>
 #include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -13,9 +14,10 @@ extern const int Num_info;				//id type xu yu zu vx vy vz c_orient[1] c_orient[2
 extern const int N_chain;				//Polarization of single chain
 extern const int Num_chains;			//Number of the chains
 extern const int Num_beeds; 			//Number of beeds
+extern vector<string> type;
 
 extern const int dimension;
-extern int Num_file;
+extern const int Num_file;
 extern vector<int> closefiles;		//closefiles -> #include <vector>
 extern string finname;				//empty or single input file -> #include <string>
 extern string foutname;		
@@ -49,12 +51,11 @@ extern vector<int> file;
 //ifile: Num_frame, Max_frame
 extern vector<vector<int> > frames;	
 
-#define max(x, y)  ( x >= y? x : y )
-#define min(x, y)  ( x <= y? x : y )
-
 extern ofstream output;
 
 //output for check
+ostream & operator<<(ostream & os, vector<int> &vec);
+ostream & operator<<(ostream & os, vector<double> &vec);
 ostream & operator<<(ostream & os, vector<vector<int> > &vec);
 ostream & operator<<(ostream & os, vector<vector<double> > &vec);
 ostream & operator<<(ostream & os, vector<vector<string> > &vec);
@@ -62,6 +63,12 @@ ostream & operator<<(ostream & os, vector<vector<string> > &vec);
 ostream & operator<<(ostream & os, vector<vector<vector<double> > > &vec);	
 
 //vector<vector<vector<double> > > center(vector<vector<vector<double> > > &a); 
+
+
+
+
+//for test
+void forTest(vector<int> &files);
 
 class Test
 {

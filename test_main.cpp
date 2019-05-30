@@ -5,7 +5,7 @@
 #include <cmath>
 #include <ctime>
 #include "paras.h"
-//#include "files.h"
+#include "files.h"
 #define max(x, y)  ( x >= y? x : y )	//#include <cmath>
 #define min(x, y)  ( x <= y? x : y )	
 
@@ -14,22 +14,23 @@ const int Num_info = 15;		//id type xu yu zu vx vy vz c_orient[1] c_orient[2] c_
 const int N_chain = 30;									//Polarization of single chain
 const int Num_chains = 1;								//Number of the chains
 const int Num_beeds = N_chain * Num_chains; 			//Number of beeds
+vector<string> type{"1", "2"};								//atom types to read
 
 const int dimension = 2;
-int Num_file = 20;
-vector<int> closefiles{};				//closefiles
-string finname ;//= "003";				//empty or single input file
-string foutname = "MSD.000_0.4_2.5_1.0_3.0.txt";		
-string outname = "MSD.000.log";
+const int Num_file = 2;
+vector<int> closefiles{1};				//closefiles
+string finname ;//= "001";				//empty or single input file
+string foutname = "test.txt";		
+string outname = "test.log";
 ofstream output(outname);
 
 const double md_dt = 0.001;
-const int Num_frame = 35000;
-const int dNM = 3000;
+const int Num_frame = 4;
+const int dNM = 0;
 const int Max_frame = Num_frame - dNM;
-const int framestep = 5000;
-//chain[iframe] [id] [id,type,xu,yu,zu...]
-vector<vector<vector<double> > > chain(Num_frame, vector<vector<double> >(Num_beeds, vector<double>(Num_info,0))); 
+const int framestep = 100000;
+//atom[iframe] [id] [id,type,xu,yu,zu...]
+vector<vector<vector<double> > > atom(Num_frame, vector<vector<double> >(Num_beeds + 1, vector<double>(Num_info,0))); 
 //center[iframe] [jchain] [x,y,z]
 vector<vector<vector<double> > > center(Num_frame, vector<vector<double> >(Num_chains, vector<double>(dimension,0)));	//each frame with centers of chain	
 //count[0,ifile] [msd_frame]: 0 for sum of average
@@ -59,8 +60,14 @@ int main()
 	int Tstart = 0;
 	int Tstop = 0;
 	double time;
-	cout << chain;
-	//atom = files.read_xyz(ifile, closefiles);
+	//LmpFile infiles;
+	LmpFile infiles(finname);
+	int num = infiles.files();
+	//atom[iframe] [id] [id,type,xu,yu,zu...]
+	for(int ifile = 0; ifile < num; ifile++)
+		atom = infiles.read(ifile, closefiles);
+	cout << infiles;
+	//ifstream fin("test.text");
 
 	return 0;
 }

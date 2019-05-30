@@ -1,6 +1,22 @@
 #include "paras.h"
 
 //os << vec
+ostream & operator<<(ostream & os, vector<int> &vec)
+{
+	for (int i = 0; i < vec.size(); i++)
+		os << vec[i] << " ";
+	os << endl;
+	return os;
+}
+
+ostream & operator<<(ostream & os, vector<double> &vec)
+{
+	for (int i = 0; i < vec.size(); i++)
+		os << vec[i] << " ";
+	os << endl;
+	return os;
+}
+
 ostream & operator<<(ostream & os, vector<vector<int> > &vec)
 {
 	for (int i = 0; i < vec.size(); i++)
@@ -41,7 +57,8 @@ ostream & operator<<(ostream & os, vector<vector<vector<double> > > &vec)
 {
 	for (int i = 0; i < vec.size(); i++)
 	{
-		os << i << " :" << endl;
+		//extern const int framestep
+		os << i * framestep << " :" << endl;
 		for (int j = 0; j < vec[i].size(); j++)
 			{
 				for (int k = 0; k < vec[i][j].size(); k++)
@@ -53,6 +70,15 @@ ostream & operator<<(ostream & os, vector<vector<vector<double> > > &vec)
 	os << endl;
 	return os;
 }
+
+
+
+//for test
+void forTest(vector<int> &files)
+{
+	files[0] = 999;
+}
+
 
 Test::Test()
 {
