@@ -54,7 +54,13 @@ extern vector<vector<int> > frames;
 
 extern ofstream output;
 
-//vector<vector<int> > test(vector<vector<int> > &a);				//for test
+//output for check
+ostream & operator<<(ostream & os, vector<vector<int> > &vec);
+ostream & operator<<(ostream & os, vector<vector<double> > &vec);
+ostream & operator<<(ostream & os, vector<vector<string> > &vec);
+//just for fun
+ostream & operator<<(ostream & os, vector<vector<vector<double> > > &vec);	
+
 //vector<vector<vector<double> > > center(vector<vector<vector<double> > > &a); 
 
 class Test

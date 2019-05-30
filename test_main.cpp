@@ -59,9 +59,8 @@ int main()
 	int Tstart = 0;
 	int Tstop = 0;
 	double time;
-	
-	
-	atom = files.read_xyz(ifile, closefiles);
-	test_atom()
+	cout << chain;
+	//atom = files.read_xyz(ifile, closefiles);
+
 	return 0;
 }

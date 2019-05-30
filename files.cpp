@@ -43,6 +43,25 @@ LmpFile::~LmpFile()
 	
 }
 
+void LmpFile::show()
+{
+	cout << "FileName  FileLabel" << endl;
+	for (int i = 0; i < m_fnamebel.size(); i++)
+	{
+		for (int j = 0; j < m_fnamebel[i].size(); j++)
+			cout << m_fnamebel[i][j] << " ";
+		cout << endl;
+	}
+	cout << endl;
+	
+	for(int i = 0; i < m_frames.size(); i++)
+	{
+		for (int j = 0; j < m_frames[i].size(); j++)
+			cout << m_frames << " ";
+		cout << endl;
+	}
+}
+
 vector<vector<vector<double> > > LmpFile::read_xyz(const int ifile, const vector<int> closefiles)
 {
 	//input	

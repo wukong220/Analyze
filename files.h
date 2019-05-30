@@ -22,10 +22,13 @@ public:
 	LmpFile(const vector<vector<string> >, const int);
 	LmpFile(const vector<vector<string> >, const vector<vector<int> >);
 	~LmpFile();
+	void show();
+	int files(){return m_Files;};
 	//ifile, atom, center
 	vector<vector<vector<double> > > read_xyz(const int, const vector<int>);
 	vector<vector<vector<double> > > center_mass(const vector<vector<vector<double> > >);	
-	int files(){return m_Files;};
+	
+
 };
 
 #endif
