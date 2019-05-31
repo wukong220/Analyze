@@ -6,12 +6,10 @@
 #include <ctime>
 #include "paras.h"
 #include "files.h"
-#define max(x, y)  ( x >= y? x : y )	//#include <cmath>
-#define min(x, y)  ( x <= y? x : y )	
 
 const int Num_info = 15;		//id type xu yu zu vx vy vz c_orient[1] c_orient[2] c_orient[3] c_orient[4] c_shape[1] c_shape[2] c_shape[3]
 const double mass = 1.0;
-const int N_chain = 3;									//Polarization of single chain
+const int N_chain = 5;									//Polarization of single chain
 const int Num_chains = 1;								//Number of the chains
 const int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 vector<string> type{"1", "2"};								//atom types to read
@@ -25,8 +23,8 @@ string outname = "test.log";
 ofstream output(outname);
 
 const double md_dt = 0.001;
-const int Num_frame = 2;
-const int dNM = 0;
+const int Num_frame = 5;
+const int dNM = 1;
 const int Max_frame = Num_frame - dNM;
 const int framestep = 100000;
 //atom[iframe] [id] [id,type,xu,yu,zu...]
@@ -36,7 +34,7 @@ vector<vector<vector<double> > > rCM(Num_frame, vector<vector<double> >(Num_chai
 //count[0,ifile] [msd_frame]: 0 for sum of average
 vector<vector<int> >cnt(Num_file + 1, vector<int>(Max_frame));		//count 000
 //msd[iframe] [jchain] [0,x,y,z]: 0 for sum of average
-vector<vector<vector<double> > > msdCM(Max_frame, vector<vector<double> >(Num_chains, vector<double>(dimension*Num_file+1, 0))); 	//mean squared displacement of each chain
+vector<vector<vector<double> > > msd(Max_frame, vector<vector<double> >(Num_chains, vector<double>(dimension*Num_file+1, 0))); 	//mean squared displacement of each chain
 //input filename
 vector<vector<string> > filename(Num_file, vector<string>(2));		//filename[ifile][name,label]
 //Num_file, max_file, files, 
@@ -68,12 +66,13 @@ int main()
 	{
 		atom = infiles.read_data(ifile, closefiles, output);		//read atom data from files, exluding closefiles
 		rCM = infiles.center(ifile, N_chain, atom);			//positiion of CM from atom data of files
-		msdCM = infiles.msd_com(ifile, N_chain, rCM, cnt);
+		msd = infiles.msd_ave(ifile, Num_chains, rCM, cnt);
 	}
 	cout << endl;
 	cout << infiles;
+	//cout << atom;
 	cout << rCM;
-	cout << msdCM;
+	cout << msd;
 	//ifstream fin("test.text");
 
 	return 0;

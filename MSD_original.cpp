@@ -48,7 +48,7 @@ int main()
 			for(int i = 0; i < Num_chains; i++)
 			{	
 				double MSD = msd[iframe][i][j] + msd[iframe][i][j+1];
-				if (filename[ifile][1] == "000" && iframe >= frames[ifile][1])
+				if (filename[ifile][1] == "000" && iframe >= frames[ifile][1])//suplement
 				{
 					cout << "nan ";
 					output << "nan ";

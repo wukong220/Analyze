@@ -220,11 +220,6 @@ vector<vector<vector<double> > > LmpFile::read_data(const int ifile, const vecto
 	return atom;
 }
 
-//calculate average msd of the atoms
-vector<vector<double> > LmpFile::msd_ave(const int ifile, const int nAtom, const vector<vector<vector<double> > > &vec, vector<vector<int> > &count)
-{
-}
-
 //calcucate position of the center of mass 
 vector<vector<vector<double> > > LmpFile::center(const int ifile, const int nChain, const vector<vector<vector<double> > > &vec)
 {
@@ -250,37 +245,60 @@ vector<vector<vector<double> > > LmpFile::center(const int ifile, const int nCha
 			//cout << rCM[i][j][0] << " " << rCM[i][j][1] << " " << rCM[i][j][2] << endl << endl;
 		}
 	}
+	
 	return rCM;
 }
 
-vector<vector<vector<double> > > LmpFile::msd_com(const int ifile, const int nChain, const vector<vector<vector<double> > > &vec, vector<vector<int> > &count)
+vector<vector<vector<double> > > LmpFile::msd_ave(const int ifile, const int num, const vector<vector<vector<double> > > &vec, vector<vector<int> > &count)
 {
-	int NumChains = Num_beeds / nChain;
 	//extern int Max_frame; int Num_file
-	vector<vector<vector<double> > > msd(Max_frame, vector<vector<double> >(NumChains, vector<double>(dimension * Num_file + 1, 0)));
+	vector<vector<vector<double> > > msd(Max_frame, vector<vector<double> >(num, vector<double>((dimension + 1) * m_NumFile + 1, 0)));
 	for (int dt = 1; dt <= m_frames[ifile][1]; dt++)
 	{
 		for(int Tstart = 0; Tstart < min(m_frames[ifile][1], m_frames[ifile][0] - dt); Tstart++)
 			{
 				int Tstop = Tstart + dt;
 				
-				for(int i = 0; i < NumChains; i++)
+				for(int i = 0; i < num; i++)
 				{
 					//extern int dimension = 2
 					int k = dimension * ifile + 1;
 					count[ifile+1][dt-1]++;
 					msd[dt-1][i][k] += (vec[Tstop][i][0] - vec[Tstart][i][0])*(vec[Tstop][i][0] - vec[Tstart][i][0]); 
 					msd[dt-1][i][k+1] += (vec[Tstop][i][1] - vec[Tstart][i][1])*(vec[Tstop][i][1] - vec[Tstart][i][1]);
-					if (m_fnamebel[ifile][1] != "000" && m_fnamebel[ifile][1] != "  ")
+					msd[dt-1][i][k+2] = msd[dt-1][i][k] + msd[dt-1][i][k+1];
+					if (m_fnamebel[ifile][1] != "000")
+					{
+						if (m_fnamebel[ifile][1] != "  ")
+							count[0][dt-1]++;
+						if (Tstart == (min(m_frames[ifile][1], m_frames[ifile][0] - dt)-1))
+							{
+								if (m_frames[ifile][1] == Max_frame && m_frames[ifile][0] == Num_frame)
+									msd[dt-1][i][0] += msd[dt-1][i][k] + msd[dt-1][i][k+1];
+							}
+					}
+					else if (m_fnamebel[ifile][1] != "  " && Tstart == (min(m_frames[ifile][1], m_frames[ifile][0] - dt)-1))
+					{
+						msd[dt-1][i][k] /= count[ifile+1][dt-1];
+						msd[dt-1][i][k+1] /= count[ifile+1][dt-1];
+						msd[dt-1][i][k+2] = msd[dt-1][i][k] + msd[dt-1][i][k+1];
+					}
+					
+					/*if (m_fnamebel[ifile][1] != "000" && m_fnamebel[ifile][1] != "  ")
 						count[0][dt-1]++;
 					//extern int Max_frame; Num_frame
 					if(Tstart == (min(Max_frame, Num_frame - dt)-1) && m_fnamebel[ifile][1] != "000")
+					{
 						msd[dt-1][i][0] += msd[dt-1][i][k] + msd[dt-1][i][k+1];
+						
+					}*/
+						
 					/*cout << Tstart << " " << dt << " " << Tstop << " " 
 					<< (vec[Tstop][i][0] - vec[Tstart][i][0])*(vec[Tstop][i][0] - vec[Tstart][i][0])+(vec[Tstop][i][1] - vec[Tstart][i][1])*(vec[Tstop][i][1] - vec[Tstart][i][1]) << " "
 					<< msd[dt-1][i][2] << " " << msd[dt-1][i][2]/count[0][dt-1] << endl;*/
 				}
 			}
+			
 			//cout << msd[dt-1][0][2]/count[0][dt-1] << endl;
 	}
 	return msd;

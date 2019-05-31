@@ -29,15 +29,12 @@ const int Max_frame = Num_frame - dNM;
 const int framestep = 5000;
 //atom[iframe] [id] [id,type,xu,yu,zu...]
 vector<vector<vector<double> > > atom(Num_frame, vector<vector<double> >(Num_beeds, vector<double>(Num_info,0))); 
-//msd_ave[iframe][x, y, z]
-vector<vector<double> > msd_ave(Max_frame, vector<double>(dimension * Num_file + 1, 0)); //average msd
 //cnt[0,ifile] [msd_frame]: 0 for sum of average
-vector<vector<int> > cnt0(Num_file + 1, vector<int>(Max_frame));		//count
-vector<vector<int> > cnt1(Num_file + 1, vector<int>(Max_frame));		//count
+vector<vector<int> > cnt(Num_file + 1, vector<int>(Max_frame));		//count
 //rCM[iframe] [jchain] [x,y,z]
 vector<vector<vector<double> > > rCM(Num_frame, vector<vector<double> >(Num_chains, vector<double>(dimension + 1,0)));	//each frame with centers of chain	
 //msd[iframe] [jchain] [0,x,y,z]: 0 for sum of average
-vector<vector<vector<double> > > msdCM(Max_frame, vector<vector<double> >(Num_chains, vector<double>(dimension*Num_file+1, 0))); 	//msd of CM for each chain
+vector<vector<vector<double> > > msdCM(Max_frame, vector<vector<double> >(Num_chains, vector<double>(dimension*Num_file + 1, 0))); 	//msd of CM for each chain
 //input filename
 vector<vector<string> > fnamebel(Num_file, vector<string>(2));		//fnamebel[ifile][name,label,Num_info]
 //Num_file, max_file, files, 
@@ -65,7 +62,8 @@ int main()
 	{
 		atom = infiles.read_data(ifile, closefiles,output);		//read atom data from files, exluding closefiles
 		rCM = infiles.center(ifile, N_chain, atom);			//positiion of CM from atom data of files
-		msdCM = infiles.msd_com(ifile, N_chain, rCM, cnt1);	//msd of CM
+		for (int i = 0; i < N_chain; i++)
+			msdCM += infiles.msd_com(ifile, Num_chains, rCM, cnt);	//msd of CM
 	}
 		
 
