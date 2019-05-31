@@ -25,7 +25,7 @@ string outname = "test.log";
 ofstream output(outname);
 
 const double md_dt = 0.001;
-const int Num_frame = 4;
+const int Num_frame = 2;
 const int dNM = 0;
 const int Max_frame = Num_frame - dNM;
 const int framestep = 100000;
@@ -34,9 +34,9 @@ vector<vector<vector<double> > > atom(Num_frame, vector<vector<double> >(Num_bee
 //center[iframe] [jchain] [x,y,z]
 vector<vector<vector<double> > > rCM(Num_frame, vector<vector<double> >(Num_chains, vector<double>(dimension,0)));	//each frame with centers of chain	
 //count[0,ifile] [msd_frame]: 0 for sum of average
-vector<vector<int> >count(Num_file + 1, vector<int>(Max_frame));		//count 000
+vector<vector<int> >cnt(Num_file + 1, vector<int>(Max_frame));		//count 000
 //msd[iframe] [jchain] [0,x,y,z]: 0 for sum of average
-vector<vector<vector<double> > > msd(Max_frame, vector<vector<double> >(Num_chains, vector<double>(dimension*Num_file+1, 0))); 	//mean squared displacement of each chain
+vector<vector<vector<double> > > msdCM(Max_frame, vector<vector<double> >(Num_chains, vector<double>(dimension*Num_file+1, 0))); 	//mean squared displacement of each chain
 //input filename
 vector<vector<string> > filename(Num_file, vector<string>(2));		//filename[ifile][name,label]
 //Num_file, max_file, files, 
@@ -66,13 +66,14 @@ int main()
 	//atom[iframe] [id] [id,type,xu,yu,zu...]
 	for(int ifile = 0; ifile < num; ifile++)
 	{
-		atom = infiles.read_data(ifile, closefiles);		//read atom data from files, exluding closefiles
+		atom = infiles.read_data(ifile, closefiles, output);		//read atom data from files, exluding closefiles
 		rCM = infiles.center(ifile, N_chain, atom);			//positiion of CM from atom data of files
+		msdCM = infiles.msd_com(ifile, N_chain, rCM, cnt);
 	}
 	cout << endl;
 	cout << infiles;
-	cout << atom;
 	cout << rCM;
+	cout << msdCM;
 	//ifstream fin("test.text");
 
 	return 0;

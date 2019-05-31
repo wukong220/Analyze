@@ -221,7 +221,7 @@ vector<vector<vector<double> > > LmpFile::read_data(const int ifile, const vecto
 }
 
 //calculate average msd of the atoms
-vector<vector<double> > LmpFile::msd_ave(const int ifile, const int nAtom, const vector<vector<vector<double> > > &vec, vector<vector<int> > &index)
+vector<vector<double> > LmpFile::msd_ave(const int ifile, const int nAtom, const vector<vector<vector<double> > > &vec, vector<vector<int> > &count)
 {
 }
 
