@@ -9,6 +9,8 @@
 
 using namespace std;
 
+typedef vector<vector<vector<double> > > vec_doub3;
+
 extern const int Num_info;				//id type xu yu zu vx vy vz c_orient[1] c_orient[2] c_orient[3] c_orient[4] c_shape[1] c_shape[2] c_shape[3]
 extern const double mass;
 extern const int Num_beeds; 			//Number of beed
@@ -23,6 +25,7 @@ extern const int framestep;
 
 extern ofstream output;
 
+vec_doub3 operator+=(vec_doub3 &vec0, const vec_doub3 vec1);
 //output for check
 ostream & operator<<(ostream & os, vector<int> &vec);
 ostream & operator<<(ostream & os, vector<double> &vec);

@@ -140,11 +140,11 @@ ostream & operator<<(ostream & os, const LmpFile & file)
 	return os;
 }
 
-vector<vector<vector<double> > > LmpFile::read_data(const int ifile, const vector<int> closefiles, ofstream &output)
+vec_doub3 LmpFile::read_data(const int ifile, const vector<int> closefiles, ofstream &output)
 {
 	//input	
 	//extern const int Num_info = 15; Num_beeds = N_chain * Num_chains; 
-	vector<vector<vector<double> > > atom(m_NumFrame, vector<vector<double> >(Num_beeds, vector<double>(Num_info,0)));
+	vec_doub3 atom(m_NumFrame, vector<vector<double> >(Num_beeds, vector<double>(Num_info,0)));
 	string error = "Right";
 	int timestep = 0;
 	string temp;
@@ -221,12 +221,12 @@ vector<vector<vector<double> > > LmpFile::read_data(const int ifile, const vecto
 }
 
 //calcucate position of the center of mass 
-vector<vector<vector<double> > > LmpFile::center(const int ifile, const int nChain, const vector<vector<vector<double> > > &vec)
+vec_doub3 LmpFile::center(const int ifile, const int nChain, const vec_doub3 &vec)
 {
-	//extern int Num_beeds; dimension = 2
+	//extern int dimension = 2
 	//extern double mass = 1.0
-	int NumChains = Num_beeds / nChain;
-	vector<vector<vector<double> > > rCM(m_NumFrame, vector<vector<double> >(NumChains, vector<double>(dimension + 1,0)));
+	int NumChains = vec[0].size() / nChain;
+	vec_doub3 rCM(m_NumFrame, vector<vector<double> >(NumChains, vector<double>(dimension + 1,0)));
 	for (int i = 0; i < m_frames[ifile][0]; i++)			
 	{
 		for (int j = 0; j < NumChains; j++)
@@ -249,10 +249,13 @@ vector<vector<vector<double> > > LmpFile::center(const int ifile, const int nCha
 	return rCM;
 }
 
-vector<vector<vector<double> > > LmpFile::msd_ave(const int ifile, const int num, const vector<vector<vector<double> > > &vec, vector<vector<int> > &count)
+vec_doub3 LmpFile::msd_ave(const int ifile, const vec_doub3 &vec, vector<vector<int> > &count, vec_doub3 &msd)
 {
-	//extern int Max_frame; int Num_file
-	vector<vector<vector<double> > > msd(Max_frame, vector<vector<double> >(num, vector<double>((dimension + 1) * m_NumFile + 1, 0)));
+	//extern int Max_frame; 
+	//vec_doub3 msd(Max_frame, vector<vector<double> >(num, vector<double>((dimension + 1) * m_NumFile + 1, 0)));
+	//Num_chains
+	int test = 0;
+	int num = vec[0].size();
 	for (int dt = 1; dt <= m_frames[ifile][1]; dt++)
 	{
 		for(int Tstart = 0; Tstart < min(m_frames[ifile][1], m_frames[ifile][0] - dt); Tstart++)
@@ -262,7 +265,7 @@ vector<vector<vector<double> > > LmpFile::msd_ave(const int ifile, const int num
 				for(int i = 0; i < num; i++)
 				{
 					//extern int dimension = 2
-					int k = dimension * ifile + 1;
+					int k = (dimension + 1) * ifile + 1;
 					count[ifile+1][dt-1]++;
 					msd[dt-1][i][k] += (vec[Tstop][i][0] - vec[Tstart][i][0])*(vec[Tstop][i][0] - vec[Tstart][i][0]); 
 					msd[dt-1][i][k+1] += (vec[Tstop][i][1] - vec[Tstart][i][1])*(vec[Tstop][i][1] - vec[Tstart][i][1]);
@@ -272,10 +275,17 @@ vector<vector<vector<double> > > LmpFile::msd_ave(const int ifile, const int num
 						if (m_fnamebel[ifile][1] != "  ")
 							count[0][dt-1]++;
 						if (Tstart == (min(m_frames[ifile][1], m_frames[ifile][0] - dt)-1))
+						{
+							if (m_frames[ifile][1] == Max_frame && m_frames[ifile][0] == Num_frame)
 							{
-								if (m_frames[ifile][1] == Max_frame && m_frames[ifile][0] == Num_frame)
-									msd[dt-1][i][0] += msd[dt-1][i][k] + msd[dt-1][i][k+1];
+								//msd[dt-1][i][0] += msd[dt-1][i][k+2];
+								test++;
+								cout << " test " << test << " " << count[0][Max_frame] << endl;
+								msd[dt-1][i][0] = (msd[dt-1][i][0] * (count[0][Max_frame]) + msd[dt-1][i][k+2]) / (count[0][Max_frame] + 1);
 							}
+							if (dt == Max_frame)
+								count[0][Max_frame]++;
+						}
 					}
 					else if (m_fnamebel[ifile][1] != "  " && Tstart == (min(m_frames[ifile][1], m_frames[ifile][0] - dt)-1))
 					{
@@ -306,7 +316,7 @@ vector<vector<vector<double> > > LmpFile::msd_ave(const int ifile, const int num
 
 
 //read atom information -> atom[iframe][jatom][kinfo]
-string read_atoms(ifstream &fin, int i, int nAtom, vector<vector<vector<double> > > &vec)
+string read_atoms(ifstream &fin, int i, int nAtom, vec_doub3 &vec)
 {
 	string temp;
 	stringstream ss;

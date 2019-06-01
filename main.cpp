@@ -28,19 +28,19 @@ const int dNM = 3000;
 const int Max_frame = Num_frame - dNM;
 const int framestep = 5000;
 //atom[iframe] [id] [id,type,xu,yu,zu...]
-vector<vector<vector<double> > > atom(Num_frame, vector<vector<double> >(Num_beeds, vector<double>(Num_info,0))); 
-//cnt[0,ifile] [msd_frame]: 0 for sum of average
-vector<vector<int> > cnt(Num_file + 1, vector<int>(Max_frame));		//count
+vec_doub3 atom(Num_frame, vector<vector<double> >(Num_beeds, vector<double>(Num_info,0))); 
 //rCM[iframe] [jchain] [x,y,z]
-vector<vector<vector<double> > > rCM(Num_frame, vector<vector<double> >(Num_chains, vector<double>(dimension + 1,0)));	//each frame with centers of chain	
-//msd[iframe] [jchain] [0,x,y,z]: 0 for sum of average
-vector<vector<vector<double> > > msdCM(Max_frame, vector<vector<double> >(Num_chains, vector<double>(dimension*Num_file + 1, 0))); 	//msd of CM for each chain
+vec_doub3 rCM(Num_frame, vector<vector<double> >(Num_chains, vector<double>(dimension + 1,0)));	//each frame with centers of chain	
+//msd[iframe] [jchain] [0,x,y,z]: 0 for sum of average, (dimension+1)for sum
+vec_doub3 msdCM(Max_frame, vector<vector<double> >(Num_chains, vector<double>((dimension + 1) * Num_file + 1, 0))); 	//msd of CM for each chain
+//cnt[0,ifile] [msd_frame]: 0 for sum of average; (Max_frame+1) for compare average 
+vector<vector<int> > cnt(Num_file + 1, vector<int>(Max_frame + 1, 0));		//count
 //input filename
-vector<vector<string> > fnamebel(Num_file, vector<string>(2));		//fnamebel[ifile][name,label,Num_info]
+//vector<vector<string> > fnamebel(Num_file, vector<string>(2));		//fnamebel[ifile][name,label,Num_info]
 //Num_file, max_file, files, 
-vector<int> files(3, Num_file);					                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+//vector<int> files(3, Num_file);					                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 //ifile: Num_frame, Max_frame
-vector<vector<int> > frames(Num_file + 1, vector<int>(2, Num_frame));			
+//vector<vector<int> > frames(Num_file + 1, vector<int>(2, Num_frame));			
 
 int main() 
 {
@@ -58,15 +58,15 @@ int main()
 	//LmpFile file;
 	LmpFile infiles(finname);		//fnamebel[ifile][name,label]; frames[ifile][Num_frame, Max_frame]
 	f = infiles.files();
+	//cnt[0][Max_frame] = 1;
 	for(int ifile = 0; ifile < f; ifile++)
 	{
 		atom = infiles.read_data(ifile, closefiles,output);		//read atom data from files, exluding closefiles
 		rCM = infiles.center(ifile, N_chain, atom);			//positiion of CM from atom data of files
-		for (int i = 0; i < N_chain; i++)
-			msdCM += infiles.msd_com(ifile, Num_chains, rCM, cnt);	//msd of CM
+		count[0][Max_frame] = 1;
+		infiles.msd_ave(ifile, rCM, cnt, msdCM);		//msd of CM
 	}
 		
-
 	//time
 	clock_t stop = clock();		//#include <ctime>
 	double Time = (double)(stop - start)/CLOCKS_PER_SEC;
