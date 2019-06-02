@@ -54,7 +54,7 @@ int main()
 	inFiles.out_msd(foutname, msdCM);
 	cout << endl << inFiles;
 	cout << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logname << endl;
-	output << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logfile << endl;
+	output << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logname << endl;
 	output.close();
 	/*vec_doub3 vec0(3, vector<vector<double> >(3, vector<double>(3,1)));
 	vec_doub3 vec1(vec0);

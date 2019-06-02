@@ -331,7 +331,7 @@ void LmpFile::out_msd(const string foutname, const vec_doub3 vec)
 			for(int i = 0; i < num; i++)
 			{	
 				int j = (dimension + 1) * ifile + 1; 
-				if (m_fnamebel[ifile][1] == "000" && dt >= m_frames[ifile + 1][1])	//suplement
+				if (m_fnamebel[ifile][1] == "000" && dt > m_frames[ifile + 1][1])	//suplement
 				{
 					cout << "nan ";
 					//output << "nan ";
