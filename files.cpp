@@ -6,12 +6,11 @@
 LmpFile::LmpFile()
 {
 	stringstream ss, sl;
-	m_NumFile = Num_file;
-	m_cnt = vector<int> {m_NumFile, 0};		//cnt[files, count]
+	m_files = vector<int> {Num_file, Num_file, 0};		//cnt[Num_file, files, count]
 	m_head = "none";
-	m_fnamebel = vector<vector<string> > (m_NumFile, vector<string>(2));
-	m_frames = vector<vector<int> >(m_NumFile + 1, vector<int>{Num_frame, Num_frame - dNM});
-	for (int i = 0; i < m_NumFile; i++)
+	m_fnamebel = vector<vector<string> > (m_files[0], vector<string>(2));
+	m_frames = vector<vector<int> >(m_files[0] + 1, vector<int>{Num_frame, Num_frame - dNM});
+	for (int i = 0; i < m_files[0]; i++)
 	{
 		if (i < 9)
 		{
@@ -32,27 +31,25 @@ LmpFile::LmpFile()
 
 LmpFile::LmpFile(const string & finname)
 {
-	m_cnt = vector<int> {m_NumFile, 0};
+	m_files = vector<int> {Num_file, Num_file, 0};
 	m_head = "none";
 	stringstream ss, sl;
 	if (finname != "\0")
 	{
-		m_NumFile = 1;
-		m_cnt[0] = 1;
-		m_fnamebel = vector<vector<string> > (m_NumFile, vector<string>(2));
-		m_frames = vector<vector<int> >(m_NumFile + 1, vector<int>{Num_frame, Num_frame - dNM});
+		m_files[0] = 1;
+		m_files[1] = 1;
+		m_fnamebel = vector<vector<string> > (m_files[0], vector<string>(2));
+		m_frames = vector<vector<int> >(m_files[0] + 1, vector<int>{Num_frame, Num_frame - dNM});
 		m_fnamebel[0][0] = finname + "u.lammpstrj";
 		m_fnamebel[0][1] = "000";
 		
 	}
 	else
 	{
-		m_NumFile = Num_file;
-		m_cnt[0] = m_NumFile;
-		m_fnamebel = vector<vector<string> > (m_NumFile, vector<string>(2));
-		m_frames = vector<vector<int> >(m_NumFile + 1, vector<int>{Num_frame, Num_frame - dNM});
+		m_fnamebel = vector<vector<string> > (m_files[0], vector<string>(2));
+		m_frames = vector<vector<int> >(m_files[0] + 1, vector<int>{Num_frame, Num_frame - dNM});
 		
-		for (int i = 0; i < m_NumFile; i++)
+		for (int i = 0; i < m_files[0]; i++)
 		{
 			if (i < 9)
 			{
@@ -74,28 +71,29 @@ LmpFile::LmpFile(const string & finname)
 
 LmpFile::LmpFile(const vector<vector<string> > fnamebel)
 {
-	m_NumFile = fnamebel.size();
-	m_cnt = vector<int> {m_NumFile, 0};
+	int num = fnamebel.size();
+	m_files = vector<int> {num, num, 0};
 	m_head = "none";
 	m_fnamebel = fnamebel;
-	m_frames = vector<vector<int> >(m_NumFile + 1, vector<int>{Num_frame, Num_frame - dNM});
+	m_frames = vector<vector<int> >(m_files[0] + 1, vector<int>{Num_frame, Num_frame - dNM});
 }
 
 LmpFile::LmpFile(const vector<vector<string> > fnamebel, const int a)
 {
-	m_NumFile = fnamebel.size();
-	m_cnt = vector<int> {m_NumFile, 0};
+	int num = fnamebel.size();
+	m_files = vector<int> {num, num, 0};
 	m_head = "none";
 	m_fnamebel = fnamebel;
-	m_frames = vector<vector<int> >(m_NumFile + 1, vector<int>{a, a - dNM});
+	m_frames = vector<vector<int> >(m_files[0] + 1, vector<int>{a, a - dNM});
 }
 
 LmpFile::LmpFile(const vector<vector<string> > fnamebel, const vector<vector<int> > frames)
 {
-	m_NumFile = fnamebel.size();
-	m_cnt = vector<int> {m_NumFile, 0};
+	int num = fnamebel.size();
+	m_files = vector<int> {num, num, 0};
 	m_head = "none";
 	m_fnamebel = fnamebel;
+	m_fnamebel.insert(m_fnamebel.begin(), m_fnamebel[0]);
 	m_frames = frames;
 	m_frames.insert(m_frames.begin(), m_frames[0]);
 }
@@ -118,14 +116,14 @@ ostream & operator<<(ostream & os, const LmpFile & file)
 	}
 	cout << "\n\n";
 	
-	cout << "Effective Files: " << file.m_cnt[0] << endl;
+	cout << "Effective Files: " << file.m_files[1] << endl;
 	os << setw(25) << left << "Name ";
 	os << setw(5) << "Label";
 	os << " ";
 	os << setw(7) << left << "Num";
 	os << " ";
 	os << setw(7) << left << "Max" << endl;
-	for (int i = 0; i < file.m_NumFile; i++)
+	for (int i = 0; i < file.m_files[0]; i++)
 	{
 		os << setw(25) << left << file.m_fnamebel[i][0] << " ";
 		os << setw(5) << file.m_fnamebel[i][1];
@@ -138,7 +136,7 @@ ostream & operator<<(ostream & os, const LmpFile & file)
 	return os;
 }
 
-vec_doub3 LmpFile::read_data(const int ifile, const vector<int> closefiles, const string logname, const int nAtoms)
+vec_doub3 LmpFile::read_data(const int ifile, const vector<int> closefiles, ofstream &output, const int nAtoms)
 {
 	//input	
 	//extern const int Num_info = 15;
@@ -148,11 +146,10 @@ vec_doub3 LmpFile::read_data(const int ifile, const vector<int> closefiles, cons
 	string temp;
 	stringstream ss;
 	int Num_atoms = 1;
-	ofstream output(logname);
 	
 	ifstream fin(m_fnamebel[ifile][0]);
 	if (m_fnamebel[0][1] == "000")
-		m_cnt[0] = 1;
+		m_files[1] = 1;
 	
 	for (int j = 0; j < closefiles.size(); j++)
 	{
@@ -169,7 +166,7 @@ vec_doub3 LmpFile::read_data(const int ifile, const vector<int> closefiles, cons
 		cout << error << m_fnamebel[ifile][0] << endl;
 		output << error << m_fnamebel[ifile][0] << endl;		//for output
 		
-		m_cnt[0]--;
+		m_files[1]--;
 		m_fnamebel[ifile][1] = "  ";
 		
 		m_frames[ifile + 1][0] = 0;
@@ -196,7 +193,7 @@ vec_doub3 LmpFile::read_data(const int ifile, const vector<int> closefiles, cons
 			error = "\"ERROR\": TIMESTEP/FRAME(files.cpp:198) -> ";
 			cout << error << timestep << " != " << i * framestep << " (" << i << " * " << framestep << ")" << endl;
 			output << error << timestep << " != " << i * framestep << " (" << i << " * " << framestep << ")" << endl;
-			m_cnt[0]--;	
+			m_files[1]--;	
 			m_fnamebel[ifile][1]= "000";
 			m_frames[ifile + 1][0] = i - 1 ;					//frames[Num_frames, max_frames]
 			m_frames[ifile + 1][1] = m_frames[ifile + 1][0] - dNM;
@@ -207,11 +204,10 @@ vec_doub3 LmpFile::read_data(const int ifile, const vector<int> closefiles, cons
 		//read_type(fin, i, type, atom);
 	}
 	fin.close();
-	output.close();
 	//extern const int dNM = 3000;
 	//m_frames[ifile + 1][1] = m_frames[ifile + 1][0] - dNM;	//frames[Num_frames, max_frames]
-	if (m_cnt[0] == 0 && error == "Right")
-		m_cnt[0] = 1;								//single file	
+	if (m_files[1] == 0 && error == "Right")
+		m_files[1] = 1;								//single file	
 	return atom;
 }
 
@@ -274,11 +270,11 @@ vec_doub3 LmpFile::msd_ave(const int ifile, const vec_doub3 vec, vec_doub3 &msd)
 								msd[dt-1][i][j] /= cnt[dt-1];
 								msd[dt-1][i][j+1] /= cnt[dt-1];
 								msd[dt-1][i][j+2] = msd[dt-1][i][j] + msd[dt-1][i][j+1];
-								//cout << "cnt[1]" << m_cnt[1] << endl;
-								msd[dt-1][i][0] = (msd[dt-1][i][0] * (m_cnt[1]) + msd[dt-1][i][j+2]) / (m_cnt[1] + 1);
+								//cout << "files[2]" << m_files[2] << endl;
+								msd[dt-1][i][0] = (msd[dt-1][i][0] * (m_files[2]) + msd[dt-1][i][j+2]) / (m_files[2] + 1);
 							}
 							if (dt == m_frames[0][1])
-								m_cnt[1]++;
+								m_files[2]++;
 						}
 					}
 					else if (m_fnamebel[ifile][1] != "  " && Tstart == (min(m_frames[ifile + 1][1], m_frames[ifile + 1][0] - dt)-1))
@@ -303,14 +299,14 @@ void LmpFile::out_msd(const string foutname, const vec_doub3 vec)
 	fout << "time ";
 	cout << "time "; 
 	//output << "time ";
-	for (int ifile = 0; ifile < m_NumFile; ifile++)
+	for (int ifile = 0; ifile < m_files[0]; ifile++)
 	{
 		for (int j = 0; j < num; j++)
 		{
 			cout << "msd[" << j + 1 << "][" << m_fnamebel[ifile][1] << "] ";
 			//output << "msd[" << j + 1 << "][" << m_fnamebel[ifile][1] << "] ";
 			fout << "msd[" << j + 1 << "][" << m_fnamebel[ifile][1] << "] ";
-			if (ifile == m_NumFile - 1)
+			if (ifile == m_files[0] - 1)
 			{
 				cout << "ave[" << j + 1 << "] ";
 				//output << "ave[" << j + 1 << "] ";
@@ -328,7 +324,7 @@ void LmpFile::out_msd(const string foutname, const vec_doub3 vec)
 		//output << time << " ";
 		fout << time << " ";
 		
-		for (int ifile = 0; ifile < m_NumFile; ifile++)
+		for (int ifile = 0; ifile < m_files[0]; ifile++)
 		{
 			if (m_fnamebel[ifile][1] == "  ")
 				continue;
@@ -347,11 +343,11 @@ void LmpFile::out_msd(const string foutname, const vec_doub3 vec)
 					//output << vec[dt-1][i][j+2] << " ";
 					fout << vec[dt-1][i][j+2] << " ";
 				}	
-				if (ifile == m_NumFile - 1)
+				if (ifile == m_files[0] - 1)
 				{
 					cout << vec[dt-1][i][0];		// << " " << vec[dt-1][i][(dimension + 1) * Num_file + 1]/count[0][dt-1];
 					//output << vec[dt-1][i][0];		// << " " << vec[dt-1][i][(dimension + 1) * Num_file + 1]/count[0][dt-1];
-					if (m_cnt[0] != 1)
+					if (m_files[1] != 1)
 						fout << vec[dt-1][i][0]; 	// << " " << vec[dt-1][i][(dimension + 1) * Num_file + 1]/count[0][dt-1];
 				}
 			}

@@ -22,6 +22,7 @@ extern const int Num_frame;
 extern const int dNM;
 //extern const int Max_frame;
 extern const int framestep;
+//extern ofstream output;
 
 vec_doub3 operator+=(vec_doub3 &vec0, const vec_doub3 vec1);
 //output for check

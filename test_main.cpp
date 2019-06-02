@@ -13,10 +13,10 @@ const int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 //vector<string> type{"1", "2"};								//atom types to read
 
 vector<int> closefiles{};				//closefiles
-string finname ;//= "001";				//empty or single input file
+string finname = "001";				//empty or single input file
 string foutname = "test.txt";		
 string logname = "test.log";
-//ofstream output(logname);
+
 
 const double md_dt = 0.001;
 const int Num_frame = 10000;
@@ -36,13 +36,14 @@ int main()
 	
 	//LmpFile infiles;
 	LmpFile inFiles(finname);
+	ofstream output(logname);
 	int f = inFiles.files();
 	
 	//atom[iframe] [id] [id,type,xu,yu,zu...]
 	for(int ifile = 0; ifile < f; ifile++)
 	{
 		//extern int Num_info; int framestep;
-		vecAtom = inFiles.read_data(ifile, closefiles, logname, Num_beeds);		//data from files, closefiles, atoms
+		vecAtom = inFiles.read_data(ifile, closefiles, output, Num_beeds);		//data from files, closefiles, atoms
 		//cout << vecAtom;
 		rCM = inFiles.center(ifile, N_chain, vecAtom);			//positiion of CM from atom data of files
 		//cout << "rCM: \n" << rCM;
@@ -53,8 +54,8 @@ int main()
 	inFiles.out_msd(foutname, msdCM);
 	cout << endl << inFiles;
 	cout << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logname << endl;
-	//output << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logfile << endl;
-	//output.close();
+	output << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logfile << endl;
+	output.close();
 	/*vec_doub3 vec0(3, vector<vector<double> >(3, vector<double>(3,1)));
 	vec_doub3 vec1(vec0);
 	cout << vec0;
