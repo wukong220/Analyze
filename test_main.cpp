@@ -4,7 +4,7 @@
 
 const int Num_info = 15;		//id type xu yu zu vx vy vz c_orient[1] c_orient[2] c_orient[3] c_orient[4] c_shape[1] c_shape[2] c_shape[3]
 const int dimension = 2;
-const int Num_file = 3;
+const int Num_file = 2;
 
 const double mass = 1.0;
 const int N_chain = 3;									//Polarization of single chain
@@ -16,7 +16,7 @@ vector<int> closefiles{};				//closefiles
 string finname ;//= "001";				//empty or single input file
 string foutname = "test.txt";		
 string logname = "test.log";
-ofstream output(logname);
+//ofstream output(logname);
 
 const double md_dt = 0.001;
 const int Num_frame = 10000;
@@ -37,6 +37,7 @@ int main()
 	//LmpFile infiles;
 	LmpFile inFiles(finname);
 	int f = inFiles.files();
+	
 	//atom[iframe] [id] [id,type,xu,yu,zu...]
 	for(int ifile = 0; ifile < f; ifile++)
 	{
@@ -49,7 +50,7 @@ int main()
 		//cout << "msd: \n" << msdCM;
 		
 	}
-	infiles.out_msd(foutname, msdCM);
+	inFiles.out_msd(foutname, msdCM);
 	cout << endl << inFiles;
 	cout << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logname << endl;
 	//output << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logfile << endl;

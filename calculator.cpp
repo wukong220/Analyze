@@ -17,7 +17,7 @@
 using namespace std;
 bool sq();
 bool sum();
-
+const int framestep = 5000;
 const double kB=1.3806485279*pow(10,-23);
 const double PI=3.141592653;
 
@@ -33,6 +33,14 @@ int main()
 	stringstream ss;		
 	int i = 0;
 	int ll = 10;
+	vector<vector<double> > vec(3, vector<double>{5, 4});
+	vec[0][1] -= 1;
+	vec[0][0] -= 1;
+	cout << vec;
+	vec.insert(vec.begin(), vec[0]);
+	cout << vec;
+	
+	
  // vector<string> str(2);
 	/*while (1)
 	{
@@ -40,13 +48,13 @@ int main()
 		if(!sq())
 			break;
 	};
-	*/
+	
 	while (1)
 	{
 		cout << " Sum: " << endl;
 		if(!sum())
 			break;
-	};
+	};*/
 	return 0;
 }
 

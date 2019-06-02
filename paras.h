@@ -23,8 +23,6 @@ extern const int dNM;
 //extern const int Max_frame;
 extern const int framestep;
 
-
-
 vec_doub3 operator+=(vec_doub3 &vec0, const vec_doub3 vec1);
 //output for check
 ostream & operator<<(ostream & os, vector<int> &vec);
