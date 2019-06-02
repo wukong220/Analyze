@@ -33,23 +33,33 @@ int main()
 	//msd[iframe] [jchain] [0,x,y,z]: 0 for sum of average, (dimension+1)for sum
 	vec_doub3 msdCM(Max_frame, vector<vector<double> >(Num_chains, vector<double>((dimension + 1) * Num_file + 1, 0))); 	//msd of CM for each chain
 	//cnt[0,ifile] [msd_frame]: 0 for sum of average; (Max_frame+1) for compare average 
-	vector<vector<int> > cnt(Num_file + 1, vector<int>(Max_frame + 1, 0));		//count
-
+	
 	string str;
 	stringstream ss;
-	int f = infiles.files();
-	double time;
 	clock_t start = clock();		//start time
-	//input filename
-	//LmpFile file;
-	LmpFile infiles(finname);		//fnamebel[ifile][name,label]; frames[ifile][Num_frame, Max_frame]
+	
+	int f = Num_file; 
+	if (finname != "\0")
+		f = 1;
+	
+	//LmpFile infiles;
+	LmpFile infiles(finname);
+	//atom[iframe] [id] [id,type,xu,yu,zu...]
 	for(int ifile = 0; ifile < f; ifile++)
 	{
-		atom = infiles.read_data(ifile, closefiles,output);		//read atom data from files, exluding closefiles
+		atom = infiles.read_data(ifile, closefiles, output);		//read atom data from files, exluding closefiles
+		//cout << atom;
 		rCM = infiles.center(ifile, N_chain, atom);			//positiion of CM from atom data of files
-		infiles.msd_ave(ifile, rCM, cnt, msdCM);		//msd of CM
-	}
+		//cout << "rCM: \n" << rCM;
+		infiles.msd_ave(ifile, rCM, msdCM);
+		//cout << "msd: \n" << msd;
 		
+	}
+	infiles.out_msd(foutname, msdCM);
+	cout << endl << infiles;
+	cout << "\"Writing\": " << foutname << endl << "\"Outputing\": " << outname << endl;
+	output << "\"Writing\": " << foutname << endl << "\"Outputing\": " << outname << endl;
+	output.close();
 		
 	//time
 	clock_t stop = clock();		//#include <ctime>
