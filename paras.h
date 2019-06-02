@@ -35,21 +35,6 @@ ostream & operator<<(ostream & os, vector<vector<string> > &vec);
 //just for fun
 ostream & operator<<(ostream & os, vector<vector<vector<double> > > &vec);	
 
-
-
-
 //for test
-void forTest(vector<int> &files);
-
-class Test
-{
-	private:
-		vector<int> m_x;
-	public:
-		Test();
-		~Test();
-		
-		void out();
-};
 
 #endif

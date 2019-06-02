@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
+#include <iomanip>
 
 using namespace std;
 
@@ -31,7 +33,8 @@ public:
 	//ifile, N_chain, atom[ifile][jatom][xu, yu, zu...]
 	vector<vector<vector<double> > > center(const int, const int, const vector<vector<vector<double> > > &);	//ifile, N_chain, atom
 	//ifile, rCM[ifile][jchain][x, y, z], count[ifile][dframe], msd[iframe][jchain][0, x, y, z]
-	vector<vector<vector<double> > > msd_ave(const int, const vector<vector<vector<double> > > &, vector<vector<int> > &, vector<vector<vector<double> > > &);	
+	vector<vector<vector<double> > > msd_ave(const int, const vector<vector<vector<double> > > , vector<vector<int> > &, vector<vector<vector<double> > > &);	
+	void out_msd(const string, const vector<vector<int> >, const vector<vector<vector<double> > >);
 };
 
 string read_atoms(ifstream &, int, int, vector<vector<vector<double> > > &); 	// fin, iframe, nAtoms, atom[i][j][k]
