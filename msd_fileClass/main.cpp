@@ -14,12 +14,12 @@ const int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 
 vector<int> closefiles{};				//closefiles
 string finname;// = "003";				//empty or single input file
-string foutname = "MSD.000_0.4_2.5_1.0_3.0.txt";		
+string foutname = "MSD.000.txt";		
 string logname = "MSD.000.log";
 
 const double md_dt = 0.001;
-const int Num_frame = 10000;
-const int dNM = 3000;
+const int Num_frame = 1000;
+const int dNM = 500;
 const int Max_frame = Num_frame - dNM;
 const int framestep = 5000;		
 

@@ -327,8 +327,8 @@ void LmpFile::out_msd(const string foutname, const vec_doub3 vec)
 		
 		for (int ifile = 0; ifile < m_files[0]; ifile++)
 		{
-			if (m_fnamebel[ifile][1] == "  ")
-				continue;
+			//if (m_fnamebel[ifile][1] == "  ")
+			//	continue;
 			for(int i = 0; i < num; i++)
 			{	
 				int j = (dimension + 1) * ifile + 1; 
@@ -338,12 +338,13 @@ void LmpFile::out_msd(const string foutname, const vec_doub3 vec)
 					//output << "nan ";
 					fout << "nan ";
 				}
-				else
+				else if (m_fnamebel[ifile][1] != "  ")
 				{
 					cout << vec[dt-1][i][j+2] << " ";
 					//output << vec[dt-1][i][j+2] << " ";
 					fout << vec[dt-1][i][j+2] << " ";
 				}	
+				
 				if (ifile == m_files[0] - 1)
 				{
 					cout << vec[dt-1][i][0];		// << " " << vec[dt-1][i][(dimension + 1) * Num_file + 1]/count[0][dt-1];

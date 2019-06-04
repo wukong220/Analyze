@@ -1,24 +1,7 @@
 "Opening": 001u.lammpstrj……
 "Opening": 002u.lammpstrj……
 "ERROR": TIMESTEP/FRAME(files.cpp:198) -> 34995000 != 35000000 (7000 * 5000)
-"Opening": 003u.lammpstrj……
-"ERROR": Cannot open 004u.lammpstrj
-"ERROR": Cannot open 005u.lammpstrj
-"ERROR": Cannot open 006u.lammpstrj
-"ERROR": Cannot open 007u.lammpstrj
-"ERROR": Cannot open 008u.lammpstrj
-"ERROR": Cannot open 009u.lammpstrj
-"ERROR": Cannot open 010u.lammpstrj
-"ERROR": Cannot open 011u.lammpstrj
-"ERROR": Cannot open 012u.lammpstrj
-"ERROR": Cannot open 013u.lammpstrj
-"ERROR": Cannot open 014u.lammpstrj
-"ERROR": Cannot open 015u.lammpstrj
-"ERROR": Cannot open 016u.lammpstrj
-"ERROR": Cannot open 017u.lammpstrj
-"ERROR": Cannot open 018u.lammpstrj
-"ERROR": Cannot open 019u.lammpstrj
-"ERROR": Cannot open 020u.lammpstrj
-"Writing": MSD.000_0.4_2.5_1.0_3.0.txt
+"CLOSE": 003u.lammpstrj
+"Writing": MSD.000.txt
 "Outputing": MSD.000.log
-"Time": 00:00:13
+"Time": 00:00:05
