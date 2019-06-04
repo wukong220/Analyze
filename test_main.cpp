@@ -13,16 +13,15 @@ const int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 //vector<string> type{"1", "2"};								//atom types to read
 
 vector<int> closefiles{};				//closefiles
-string finname = "001";				//empty or single input file
+string finname ;//= "001";				//empty or single input file
 string foutname = "test.txt";		
 string logname = "test.log";
 
 
 const double md_dt = 0.001;
-const int Num_frame = 10000;
-const int dNM = 5000;
-const int Max_frame = Num_frame - dNM;
 const int framestep = 5000;
+const int Num_frame = 10000;
+const int dNM = 2000;
 
 int main()
 {
@@ -31,7 +30,7 @@ int main()
 	//center[iframe] [jchain] [x,y,z]
 	vec_doub3 rCM(Num_frame, vector<vector<double> >(Num_chains, vector<double>(dimension,0)));	//each frame with centers of chain	
 	//msd[iframe] [jchain] [0,x,y,z]: 0 for sum of average
-	vec_doub3 msdCM(Max_frame, vector<vector<double> >(Num_chains, vector<double>((dimension + 1) * Num_file + 1, 0))); 	//mean squared displacement of each chain
+	vec_doub3 msdCM(Num_frame - dNM, vector<vector<double> >(Num_chains, vector<double>((dimension + 1) * Num_file + 1, 0))); 	//mean squared displacement of each chain
 	//count[0,ifile] [msd_frame]: 0 for sum of average
 	
 	//LmpFile infiles;
@@ -56,13 +55,6 @@ int main()
 	cout << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logname << endl;
 	output << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logname << endl;
 	output.close();
-	/*vec_doub3 vec0(3, vector<vector<double> >(3, vector<double>(3,1)));
-	vec_doub3 vec1(vec0);
-	cout << vec0;
-	cout << vec1;
-	vec0 += vec1;
-	cout << vec0;*/
-	//ifstream fin("test.text");
 
 	return 0;
 }

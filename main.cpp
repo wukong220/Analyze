@@ -54,7 +54,6 @@ int main()
 	}
 	inFiles.out_msd(foutname, msdCM);
 	cout << endl << inFiles;
-	ofstream fout(logname, ios::app);
 	cout << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logname << endl;
 	output << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logname << endl;	
 	//time
