@@ -315,7 +315,8 @@ void LmpFile::out_msd(const string foutname, const vec_doub3 vec)
 		}
 	}
 	cout << endl;
-
+	fout << endl;
+	
 	//extern int Max_frame = 20000;int framestep = 5000; double md_dt = 0.001;
 	for (int dt = 1; dt <= m_frames[0][1]; dt++)
 	{
