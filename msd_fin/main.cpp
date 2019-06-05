@@ -15,12 +15,12 @@ int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 vector<int> closefiles{};				//closefiles
 string finname;// = "001";				//empty or single input file
 string foutname = "000";		
-string logname = "000";
+string logname = "000.";
 
 const double md_dt = 1;
 const int framestep = 1;	
-int Num_frame = 100000;
-int dNM = 10000;
+int Num_frame = 10000;
+int dNM = 1000;
 int Max_frame = Num_frame - dNM;
 
 void input(int &x);
@@ -32,10 +32,15 @@ int main()
 			
 	string str;
 	stringstream ss;
-	ofstream output(logname);
 	clock_t start = clock();		//start time
 	
-	cout << "dimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n"; //default information
+	cout << "\"Log file name( \'" << logname << ".MSD.log\' for default): \" \n";
+	//output << "\"Log file name( \'" << logname << ".MSD.log\' for default): \" \n";
+	input(logname);
+	logname += ".MSD.log";
+	ofstream output(logname);
+	
+	cout << "\ndimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n"; //default information
 	output << "dimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n";
 	cout << "\"Number of chains( \'" << Num_chains << "\' for default): \"\n";
 	output << "\"Number of chains( \'" << Num_chains << "\' for default): \"\n";
@@ -68,11 +73,7 @@ int main()
 	output << "\n\"Output txt file name( \'" << foutname << ".MSD.txt\' for default): \" \n";
 	input(foutname);
 	foutname += ".MSD.txt";
-	cout << "\"Log file name( \'" << logname << ".MSD.log\' for default): \" \n";
-	output << "\"Log file name( \'" << logname << ".MSD.log\' for default): \" \n";
-	input(logname);
-	logname += ".MSD.log";
-	
+
 	//atom[iframe] [id] [id,type,xu,yu,zu...]
 	vec_doub3 vecAtom(Num_frame, vector<vector<double> >(Num_beeds, vector<double>(Num_info,0))); 
 	//rCM[iframe] [jchain] [x,y,z]
