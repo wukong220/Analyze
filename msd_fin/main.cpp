@@ -4,7 +4,7 @@
 
 const int Num_info = 15;		//id type xu yu zu vx vy vz c_orient[1] c_orient[2] c_orient[3] c_orient[4] c_shape[1] c_shape[2] c_shape[3]
 const int dimension = 2;
-const int Num_file = 20;
+int Num_file = 20;
 
 const double mass = 1.0;
 const int N_chain = 30;									//Polarization of single chain
@@ -13,7 +13,7 @@ const int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 //vector<string> type{"1", "2"};								//atom types to read
 
 vector<int> closefiles{};				//closefiles
-string finname;// = "003";				//empty or single input file
+string finname;// = "001";				//empty or single input file
 string foutname = "MSD.000.txt";		
 string logname = "MSD.000.log";
 
@@ -25,6 +25,26 @@ const int framestep = 5000;
 
 int main() 
 {
+		
+	string str;
+	stringstream ss;
+	char ch;
+	clock_t start = clock();		//start time
+	
+	cout << "\"Number of files: (20 for default)\"\n";
+	cin >> Num_file;
+	
+	cout << "\"Input file (single letter for all):\" \n";
+	cin >> str;
+	if (str.length() != 1 && !(isalpha(str[0])))
+		finname = str;
+	cout << "\"Output txt file:\" \n";
+	cin >> foutname;
+	foutname += ".txt";
+	cout << "\"Log file:\" \n";
+	cin >> logname;
+	logname += ".log";
+	
 	//atom[iframe] [id] [id,type,xu,yu,zu...]
 	vec_doub3 vecAtom(Num_frame, vector<vector<double> >(Num_beeds, vector<double>(Num_info,0))); 
 	//rCM[iframe] [jchain] [x,y,z]
@@ -32,11 +52,7 @@ int main()
 	//msd[iframe] [jchain] [0,x,y,z]: 0 for sum of average, (dimension+1)for sum
 	vec_doub3 msdCM(Max_frame, vector<vector<double> >(Num_chains, vector<double>((dimension + 1) * Num_file + 1, 0))); 	//msd of CM for each chain
 	//cnt[0,ifile] [msd_frame]: 0 for sum of average; (Max_frame+1) for compare average 
-	
-	string str;
-	stringstream ss;
-	clock_t start = clock();		//start time
-	
+
 	//LmpFile infiles;
 	LmpFile inFiles(finname);
 	ofstream output(logname);
