@@ -299,20 +299,21 @@ void LmpFile::out_msd(const string foutname, const vec_doub3 vec)
 	fout << "time ";
 	cout << "time "; 
 	//output << "time ";
-	for (int ifile = 0; ifile < m_files[0]; ifile++)
+	for (int ichain = 0; ichain < num; ichain++)
 	{
-		for (int j = 0; j < num; j++)
+		for (int ifile = 0; ifile < m_files[0]; ifile++)
 		{
-			cout << "msd[" << j + 1 << "][" << m_fnamebel[ifile][1] << "] ";
-			//output << "msd[" << j + 1 << "][" << m_fnamebel[ifile][1] << "] ";
-			fout << "msd[" << j + 1 << "][" << m_fnamebel[ifile][1] << "] ";
+			cout << "msd[" << ichain + 1 << "][" << m_fnamebel[ifile][1] << "] ";
+			//output << "msd[" << ichain + 1 << "][" << m_fnamebel[ifile][1] << "] ";
+			fout << "msd[" << ichain + 1 << "][" << m_fnamebel[ifile][1] << "] ";
 			if (ifile == m_files[0] - 1)
 			{
-				cout << "ave[" << j + 1 << "] ";
-				//output << "ave[" << j + 1 << "] ";
-				fout << "ave[" << j + 1 << "] ";
+				cout << "ave[" << ichain + 1 << "] ";
+				//output << "ave[" << ichain + 1 << "] ";
+				fout << "ave[" << ichain + 1 << "] ";
 			}
 		}
+		
 	}
 	cout << endl;
 	fout << endl;

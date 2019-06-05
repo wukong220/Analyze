@@ -1,6 +1,7 @@
 "Opening": 001u.lammpstrj……
 "ERROR": Cannot open 002u.lammpstrj
 "ERROR": Cannot open 003u.lammpstrj
-"Writing": test.00.txt
-"Outputing": test.00.log
-"Time": 00:00:00
+"ERROR": Cannot open 004u.lammpstrj
+"Writing": .MSD.txt
+"Outputing": .MSD.log
+"Time": 00:00:03

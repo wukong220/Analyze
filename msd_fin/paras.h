@@ -18,8 +18,8 @@ extern const double mass;
 extern int Num_file;
 
 extern const double md_dt;
-extern const int Num_frame;
-extern const int dNM;
+extern int Num_frame;
+extern int dNM;
 //extern const int Max_frame;
 extern const int framestep;
 //extern ofstream output;
