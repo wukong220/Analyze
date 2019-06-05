@@ -15,7 +15,7 @@ int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 vector<int> closefiles{};				//closefiles
 string finname;// = "001";				//empty or single input file
 string foutname = "000";		
-string logname = "000.";
+string logname = "000";
 
 const double md_dt = 1;
 const int framestep = 1;	
@@ -40,16 +40,6 @@ int main()
 	logname += ".MSD.log";
 	ofstream output(logname);
 	
-	cout << "\ndimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n"; //default information
-	output << "dimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n";
-	cout << "\"Number of chains( \'" << Num_chains << "\' for default): \"\n";
-	output << "\"Number of chains( \'" << Num_chains << "\' for default): \"\n";
-	input(Num_chains);
-	cout << "\"Number of atoms( \'" << N_chain << "\' for single chain default): \"\n";
-	output << "\"Number of atoms( \'" << N_chain << "\' for single chain default): \"\n";
-	input(N_chain); 
-	Num_beeds = N_chain * Num_chains;
-	
 	cout << "\n\"Number of files(\'" << Num_file << "\' for default): \"\n";
 	output << "\n\"Number of files(\'" << Num_file << "\' for default): \"\n";
 	input(Num_file);
@@ -61,6 +51,22 @@ int main()
 		ss << str;
 		ss >> finname;
 	}
+	
+	cout << "\n\"Output txt file name( \'" << foutname << ".MSD.txt\' for default): \" \n";
+	output << "\n\"Output txt file name( \'" << foutname << ".MSD.txt\' for default): \" \n";
+	input(foutname);
+	foutname += ".MSD.txt";
+	
+	cout << "\ndimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n"; //default information
+	output << "dimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n";
+	cout << "\"Number of chains( \'" << Num_chains << "\' for default): \"\n";
+	output << "\"Number of chains( \'" << Num_chains << "\' for default): \"\n";
+	input(Num_chains);
+	cout << "\"Number of atoms( \'" << N_chain << "\' for single chain default): \"\n";
+	output << "\"Number of atoms( \'" << N_chain << "\' for single chain default): \"\n";
+	input(N_chain); 
+	Num_beeds = N_chain * Num_chains;
+	
 	cout << "\"Number of frames( \'" << Num_frame << "\' for default): \"\n";
 	output << "\"Number of frames( \'" << Num_frame << "\' for default): \"\n";
 	input(Num_frame);
@@ -69,11 +75,6 @@ int main()
 	input(dNM);
 	Max_frame = Num_frame - dNM;
 	
-	cout << "\n\"Output txt file name( \'" << foutname << ".MSD.txt\' for default): \" \n";
-	output << "\n\"Output txt file name( \'" << foutname << ".MSD.txt\' for default): \" \n";
-	input(foutname);
-	foutname += ".MSD.txt";
-
 	//atom[iframe] [id] [id,type,xu,yu,zu...]
 	vec_doub3 vecAtom(Num_frame, vector<vector<double> >(Num_beeds, vector<double>(Num_info,0))); 
 	//rCM[iframe] [jchain] [x,y,z]
