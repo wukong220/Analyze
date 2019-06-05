@@ -1,0 +1,16 @@
+dimension = 2;
+mass =1;
+md_dt = 1;
+framestep = 1;
+
+"Number of chains( '1' for default): "
+"Number of atoms( '2' for single chain default): "
+
+"Number of files('1' for default): "
+"Input file name(without 'u.lammpstrj'):" 
+"Number of frames( '100000' for default): "
+"Frames to delete( '10000' for default): "
+
+"Output txt file name( '000.MSD.txt' for default): " 
+"Log file name( '000.MSD.log' for default): " 
+"Opening": 002.testu.lammpstrj……

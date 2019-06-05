@@ -376,6 +376,11 @@ string read_atoms(ifstream &fin, int iframe, int nAtoms, vec_doub3 &vec)
 	ss >> Num_atoms;							//Number of atoms
 	ss.clear();
 	Num_obs = Num_atoms - nAtoms;				//for clearing obstacles
+	if (Num_obs < 0)
+	{
+		cout << "Wrong atoms!" << endl;
+		exit(1);
+	}
 	
 	for (int clear = 0; clear < 5; clear++)			
 		getline(fin, temp);
