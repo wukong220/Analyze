@@ -15,7 +15,7 @@ extern ofstream output;
 extern const int Num_info;				//id type xu yu zu...
 extern const int dimension;
 extern const double mass;
-extern const int Num_file;
+extern int Num_file;
 
 extern const double md_dt;
 extern const int Num_frame;
