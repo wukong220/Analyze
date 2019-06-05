@@ -1,7 +1,0 @@
-"Opening": 001u.lammpstrj……
-"Opening": 002u.lammpstrj……
-"ERROR": TIMESTEP/FRAME(files.cpp:198) -> 34995000 != 35000000 (7000 * 5000)
-"CLOSE": 003u.lammpstrj
-"Writing": MSD.000.txt
-"Outputing": MSD.000.log
-"Time": 00:00:05
