@@ -10,9 +10,6 @@ framestep = 1;
 
 "Number of chains( '1' for default): "
 "Number of atoms( '2' for single chain default): "
-"Number of frames( '10000' for default): "
+"Number of frames( '50000' for default): "
 "Frames to delete( '1000' for default): "
 "Opening": 002.testu.lammpstrj……
-"Writing": 000.MSD.txt
-"Outputing": 000.MSD.log
-"Time": 00:00:03

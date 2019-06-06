@@ -5,9 +5,9 @@
 const int Num_info = 15;		//id type xu yu zu vx vy vz c_orient[1] c_orient[2] c_orient[3] c_orient[4] c_shape[1] c_shape[2] c_shape[3]
 const int dimension = 2;
 const double mass = 1.0;
-int Num_file = 1;
+int Num_file = 20;
 
-int N_chain = 2;									//Polarization of single chain
+int N_chain = 30;									//Polarization of single chain
 int Num_chains = 1;								//Number of the chains
 int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 //vector<string> type{"1", "2"};								//atom types to read
@@ -17,10 +17,10 @@ string finname;// = "001";				//empty or single input file
 string foutname = "000";		
 string logname = "000";
 
-const double md_dt = 1;
-const int framestep = 1;	
-int Num_frame = 10000;
-int dNM = 1000;
+const double md_dt = 0.001;
+const int framestep = 5000;	
+int Num_frame = 20000;
+int dNM = 3000;
 int Max_frame = Num_frame - dNM;
 
 void input(int &x);
@@ -33,8 +33,8 @@ int main()
 	string str;
 	stringstream ss;
 	clock_t start = clock();		//start time
-	
-	cout << "\"Log file name( \'" << logname << ".MSD.log\' for default): \" \n";
+	ofstream output(logname);
+	/*cout << "\"Log file name( \'" << logname << ".MSD.log\' for default): \" \n";
 	//output << "\"Log file name( \'" << logname << ".MSD.log\' for default): \" \n";
 	input(logname);
 	logname += ".MSD.log";
@@ -73,7 +73,7 @@ int main()
 	cout << "\"Frames to delete( \'" << dNM << "\' for default): \"\n";
 	output << "\"Frames to delete( \'" << dNM << "\' for default): \"\n";
 	input(dNM);
-	Max_frame = Num_frame - dNM;
+	Max_frame = Num_frame - dNM;*/
 	
 	//atom[iframe] [id] [id,type,xu,yu,zu...]
 	vec_doub3 vecAtom(Num_frame, vector<vector<double> >(Num_beeds, vector<double>(Num_info,0))); 
