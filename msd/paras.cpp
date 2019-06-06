@@ -1,5 +1,5 @@
 #include "paras.h"
-#include "files.h"
+#include "files.h"		//for test
 
 inline bool input(int &x)
 {
@@ -179,7 +179,8 @@ vector<string> show(string &logname, string &finname, string &foutname, int &Num
 	int num;
 	cout << "\"Log file name( \'MSD." << logname << ".log\' for default ): \" \n";
 	//output << "\"Log file name( \'" << logname << ".MSD.log\' for default ): \" \n";
-	input(str);
+	if (!input(str))
+		str = logname;
 	logname = "MSD." + str + ".log";
 	//cout << logname << endl;
 	output.open(logname);
@@ -204,18 +205,19 @@ vector<string> show(string &logname, string &finname, string &foutname, int &Num
 	filename.resize(Num_file);
 	cout << "Number of files: " << filename.size() << endl;
 	
-	LmpFile Files(filename);
-	cout << Files;
-	cin.get();
+	//LmpFile Files(filename);
+	//cout << Files;
+	//cin.get();
 	
 	cout << "\n\"Output txt file name( \'MSD." << foutname << ".txt\' for default ): \" \n";
 	output << "\n\"Output txt file name( \'MSD." << foutname << ".txt\' for default ): \" \n";
-	input(str);
+	if(!input(str))
+		str = foutname;
 	foutname = "MSD." + str + ".txt";
 	//cout << foutname << endl;
 	
 	cout << "\ndimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n"; //default information
-	output << "dimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n";
+	output << "\ndimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n";
 	cout << "\"Number of chains( \'" << Num_chains << "\' for default ): \"\n";
 	output << "\"Number of chains( \'" << Num_chains << "\' for default ): \"\n";
 	input(Num_chains);
@@ -242,7 +244,8 @@ vector<string> show(string &logname, string &foutname, int &Num_chains, int &N_c
 	int num;
 	cout << "\"Log file name( \'MSD." << logname << ".log\' for default ): \" \n";
 	//output << "\"Log file name( \'" << logname << ".MSD.log\' for default ): \" \n";
-	input(str);
+	if (!input(str))
+		str = logname;
 	logname = "MSD." + str + ".log";
 	//cout << logname << endl;
 	output.open(logname);
@@ -262,13 +265,15 @@ vector<string> show(string &logname, string &foutname, int &Num_chains, int &N_c
 	filename.resize(Num_file);
 	cout << "Number of files: " << filename.size() << endl;
 	
+	//for test
 	//LmpFile Files(filename);
 	//cout << Files;
 	//cin.get();
 	
 	cout << "\n\"Output txt file name( \'MSD." << foutname << ".txt\' for default ): \" \n";
 	output << "\n\"Output txt file name( \'MSD." << foutname << ".txt\' for default ): \" \n";
-	input(str);
+	if (!input(str))
+		str = foutname;
 	foutname = "MSD." + str + ".txt";
 	//cout << foutname << endl;
 	
