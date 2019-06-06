@@ -33,11 +33,10 @@ int main()
 	string str;
 	stringstream ss;
 	clock_t start = clock();		//start time
-	ofstream output(logname);
-	/*cout << "\"Log file name( \'" << logname << ".MSD.log\' for default): \" \n";
+	cout << "\"Log file name( \'" << logname << "MSD.000.log\' for default): \" \n";
 	//output << "\"Log file name( \'" << logname << ".MSD.log\' for default): \" \n";
-	input(logname);
-	logname += ".MSD.log";
+	input(str);
+	logname = "MSD." + str + ".log";
 	ofstream output(logname);
 	
 	cout << "\n\"Number of files(\'" << Num_file << "\' for default): \"\n";
@@ -52,10 +51,10 @@ int main()
 		ss >> finname;
 	}
 	
-	cout << "\n\"Output txt file name( \'" << foutname << ".MSD.txt\' for default): \" \n";
-	output << "\n\"Output txt file name( \'" << foutname << ".MSD.txt\' for default): \" \n";
-	input(foutname);
-	foutname += ".MSD.txt";
+	cout << "\n\"Output txt file name( \'" << foutname << "MSD.000.txt\' for default): \" \n";
+	output << "\n\"Output txt file name( \'" << foutname << "MSD.000.txt\' for default): \" \n";
+	input(str);
+	foutname += "MSD." + str + ".txt";
 	
 	cout << "\ndimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n"; //default information
 	output << "dimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n";
@@ -73,7 +72,7 @@ int main()
 	cout << "\"Frames to delete( \'" << dNM << "\' for default): \"\n";
 	output << "\"Frames to delete( \'" << dNM << "\' for default): \"\n";
 	input(dNM);
-	Max_frame = Num_frame - dNM;*/
+	Max_frame = Num_frame - dNM;
 	
 	//atom[iframe] [id] [id,type,xu,yu,zu...]
 	vec_doub3 vecAtom(Num_frame, vector<vector<double> >(Num_beeds, vector<double>(Num_info,0))); 
