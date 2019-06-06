@@ -5,22 +5,22 @@
 const int Num_info = 15;		//id type xu yu zu vx vy vz c_orient[1] c_orient[2] c_orient[3] c_orient[4] c_shape[1] c_shape[2] c_shape[3]
 const int dimension = 2;
 const double mass = 1.0;
-int Num_file = 20;
+int Num_file = 1;
 
-int N_chain = 30;									//Polarization of single chain
+int N_chain = 1;									//Polarization of single chain
 int Num_chains = 1;								//Number of the chains
 int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 //vector<string> type{"1", "2"};								//atom types to read
 
 vector<int> closefiles{};				//closefiles
-string finname;// = "001";				//empty or single input file
-string foutname = "000";		
-string logname = "000";
+vector<string> finname;// = "001.test";				//empty or single input file
+string foutname = "001";		
+string logname = "001";
 
-const double md_dt = 0.001;
-const int framestep = 5000;	
-int Num_frame = 20000;
-int dNM = 3000;
+const double md_dt = 1;
+const int framestep = 1;	
+int Num_frame =100000;
+int dNM = 10000;
 int Max_frame = Num_frame - dNM;
 
 void input(int &x);
