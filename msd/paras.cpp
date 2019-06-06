@@ -177,11 +177,11 @@ vector<string> show(string &logname, string &finname, string &foutname, int &Num
 {
 	string str;
 	int num;
-	cout << "\"Log file name( \'MSD." << logname << ".log\' for default ): \" \n";
+	cout << "\"Log file name( \'" << logname << ".MSD.log\' for default ): \" \n";
 	//output << "\"Log file name( \'" << logname << ".MSD.log\' for default ): \" \n";
 	if (!input(str))
 		str = logname;
-	logname = "MSD." + str + ".log";
+	logname = str + ".MSD.log";
 	//cout << logname << endl;
 	output.open(logname);
 	
@@ -243,11 +243,11 @@ vector<string> show(string &logname, string &foutname, int &Num_chains, int &N_c
 {	
 	string str;
 	int num;
-	cout << "\"Log file name( \'MSD." << logname << ".log\' for default ): \" \n";
+	cout << "\"Log file name( \'" << logname << ".MSD.log\' for default ): \" \n";
 	//output << "\"Log file name( \'" << logname << ".MSD.log\' for default ): \" \n";
 	if (!input(str))
 		str = logname;
-	logname = "MSD." + str + ".log";
+	logname = str + ".MSD.log";
 	//cout << logname << endl;
 	output.open(logname);
 	

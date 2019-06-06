@@ -21,10 +21,9 @@ ofstream output;
 
 const double md_dt = 1;
 const int framestep = 1;	
-int Num_frame = 10000;
-int dNM = 3000;
+int Num_frame = 100000;
+int dNM = 10000;
 int Max_frame = Num_frame - dNM;
-
 
 int main() 
 {
