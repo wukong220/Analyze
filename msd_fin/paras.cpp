@@ -1,5 +1,5 @@
 #include "paras.h"
-#include "files.h"		//for test
+//#include "files.h"		//for test
 
 inline bool input(int &x)
 {
