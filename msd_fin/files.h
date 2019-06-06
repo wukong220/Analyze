@@ -29,6 +29,7 @@ public:
 	int files(){return m_files[1];};
 	//ifile, atom, center
 	vector<vector<vector<double> > > read_data(const int, const vector<int>, ofstream &output, const int);	//ifile, closefile[i]
+	vector<vector<vector<double> > > read_data(const int, ofstream &output, const int);
 	//ifile, N_chain, atom[ifile][jatom][xu, yu, zu...]
 	vector<vector<vector<double> > > center(const int, const int, const vector<vector<vector<double> > > &);	//ifile, N_chain, atom
 	//ifile, rCM[ifile][jchain][x, y, z], count[ifile][dframe], msd[iframe][jchain][0, x, y, z]

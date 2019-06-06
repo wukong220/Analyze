@@ -211,6 +211,75 @@ vec_doub3 LmpFile::read_data(const int ifile, const vector<int> closefiles, ofst
 	return atom;
 }
 
+vec_doub3 LmpFile::read_data(const int ifile, ofstream &output, const int nAtoms)
+{
+	//input	
+	//extern const int Num_info = 15;
+	vec_doub3 atom(m_frames[0][0], vector<vector<double> >(nAtoms, vector<double>(Num_info,0)));
+	string error = "Right";
+	int timestep = 0;
+	string temp;
+	stringstream ss;
+	int Num_atoms = 1;
+	
+	ifstream fin(m_fnamebel[ifile][0]);
+	if (m_fnamebel[0][1] == "000")
+		m_files[1] = 1;
+	
+	if(!fin.is_open())
+		error = "\"ERROR\": Cannot open ";
+	
+	//error information
+	if(error != "Right")
+	{
+		cout << error << m_fnamebel[ifile][0] << endl;
+		output << error << m_fnamebel[ifile][0] << endl;		//for output
+		
+		m_files[1]--;
+		m_fnamebel[ifile][1] = "  ";
+		
+		m_frames[ifile + 1][0] = 0;
+		m_frames[ifile + 1][1] = 0;
+		
+		error = "Right";
+		return atom;
+	}
+	else
+	{
+		cout << "\"Opening\": " << m_fnamebel[ifile][0] << "……" << endl;
+		output << "\"Opening\": " << m_fnamebel[ifile][0] << "……" << endl;
+	}
+	
+	
+	for (int i = 0; i < m_frames[0][0]; i++)
+	{
+		for (int clear = 0; clear < 2; clear++)			//the head
+			getline(fin, temp);
+		ss << temp;
+		ss >> timestep;
+		if (timestep != i * framestep)		//extern const int framestep = 5000;
+		{
+			error = "\"ERROR\": TIMESTEP/FRAME(files.cpp:198) -> ";
+			cout << error << timestep << " != " << i * framestep << " (" << i << " * " << framestep << ")" << endl;
+			output << error << timestep << " != " << i * framestep << " (" << i << " * " << framestep << ")" << endl;
+			m_files[1]--;	
+			m_fnamebel[ifile][1]= "000";
+			m_frames[ifile + 1][0] = i - 1 ;					//frames[Num_frames, max_frames]
+			m_frames[ifile + 1][1] = m_frames[ifile + 1][0] - dNM;
+			break;
+		}
+		ss.clear();
+		m_head = read_atoms(fin, i, nAtoms, atom);
+		//read_type(fin, i, type, atom);
+	}
+	fin.close();
+	//extern const int dNM = 3000;
+	//m_frames[ifile + 1][1] = m_frames[ifile + 1][0] - dNM;	//frames[Num_frames, max_frames]
+	if (m_files[1] == 0 && error == "Right")
+		m_files[1] = 1;								//single file	
+	return atom;
+}
+
 //calcucate position of the center of mass 
 vec_doub3 LmpFile::center(const int ifile, const int nChain, const vec_doub3 &vec)
 {
