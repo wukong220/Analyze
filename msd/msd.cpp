@@ -60,8 +60,8 @@ int main()
 	}
 	inFiles.out_msd(foutname, msdCM);
 	cout << endl << inFiles;
-	cout << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logname << endl;
-	output << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logname << endl;	
+	cout << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logname << "\n" << endl;
+	output << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logname << "\n" << endl;	
 	//time
 
 	str = time(start);

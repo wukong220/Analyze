@@ -1,5 +1,5 @@
 #include "paras.h"
-#include "files.h"		//for test
+//#include "files.h"		//for test
 
 inline bool input(int &x)
 {
@@ -226,14 +226,15 @@ vector<string> show(string &logname, string &finname, string &foutname, int &Num
 	input(N_chain); 
 	Num_beeds = N_chain * Num_chains;
 	
-	cout << "\"Number of frames( \'" << Num_frame << "\' for default ): \"\n";
-	output << "\"Number of frames( \'" << Num_frame << "\' for default ): \"\n";
+	cout << "\n\"Number of frames( \'" << Num_frame << "\' for default ): \"\n";
+	output << "\n\"Number of frames( \'" << Num_frame << "\' for default ): \"\n";
 	input(Num_frame);
 	cout << "\"Frames to delete( \'" << dNM << "\' for default ): \"\n";
 	output << "\"Frames to delete( \'" << dNM << "\' for default ): \"\n";
 	input(dNM);
 	Max_frame = Num_frame - dNM;
-	
+	cout << "\n";
+	output << "\n";
 	return filename;
 }
 
@@ -278,7 +279,7 @@ vector<string> show(string &logname, string &foutname, int &Num_chains, int &N_c
 	//cout << foutname << endl;
 	
 	cout << "\ndimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n"; //default information
-	output << "dimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n";
+	output << "\ndimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n";
 	cout << "\"Number of chains( \'" << Num_chains << "\' for default ): \"\n";
 	output << "\"Number of chains( \'" << Num_chains << "\' for default ): \"\n";
 	input(Num_chains);
@@ -287,14 +288,15 @@ vector<string> show(string &logname, string &foutname, int &Num_chains, int &N_c
 	input(N_chain); 
 	Num_beeds = N_chain * Num_chains;
 	
-	cout << "\"Number of frames( \'" << Num_frame << "\' for default ): \"\n";
-	output << "\"Number of frames( \'" << Num_frame << "\' for default ): \"\n";
+	cout << "\n\"Number of frames( \'" << Num_frame << "\' for default ): \"\n";
+	output << "\n\"Number of frames( \'" << Num_frame << "\' for default ): \"\n";
 	input(Num_frame);
 	cout << "\"Frames to delete( \'" << dNM << "\' for default ): \"\n";
 	output << "\"Frames to delete( \'" << dNM << "\' for default ): \"\n";
 	input(dNM);
 	Max_frame = Num_frame - dNM;
-	
+	cout << "\n";
+	output << "\n";
 	return filename;
 }
 
