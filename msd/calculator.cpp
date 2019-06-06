@@ -15,16 +15,29 @@
 #include "paras.h"
 
 using namespace std;
-bool sq();
-bool sum();
-const int framestep = 5000;
+
 const double kB=1.3806485279*pow(10,-23);
 const double PI=3.141592653;
+
+const int Num_info = 15;		//id type xu yu zu vx vy vz c_orient[1] c_orient[2] c_orient[3] c_orient[4] c_shape[1] c_shape[2] c_shape[3]
+const int dimension = 2;
+const double mass = 1.0;
+int Num_file = 20;
+
+const double md_dt = 0.001;
+const int framestep = 5000;	
+int Num_frame = 20000;
+int dNM = 3000;
+int Max_frame = Num_frame - dNM;
+
 ofstream output;
 
-void now(ofstream* fout);
+bool sq();
+bool sum();
 bool input(int &x);
 bool input(string &x);
+void show();
+
 int main()
 {
 	double N=207;
@@ -35,10 +48,12 @@ int main()
 	
 	stringstream ss;	
 	string str;
-	
+	//output.open("test.text");
+	show();
 	vector<string> a(3,"000");
 	vector<string> b = a;
 	cout << b;
+	output << b;
 	
  // vector<string> str(2);
 	/*while (1)
@@ -56,6 +71,14 @@ int main()
 	};*/
 	return 0;
 }
+
+void show()
+{
+	output.open("test.txt");
+	cout << " 0001\n";
+	output << " 0001\n";
+}
+
 bool sq()
 {
 	string str;

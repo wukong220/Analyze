@@ -1,0 +1,5 @@
+main.cpp:15:23: error: expected ';' after top level declarator
+vector<int> closefiles{};                               //closefiles
+                      ^
+                      ;
+1 error generated.
