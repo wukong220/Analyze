@@ -13,9 +13,10 @@ int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 //vector<string> type{"1", "2"};								//atom types to read
 
 vector<int> closefiles{};				//closefiles
-string finname;// = "001";				//empty or single input file
+				//empty or single input file
 string foutname = "000";		
 string logname = "000";
+ofstream output;
 
 const double md_dt = 0.001;
 const int framestep = 5000;	
@@ -23,9 +24,6 @@ int Num_frame = 20000;
 int dNM = 3000;
 int Max_frame = Num_frame - dNM;
 
-void input(int &x);
-void input(string &str);
-string time (clock_t start);
 
 int main() 
 {
@@ -33,48 +31,7 @@ int main()
 	string str;
 	stringstream ss;
 	clock_t start = clock();		//start time
-	cout << "\"Log file name( \'MSD." << logname << ".log\' for default): \" \n";
-	//output << "\"Log file name( \'" << logname << ".MSD.log\' for default): \" \n";
-	input(str);
-	logname = "MSD." + str + ".log";
-	//cout << logname << endl;
-	ofstream output(logname);
-	
-	cout << "\n\"Number of files(\'" << Num_file << "\' for default): \"\n";
-	output << "\n\"Number of files(\'" << Num_file << "\' for default): \"\n";
-	input(Num_file);
-	if (Num_file == 1)
-	{
-		cout << "\"Input file name(without \'u.lammpstrj\'):\" \n";
-		output << "\"Input file name(without \'u.lammpstrj\'):\" \n";
-		getline(cin, str);
-		ss << str;
-		ss >> finname;
-	}
-	
-	cout << "\n\"Output txt file name( \'MSD." << foutname << ".txt\' for default): \" \n";
-	output << "\n\"Output txt file name( \'MSD." << foutname << ".txt\' for default): \" \n";
-	input(str);
-	foutname = "MSD." + str + ".txt";
-	//cout << foutname << endl;
-	
-	cout << "\ndimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n"; //default information
-	output << "dimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n";
-	cout << "\"Number of chains( \'" << Num_chains << "\' for default): \"\n";
-	output << "\"Number of chains( \'" << Num_chains << "\' for default): \"\n";
-	input(Num_chains);
-	cout << "\"Number of atoms( \'" << N_chain << "\' for single chain default): \"\n";
-	output << "\"Number of atoms( \'" << N_chain << "\' for single chain default): \"\n";
-	input(N_chain); 
-	Num_beeds = N_chain * Num_chains;
-	
-	cout << "\"Number of frames( \'" << Num_frame << "\' for default): \"\n";
-	output << "\"Number of frames( \'" << Num_frame << "\' for default): \"\n";
-	input(Num_frame);
-	cout << "\"Frames to delete( \'" << dNM << "\' for default): \"\n";
-	output << "\"Frames to delete( \'" << dNM << "\' for default): \"\n";
-	input(dNM);
-	Max_frame = Num_frame - dNM;
+	vector<string> finname = show(logname, foutname, Num_chains, N_chain, Num_beeds, Max_frame);
 	
 	//atom[iframe] [id] [id,type,xu,yu,zu...]
 	vec_doub3 vecAtom(Num_frame, vector<vector<double> >(Num_beeds, vector<double>(Num_info,0))); 
@@ -86,7 +43,9 @@ int main()
 
 	//LmpFile infiles;
 	LmpFile inFiles(finname);
-
+	//cout << inFiles;
+	//cin.get();
+	
 	int f = inFiles.files();
 	//atom[iframe] [id] [id,type,xu,yu,zu...]
 	for(int ifile = 0; ifile < f; ifile++)
@@ -108,55 +67,4 @@ int main()
 	output << str << endl;
 	output.close();
 	return 0;
-}
-
-inline void input(int &x)
-{
-	stringstream ss;
-	string str;
-	getline(cin, str);
-	if(str != "\n")
-	{
-		ss << str;
-		ss >> x;
-	}
-}
-
-inline void input(string &x)
-{
-	stringstream ss;
-	string str;
-	getline(cin, str);
-	if(str != "\n")
-	{
-		ss << str;
-		ss >> x;
-	}
-}
-
-string time (clock_t start)
-{
-	stringstream ss;
-	string str;
-	clock_t stop = clock();		//#include <ctime>
-	double Time = (double)(stop - start)/CLOCKS_PER_SEC;
-	vector<int> inter(4,Time);
-	inter[1] = inter[0]/3600;
-	inter[2] = inter[0]/60%60;
-	inter[3] = inter[0]%60;
-	string st = "\"Time\": ";    //#include <string>
-	for (int i = 0; i < 3; i++)
-	{
-		ss << inter[i+1];
-		ss >> str;  
-		if (inter[i+1] < 9)
-			st += "0" + str;    //using std::to_string;
-		else
-			st += str;
-		if (i < 2)
-			st += ":";
-		ss.clear();
-	}
-	cout << st << endl;
-	return st;
 }

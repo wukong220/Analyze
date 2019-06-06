@@ -69,6 +69,51 @@ LmpFile::LmpFile(const string & finname)
 	}
 }
 
+LmpFile::LmpFile(const vector<string> finname)
+{
+	stringstream ss, sl;
+	int num = finname.size();
+	m_files = vector<int>{num, num, 0};
+	m_head = "none";
+	m_fnamebel = vector<vector<string> > (m_files[0], vector<string>(2));
+	m_frames = vector<vector<int> >(m_files[0] + 1, vector<int>{Num_frame, Num_frame - dNM});
+	
+	if (finname[0] == "\0")
+	{
+		for (int i = 0; i < m_files[0]; i++)
+		{
+			if (i < 9)
+			{
+				ss << "00" << i + 1 << "u.lammpstrj";
+				sl << "00" << i + 1;
+			}
+			else if (i >= 9 && i < 100)
+			{
+				ss << "0" << i + 1 << "u.lammpstrj";
+				sl << "0" << i + 1;
+			}
+			ss >> m_fnamebel[i][0];
+			sl >> m_fnamebel[i][1];
+			ss.clear();
+			sl.clear();
+		}
+	}
+	else
+	{
+		for (int i = 0; i < m_files[0]; i++)
+		{
+			m_fnamebel[i][0] = finname[i] + "u.lammpstrj";
+			if (i < 9)
+				ss << "00" << i + 1;
+			else if (i >= 9 && i < 100)
+				ss << "0" << i + 1;
+			ss >> m_fnamebel[i][1];
+			ss.clear();
+		}
+	}
+
+}
+
 LmpFile::LmpFile(const vector<vector<string> > fnamebel)
 {
 	int num = fnamebel.size();

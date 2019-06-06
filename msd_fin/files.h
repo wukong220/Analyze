@@ -21,6 +21,7 @@ public:
 	//constructors and destructors
 	LmpFile();
 	LmpFile(const string &);
+	LmpFile(const vector<string>);
 	LmpFile(const vector<vector<string> >);
 	LmpFile(const vector<vector<string> >, const int);
 	LmpFile(const vector<vector<string> >, const vector<vector<int> >);

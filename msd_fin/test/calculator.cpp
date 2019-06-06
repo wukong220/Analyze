@@ -20,10 +20,11 @@ bool sum();
 const int framestep = 5000;
 const double kB=1.3806485279*pow(10,-23);
 const double PI=3.141592653;
+ofstream output;
 
 void now(ofstream* fout);
-void input(int &x);
-void input(string &x);
+bool input(int &x);
+bool input(string &x);
 int main()
 {
 	double N=207;
@@ -33,22 +34,11 @@ int main()
 	double phi=0.4;
 	
 	stringstream ss;	
-	vector<string> finname = {"001"};	
-	int N = 20;
-	input(N);
-	if (Num_file == 0)
-	{
-		cout << "\"Input file name(without \'u.lammpstrj\'):\" \n";
-		output << "\"Input file name(without \'u.lammpstrj\'):\" \n";
-		getline(cin, str);
-		ss << str;
-		for(int i = 0; str!="\n" ; i++)
-		{
-			ss >> finname[i];
-			ss << str;
-		} 
-	}
+	string str;
 	
+	vector<string> a(3,"000");
+	vector<string> b = a;
+	cout << b;
 	
  // vector<string> str(2);
 	/*while (1)
@@ -66,7 +56,6 @@ int main()
 	};*/
 	return 0;
 }
-
 bool sq()
 {
 	string str;
@@ -107,28 +96,40 @@ bool sum()
 		return false;
 }
 
-inline void input(int &x)
+inline bool input(int &x)
 {
 	stringstream ss;
 	string str;
 	getline(cin, str);
-	if(str != "\n")
+	if (str == "\0") 
+	{
+		return false;
+	}
+	else
 	{
 		ss << str;
 		ss >> x;
+		return true;
 	}
-	cout << "Number: " << x << endl;
+	cout << "false";
+	
+	//cout << "Number: " << x << endl;
 }
 
-inline void input(string &x)
+inline bool input(string &x)
 {
 	stringstream ss;
 	string str;
 	getline(cin, str);
-	if(str != "\n")
+	if (str == "\0") 
+	{
+		return false;
+	}
+	else
 	{
 		ss << str;
 		ss >> x;
+		return true;
 	}
-	cout << "String: " << x << endl;
+	//cout << "String: " << x << endl;
 }

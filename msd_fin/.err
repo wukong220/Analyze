@@ -2,4 +2,11 @@ main.cpp:15:23: error: expected ';' after top level declarator
 vector<int> closefiles{};                               //closefiles
                       ^
                       ;
-1 error generated.
+main.cpp:16:16: error: non-aggregate type 'vector<std::__1::string>' (aka 'vector<basic_string<char, char_traits<char>, allocator<char> > >') cannot be initialized with an initializer list
+vector<string> finname = {"001"};                               //empty or single input file
+               ^         ~~~~~~~
+main.cpp:56:22: error: expected ';' after do/while statement
+                } while (str!="\n")
+                                   ^
+                                   ;
+3 errors generated.
