@@ -45,8 +45,8 @@ int main()
 
 	//LmpFile infiles;
 	LmpFile inFiles(filename);
-	cout << inFiles;
-	cin.get();
+	//cout << inFiles;
+	//cin.get();
 	
 	int f = inFiles.files();
 	//atom[iframe] [id] [id,type,xu,yu,zu...]
