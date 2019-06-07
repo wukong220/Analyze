@@ -5,33 +5,35 @@
 const int Num_info = 15;		//id type xu yu zu vx vy vz c_orient[1] c_orient[2] c_orient[3] c_orient[4] c_shape[1] c_shape[2] c_shape[3]
 const int dimension = 2;
 const double mass = 1.0;
-int Num_file = 1;
+int Num_file = 20;
 
-int N_chain = 1;									//Polarization of single chain
-int Num_chains = 30;								//Number of the chains
+int N_chain = 30;									//Polarization of single chain
+int Num_chains = 1;								//Number of the chains
 int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 //vector<string> type{"1", "2"};								//atom types to read
 
 vector<int> closefiles{};				//closefiles
-				//empty or single input file
-string foutname = "0.0_5.0";		
-string logname = "0.0_5.0";
-string finname = "0.0_5.0";
+string logname = "000";
+string foutname = "000";
+string finname = "001";
 ofstream output;
 
-const double md_dt = 1;
-const int framestep = 1;	
+const double md_dt = 0.001;
+const int framestep = 5000;	
 int Num_frame = 20000;
-int dNM = 5000;
+int dNM = 3000;
 int Max_frame = Num_frame - dNM;
+
 
 int main() 
 {
 			
 	string str;
 	stringstream ss;
+	
 	clock_t start = clock();		//start time
-	vector<string> finame = show(logname, finname, foutname, Num_chains, N_chain, Num_beeds, Max_frame);
+	vector<string> filename = show(logname, finname, foutname, Num_chains, N_chain, Num_beeds, Max_frame);		//for single file
+	//vector<string> filename = show(logname, foutname, Num_chains, N_chain, Num_beeds, Max_frame);	//for serials files
 	
 	//atom[iframe] [id] [id,type,xu,yu,zu...]
 	vec_doub3 vecAtom(Num_frame, vector<vector<double> >(Num_beeds, vector<double>(Num_info,0))); 
@@ -42,7 +44,7 @@ int main()
 	//cnt[0,ifile] [msd_frame]: 0 for sum of average; (Max_frame+1) for compare average 
 
 	//LmpFile infiles;
-	LmpFile inFiles(finname);
+	LmpFile inFiles(filename);
 	//cout << inFiles;
 	//cin.get();
 	
