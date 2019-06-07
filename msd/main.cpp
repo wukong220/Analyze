@@ -7,7 +7,7 @@ const int dimension = 2;
 const double mass = 1.0;
 int Num_file = 1;
 
-int N_chain = 001;									//Polarization of single chain
+int N_chain = 1;									//Polarization of single chain
 int Num_chains = 1;								//Number of the chains
 int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 //vector<string> type{"1", "2"};								//atom types to read
@@ -21,8 +21,8 @@ ofstream output;
 
 const double md_dt = 1;
 const int framestep = 1;	
-int Num_frame = 100000;
-int dNM = 10000;
+int Num_frame = 10000;
+int dNM = 5000;
 int Max_frame = Num_frame - dNM;
 
 int main() 
