@@ -14,7 +14,7 @@ int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 
 vector<int> closefiles{};				//closefiles
 string logname = "000";
-string finname = "001.test";
+string finname = "001";
 string foutname = "000";
 ofstream output;
 

@@ -49,20 +49,15 @@ int main()
 	stringstream ss;	
 	string str;
 	//output.open("test.text");
-	show();
-	vector<string> a(3,"000");
-	vector<string> b = a;
-	cout << b;
-	output << b;
 	
  // vector<string> str(2);
-	/*while (1)
+	while (1)
 	{
 		cout << " Square: " << endl;
 		if(!sq())
 			break;
 	};
-	
+	/*
 	while (1)
 	{
 		cout << " Sum: " << endl;
@@ -90,7 +85,8 @@ bool sq()
 	if (ss >> num[0] >> num[1])
 	{
 		dx = num[0] - num[1];
-		cout << dx * dx << endl << endl;
+		//cout << dx * dx << endl << endl;
+		cout << dx << endl;
 	}
 	else 
 		return false;

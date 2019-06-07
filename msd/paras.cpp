@@ -185,6 +185,13 @@ vector<string> show(string &logname, string &finname, string &foutname, int &Num
 	//cout << logname << endl;
 	output.open(logname);
 	
+	cout << "\n\"Output txt file name( \'MSD." << foutname << ".txt\' for default ): \" \n";
+	output << "\n\"Output txt file name( \'MSD." << foutname << ".txt\' for default ): \" \n";
+	if(!input(str))
+		str = foutname;
+	foutname = "MSD." + str + ".txt";
+	//cout << foutname << endl;
+	
 	cout << "\n\"Number of files( \'" << Num_file << "\' for default ): \"\n";
 	output << "\n\"Number of files( \'" << Num_file << "\' for default ): \"\n";
 	input(Num_file);
@@ -208,13 +215,6 @@ vector<string> show(string &logname, string &finname, string &foutname, int &Num
 	//LmpFile Files(filename);
 	//cout << Files;
 	//cin.get();
-	
-	cout << "\n\"Output txt file name( \'MSD." << foutname << ".txt\' for default ): \" \n";
-	output << "\n\"Output txt file name( \'MSD." << foutname << ".txt\' for default ): \" \n";
-	if(!input(str))
-		str = foutname;
-	foutname = "MSD." + str + ".txt";
-	//cout << foutname << endl;
 	
 	cout << "\ndimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n"; //default information
 	output << "\ndimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n";
@@ -250,6 +250,13 @@ vector<string> show(string &logname, string &foutname, int &Num_chains, int &N_c
 	logname = str + ".MSD.log";
 	//cout << logname << endl;
 	output.open(logname);
+		
+	cout << "\n\"Output txt file name( \'MSD." << foutname << ".txt\' for default ): \" \n";
+	output << "\n\"Output txt file name( \'MSD." << foutname << ".txt\' for default ): \" \n";
+	if (!input(str))
+		str = foutname;
+	foutname = "MSD." + str + ".txt";
+	//cout << foutname << endl;
 	
 	cout << "\n\"Number of files( \'" << Num_file << "\' for default ): \"\n";
 	output << "\n\"Number of files( \'" << Num_file << "\' for default ): \"\n";
@@ -270,13 +277,6 @@ vector<string> show(string &logname, string &foutname, int &Num_chains, int &N_c
 	//LmpFile Files(filename);
 	//cout << Files;
 	//cin.get();
-	
-	cout << "\n\"Output txt file name( \'MSD." << foutname << ".txt\' for default ): \" \n";
-	output << "\n\"Output txt file name( \'MSD." << foutname << ".txt\' for default ): \" \n";
-	if (!input(str))
-		str = foutname;
-	foutname = "MSD." + str + ".txt";
-	//cout << foutname << endl;
 	
 	cout << "\ndimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n"; //default information
 	output << "\ndimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n";
