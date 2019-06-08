@@ -52,7 +52,7 @@ int main()
 	//atom[iframe] [id] [id,type,xu,yu,zu...]
 	for(int ifile = 0; ifile < f; ifile++)
 	{
-		vecAtom = inFiles.read_data(ifile, output, Num_beeds);		//read atom data from files, exluding closefiles
+		vecAtom = inFiles.read_data(ifile, closefiles, output, Num_beeds);		//read atom data from files, exluding closefiles
 		//cout << vecAtom;
 		rCM = inFiles.center(ifile, N_chain, vecAtom);			//positiion of CM from atom data of files
 		//cout << "rCM: \n" << rCM;

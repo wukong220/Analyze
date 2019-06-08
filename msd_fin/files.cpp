@@ -29,46 +29,6 @@ LmpFile::LmpFile()
 	}
 }
 
-LmpFile::LmpFile(const string & finname)
-{
-	m_files = vector<int> {Num_file, Num_file, 0};
-	m_head = "none";
-	stringstream ss, sl;
-	if (finname != "\0")
-	{
-		m_files[0] = 1;
-		m_files[1] = 1;
-		m_fnamebel = vector<vector<string> > (m_files[0], vector<string>(2));
-		m_frames = vector<vector<int> >(m_files[0] + 1, vector<int>{Num_frame, Num_frame - dNM});
-		m_fnamebel[0][0] = finname + "u.lammpstrj";
-		m_fnamebel[0][1] = "000";
-		
-	}
-	else
-	{
-		m_fnamebel = vector<vector<string> > (m_files[0], vector<string>(2));
-		m_frames = vector<vector<int> >(m_files[0] + 1, vector<int>{Num_frame, Num_frame - dNM});
-		
-		for (int i = 0; i < m_files[0]; i++)
-		{
-			if (i < 9)
-			{
-				ss << "00" << i + 1 << "u.lammpstrj";
-				sl << "00" << i + 1;
-			}
-			else if (i >= 9 && i < 100)
-			{
-				ss << "0" << i + 1 << "u.lammpstrj";
-				sl << "0" << i + 1;
-			}
-			ss >> m_fnamebel[i][0];
-			sl >> m_fnamebel[i][1];
-			ss.clear();
-			sl.clear();
-		}
-	}
-}
-
 LmpFile::LmpFile(const vector<string> finname)
 {
 	stringstream ss, sl;
@@ -181,7 +141,7 @@ ostream & operator<<(ostream & os, const LmpFile & file)
 	return os;
 }
 
-vec_doub3 LmpFile::read_data(const int ifile, const vector<int> closefiles, ofstream &output, const int nAtoms)
+vec_doub3 LmpFile::read_data(const int ifile, ofstream &output, const int nAtoms, const vector<int> closefiles)
 {
 	//input	
 	//extern const int Num_info = 15;
@@ -201,75 +161,6 @@ vec_doub3 LmpFile::read_data(const int ifile, const vector<int> closefiles, ofst
 		if (ifile == closefiles[j] - 1)
 			error = "\"CLOSE\": ";
 	}
-	
-	if(!fin.is_open())
-		error = "\"ERROR\": Cannot open ";
-	
-	//error information
-	if(error != "Right")
-	{
-		cout << error << m_fnamebel[ifile][0] << endl;
-		output << error << m_fnamebel[ifile][0] << endl;		//for output
-		
-		m_files[1]--;
-		m_fnamebel[ifile][1] = "  ";
-		
-		m_frames[ifile + 1][0] = 0;
-		m_frames[ifile + 1][1] = 0;
-		
-		error = "Right";
-		return atom;
-	}
-	else
-	{
-		cout << "\"Opening\": " << m_fnamebel[ifile][0] << "……" << endl;
-		output << "\"Opening\": " << m_fnamebel[ifile][0] << "……" << endl;
-	}
-	
-	
-	for (int i = 0; i < m_frames[0][0]; i++)
-	{
-		for (int clear = 0; clear < 2; clear++)			//the head
-			getline(fin, temp);
-		ss << temp;
-		ss >> timestep;
-		if (timestep != i * framestep)		//extern const int framestep = 5000;
-		{
-			error = "\"ERROR\": TIMESTEP/FRAME(files.cpp:198) -> ";
-			cout << error << timestep << " != " << i * framestep << " (" << i << " * " << framestep << ")" << endl;
-			output << error << timestep << " != " << i * framestep << " (" << i << " * " << framestep << ")" << endl;
-			m_files[1]--;	
-			m_fnamebel[ifile][1]= "000";
-			m_frames[ifile + 1][0] = i - 1 ;					//frames[Num_frames, max_frames]
-			m_frames[ifile + 1][1] = m_frames[ifile + 1][0] - dNM;
-			break;
-		}
-		ss.clear();
-		m_head = read_atoms(fin, i, nAtoms, atom);
-		//read_type(fin, i, type, atom);
-	}
-	fin.close();
-	//extern const int dNM = 3000;
-	//m_frames[ifile + 1][1] = m_frames[ifile + 1][0] - dNM;	//frames[Num_frames, max_frames]
-	if (m_files[1] == 0 && error == "Right")
-		m_files[1] = 1;								//single file	
-	return atom;
-}
-
-vec_doub3 LmpFile::read_data(const int ifile, ofstream &output, const int nAtoms)
-{
-	//input	
-	//extern const int Num_info = 15;
-	vec_doub3 atom(m_frames[0][0], vector<vector<double> >(nAtoms, vector<double>(Num_info,0)));
-	string error = "Right";
-	int timestep = 0;
-	string temp;
-	stringstream ss;
-	int Num_atoms = 1;
-	
-	ifstream fin(m_fnamebel[ifile][0]);
-	if (m_fnamebel[0][1] == "000")
-		m_files[1] = 1;
 	
 	if(!fin.is_open())
 		error = "\"ERROR\": Cannot open ";

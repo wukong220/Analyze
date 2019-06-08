@@ -8,6 +8,7 @@
 
 using namespace std;
 typedef vector<vector<vector<double> > > vec_doub3;
+extern const int dimension;
 
 class LmpFile
 {
@@ -30,8 +31,8 @@ public:
 	int files(){return m_files[1];};
 	
 	//ifile, atom, center
-	vec_doub3 read_data(const int ifile, ofstream &output, const int nAtoms, const vector<int> = {});	//ifile, closefile[i]
-	vec_doub3 read_data(const vec_doub3 vecAtom);
+	vec_doub3 read_data(const int ifile, ofstream &output, const int nAtoms, const vector<int> closefiles = {});	//ifile, closefile[i]
+
 	//ifile, N_chain, atom[ifile][jatom][xu, yu, zu...]
 	vec_doub3 center(const int ifile, const int nChain, const vec_doub3 & vec, const int d = 2);	//ifile, N_chain, atom
 	//ifile, rCM[ifile][jchain][x, y, z], count[ifile][dframe], msd[iframe][jchain][0, x, y, z]
@@ -44,5 +45,5 @@ public:
 };
 
 string read_atoms(ifstream &fin, int iframe, int nAtoms, vec_doub3 &vec); 	// fin, iframe, nAtoms, atom[i][j][k]
-
+vec_doub3 read_data(const vec_doub3 vecAtom);
 #endif

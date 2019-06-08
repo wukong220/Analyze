@@ -20,9 +20,10 @@ ofstream output;
 
 const double md_dt = 0.001;
 const int framestep = 5000;	
-int Num_frame = 10000;
-int dNM = 5000;
+int Num_frame = 1000;
+int dNM = 500;
 int Max_frame = Num_frame - dNM;
+
 
 
 int main() 
@@ -58,14 +59,16 @@ int main()
 	//atom[iframe] [id] [id,type,xu,yu,zu...]
 	for(int ifile = 0; ifile < f; ifile++)
 	{
-		vecAtom = inFiles.read_data(ifile, output, Num_beeds, closefiles);		//read atom data from files, exluding closefiles
+		vecAtom = inFiles.read_data(ifile, output, Num_beeds);		//read atom data from files, exluding closefiles
 		//cout << vecAtom;
+		cout << "!!!!Outside!!!!!";
 		//inFiles.msd(ifile, vecAtom, msdCOM, msdAVE, "all");
-
 		rCM = inFiles.center(ifile, N_chain, vecAtom);			//positiion of CM from atom data of files
 		//cout << "rCM: \n" << rCM;
+		
 		inFiles.msd_point(ifile, rCM, msdCOM);
 		//cout << "msd: \n" << msdCM;
+		
 		
 		rAtom = read_data(vecAtom);		//read atom data from vectors
 		//cout << "rAtom: \n" << rAtom;
