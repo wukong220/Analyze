@@ -370,9 +370,14 @@ vec_doub3 LmpFile::msd_ave(const int ifile, const vec_doub3 vec, vec_doub3 &msd)
 					int j = (dimension + 1) * ifile + 1;
 					//count[ifile+1][dt-1]++;
 					cnt[dt-1]++;
-					msd[dt-1][i][j] += (vec[Tstop][i][0] - vec[Tstart][i][0])*(vec[Tstop][i][0] - vec[Tstart][i][0]); 
-					msd[dt-1][i][j+1] += (vec[Tstop][i][1] - vec[Tstart][i][1])*(vec[Tstop][i][1] - vec[Tstart][i][1]);
-					msd[dt-1][i][j+2] = msd[dt-1][i][j] + msd[dt-1][i][j+1];
+					for (int dim = 0; dim <= dimension; dim++)
+					{
+						msd[dt-1][i][j+dim] += (vec[Tstop][i][dim] - vec[Tstart][i][dim])*(vec[Tstop][i][dim] - vec[Tstart][i][dim]); 
+						msd[dt-1][i][j+dimension] += msd[dt-1][i][j+dim];
+					}
+					//msd[dt-1][i][j] += (vec[Tstop][i][0] - vec[Tstart][i][0])*(vec[Tstop][i][0] - vec[Tstart][i][0]); 
+					//msd[dt-1][i][j+1] += (vec[Tstop][i][1] - vec[Tstart][i][1])*(vec[Tstop][i][1] - vec[Tstart][i][1]);
+					//msd[dt-1][i][j+2] = msd[dt-1][i][j] + msd[dt-1][i][j+1];
 					if (m_fnamebel[ifile][1] != "000")
 					{
 						//if (m_fnamebel[ifile][1] != "  ")
