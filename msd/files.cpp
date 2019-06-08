@@ -185,6 +185,8 @@ vec_doub3 LmpFile::read_data(const int ifile, ofstream &output, const int nAtoms
 		cout << "\"Opening\": " << m_fnamebel[ifile][0] << "……" << endl;
 		output << "\"Opening\": " << m_fnamebel[ifile][0] << "……" << endl;
 	}
+	
+	
 	for (int i = 0; i < m_frames[0][0]; i++)
 	{
 		for (int clear = 0; clear < 2; clear++)			//the head
@@ -206,7 +208,6 @@ vec_doub3 LmpFile::read_data(const int ifile, ofstream &output, const int nAtoms
 		m_head = read_atoms(fin, i, nAtoms, atom);
 		//read_type(fin, i, type, atom);
 	}
-
 	fin.close();
 	//extern const int dNM = 3000;
 	//m_frames[ifile + 1][1] = m_frames[ifile + 1][0] - dNM;	//frames[Num_frames, max_frames]
@@ -216,44 +217,43 @@ vec_doub3 LmpFile::read_data(const int ifile, ofstream &output, const int nAtoms
 }
 
 //calcucate position of the center of mass 
-vec_doub3 LmpFile::center(const int ifile, const int nChain, const vec_doub3 &vec, const int d)
+vec_doub3 LmpFile::center(const int ifile, const int nChain, const vec_doub3 &vec, int d)
 {
 	//extern int dimension = 2
 	//extern double mass = 1.0
 	int NumChains = vec[0].size() / nChain;
+	double m = mass;
+	if (d == 0)
+		m = 1;
 	vec_doub3 rCM(m_frames[0][0], vector<vector<double> >(NumChains, vector<double>(d + 1, 0)));
 	for (int i = 0; i < m_frames[ifile + 1][0]; i++)			
 	{
 		for (int j = 0; j < NumChains; j++)
 		{
 			for (int k = nChain * j; k < nChain * (j + 1); k++)
-			{
+			{	
 				for (int dim = 0; dim < d + 1; dim++)
-					rCM[i][j][dim] += vec[i][k][dim+2] * mass;
+					rCM[i][j][dim] += vec[i][k][dim] * m;
 				//rCM[i][j][0] += vec[i][k][2] * mass;		//rCm[iframe][jchain][x, y, z]
 				//rCM[i][j][1] += vec[i][k][3] * mass;
 				//rCM[i][j][2] += vec[i][k][4] * mass;	
 				//cout << vec[i][k][2] << " " << vec[i][k][3] << " " << endl;
 			}
-			double TotMass = nChain * mass;
+			double TotMass = nChain * m;
 			for (int dim = 0; dim < d + 1; dim++)
 				rCM[i][j][dim] /= TotMass;
-			//rCM[i][j][0] /= TotMass;
-			//rCM[i][j][1] /= TotMass;
-			//rCM[i][j][2] /= TotMass;
+
 			//cout << rCM[i][j][0] << " " << rCM[i][j][1] << " " << rCM[i][j][2] << endl << endl;
 		}
 	}
-	cout << "!!!!!!center!!!!!!";
 	return rCM;
 }
 
-//average + msd: msd[dt] [ichain] [ave, ifile*(dimension+1)] for dtime ipoint  msd[x,y,z,r]*files(0 for average of all files)
 vec_doub3 LmpFile::msd_point(const int ifile, const vec_doub3 vec, vec_doub3 &msd)
 {
 	//extern int Max_frame; 
 	//Num_chains
-	int num = vec[0].size();	
+	int num = vec[0].size();	//Num_chains
 	vector<int> cnt(m_frames[0][1], 0);
 	for (int dt = 1; dt <= m_frames[ifile + 1][1]; dt++)
 	{
@@ -266,6 +266,7 @@ vec_doub3 LmpFile::msd_point(const int ifile, const vec_doub3 vec, vec_doub3 &ms
 					int j = (dimension + 1) * ifile + 1;
 					//count[ifile+1][dt-1]++;
 					cnt[dt-1]++;
+					msd[dt-1][i][j+dimension] = 0;		//for different files
 					for (int dim = 0; dim < dimension; dim++)
 					{
 						msd[dt-1][i][j+dim] += (vec[Tstop][i][dim] - vec[Tstart][i][dim])*(vec[Tstop][i][dim] - vec[Tstart][i][dim]); 
@@ -282,31 +283,30 @@ vec_doub3 LmpFile::msd_point(const int ifile, const vec_doub3 vec, vec_doub3 &ms
 						{
 							if (m_frames[ifile + 1][1] == (m_frames[0][1]) && m_frames[ifile + 1][0] == m_frames[0][0])
 							{	
+								msd[dt-1][i][j+dimension] /= cnt[dt-1];
+								/*msd[dt-1][i][j+dimension] = 0;
 								for (int dim = 0; dim < dimension; dim++)
 								{
 									msd[dt-1][i][j+dim] /= cnt[dt-1]; 
 									msd[dt-1][i][j+dimension] += msd[dt-1][i][j+dim];
-								}
-								//msd[dt-1][i][j] /= cnt[dt-1];
-								//msd[dt-1][i][j+1] /= cnt[dt-1];
-								//msd[dt-1][i][j+2] = msd[dt-1][i][j] + msd[dt-1][i][j+1];
+								}*/
 								//cout << "files[2]" << m_files[2] << endl;
-								msd[dt-1][i][0] = (msd[dt-1][i][0] * (m_files[2]) + msd[dt-1][i][j + dimension]) / (m_files[2] + 1);
+								msd[dt-1][i][0] = (msd[dt-1][i][0] * (m_files[2]) + msd[dt-1][i][j+2]) / (m_files[2] + 1);
 							}
+							//msd[dt-1][i][0] /= cnt[dt-1];
 							if (dt == m_frames[0][1])
 								m_files[2]++;
 						}
 					}
 					else if (m_fnamebel[ifile][1] != "  " && Tstart == (min(m_frames[ifile + 1][1], m_frames[ifile + 1][0] - dt)-1))
 					{
-						for (int dim = 0; dim < dimension; dim++)
+						msd[dt-1][i][j+dimension] /= cnt[dt-1];
+						/*for (int dim = 0; dim < dimension; dim++)
 						{
 							msd[dt-1][i][j+dim] /= cnt[dt-1]; 
 							msd[dt-1][i][j+dimension] += msd[dt-1][i][j+dim];
 						}
-						//msd[dt-1][i][j] /= cnt[dt-1];
-						//msd[dt-1][i][j+1] /= cnt[dt-1];
-						//msd[dt-1][i][j+2] = msd[dt-1][i][j] + msd[dt-1][i][j+1];
+						msd[dt-1][i][j+2] = msd[dt-1][i][j] + msd[dt-1][i][j+1];*/
 					}
 				}
 			}
@@ -314,56 +314,123 @@ vec_doub3 LmpFile::msd_point(const int ifile, const vec_doub3 vec, vec_doub3 &ms
 	return msd;
 }
 
-//msd + average
-vec_doub3 LmpFile::msd_ave(const int ifile, const vec_doub3 vec, vec_doub3 &msd, vec_doub3 &msd_ave)
+vec_doub3 LmpFile::msd(const int ifile, const vec_doub3 vec, vec_doub3 &msd_com, vec_doub3 &msd, const string label) //, vec_doub3 &msd_ave
 {
+	string error = "Right";
+	int Num_frame = vec.size();
+	if (Num_frame != m_frames[0][0])
+		error = "Wrong Num_frame!";
 	int NumBeeds = vec[0].size();
-	int NumChains = msd_ave[0].size();
+	int Max_frame = msd_com.size();
+	if (Max_frame != m_frames[0][1])
+		error = "Wrong Max_frame!";
+	int NumChains = msd_com[0].size();
 	int nChain = NumBeeds / NumChains;
-	cout << "!!!!!!!!!";
-	if ((nChain + 1) != msd_ave[0][0].size())
+	//int nChain = msd_ave[0][0].size() - 1;
+	//if (NumBeeds != NumChains * nChain)
+	//	error = "Wrong Atoms!";
+	if (error != "Right")
 	{
-		cout << "Wrong nChain!" << endl;
+		cout << error << endl;
 		exit(1);
 	}
-	msd_point(ifile, vec, msd);
-	for (int dt = 1; dt <= m_frames[0][1]; dt++)
-	{
-		for (int i = 0; i < NumChains; i++)
-		{
-			for (int j = i * nChain + 1; j <= (i + 1) * nChain; j++)
-			{
-				msd_ave[dt-1][i][j] = msd[dt-1][j][0];
-				msd_ave[dt-1][i][0] += msd[dt-1][j][0];
-			}
-				msd_ave[dt-1][i][0] /= nChain;
-		}
-	}
-	//for test
-	vec_doub3 test(m_frames[0][0], vector<vector<double> >(NumChains, vector<double>(1, 0)));
-	test = center(ifile, nChain, msd_ave, 0);	 //msd_ave[dt-1][i][0];		
+	vec_doub3 msd_ave(m_frames[0][0], vector<vector<double> >(NumChains, vector<double>(nChain + 1, 0))); 
+	vec_doub3 rAtom(m_frames[0][0], vector<vector<double> >(NumBeeds, vector<double> (3, 0)));
 	for (int i = 0; i < m_frames[0][0]; i++)
+		for (int j = 0; j< NumBeeds; j++)
+			for (int dim = 0; dim < 3; dim++)
+				rAtom[i][j][dim] = vec[i][j][dim+2];
+	//msd[dt] [iatom] [0, x1,y1,z1,r1, x2,y2,z2,r2...]: 0 for average of Num files, (dimension+1)for sum
+	
+	if (label == "com")
 	{
-		for (int j = 0; j < nChain; j++)
-			cout << "test msd:\n" << test[i][j][0] << " " << msd_ave[i][j][0] << endl;
+		//rCM[iframe] [jchain] [x,y,z]
+		vec_doub3 rCM(m_frames[0][0], vector<vector<double> >(NumChains, vector<double>(dimension + 1,0)));
+		//vec[iframe] [id] [id,type,xu,yu,zu...]
+		//rAtom[iframe] [jatom] [x, y, z]
+		rCM = center(ifile, nChain, rAtom);
+		//msd_com[iframe] [jchain] [0,x,y,z,r]: 0 for average of Num files, (dimension+1)for sum
+		msd_point(ifile, rCM, msd_com);
+		//return msd_com;
+	}
+	else if (label == "ave")
+	{
+		//msd[dt] [iatom] [0, x1,y1,z1,r1, x2,y2,z2,r2...]: 0 for average of Num files, (dimension+1)for sum
+		msd_point(ifile, rAtom, msd);
+		//if(ifile == m_files[0] - 1;
+		for (int dt = 1; dt <= m_frames[0][1]; dt++)
+		{
+			for (int i = 0; i < NumChains; i++)
+			{
+				msd_ave[dt-1][i][0] = 0; 
+				for (int j = i * nChain; j < (i + 1) * nChain; j++)
+				{
+					//msd_ave[dt] [ichain] [0, r1,r2,r3 ...]: 0 for average of N beeds
+					msd_ave[dt-1][i][j+1] = msd[dt-1][j][0];
+					msd_ave[dt-1][i][0] += msd_ave[dt-1][i][j+1];
+				}
+					msd_ave[dt-1][i][0] /= nChain;
+			}
+		}
+		//for test[iframe] [jchain] [0]
+		vec_doub3 test(m_frames[0][0], vector<vector<double> >(NumChains, vector<double>(1, 0)));
+		test = center(ifile, nChain, msd, 0);	 //msd_ave[dt-1][i][0];		
+		for (int i = 0; i < m_frames[0][0]; i++)
+		{
+			for (int j = 0; j < nChain; j++)
+				cout << "test msd:\n" << test[i][j][0] << " " << msd_ave[i][j][0] << endl;
+		}
+		//return msd_ave;
+	}
+	else if (label == "all")
+	{
+		//rCM[iframe] [jchain] [x,y,z]
+		vec_doub3 rCM(m_frames[0][0], vector<vector<double> >(NumChains, vector<double>(dimension + 1,0)));
+		vec_doub3 rAtom(m_frames[0][0], vector<vector<double> >(NumBeeds, vector<double> (dimension + 1, 0)));
+
+		for (int i = 0; i < m_frames[0][0]; i++)
+			for (int j = 0; j< NumBeeds; j++)
+				for (int dim = 0; dim < 3; dim++)
+					rAtom[i][j][dim] = vec[i][j][dim+2];
+					
+		//vec[iframe] [id] [id,type,xu,yu,zu...]
+		rCM = center(ifile, nChain, rAtom);
+		//msd_com[iframe] [jchain] [0,x,y,z,r]: 0 for average of Num files, (dimension+1)for sum
+		msd_point(ifile, rCM, msd_com);
+		
+		//msd[dt] [iatom] [0, x1,y1,z1,r1, x2,y2,z2,r2...]: 0 for average of Num files, (dimension+1)for sum
+		msd_point(ifile, rAtom, msd);
+		for (int dt = 1; dt <= m_frames[0][1]; dt++)
+			{
+				for (int i = 0; i < NumChains; i++)
+				{
+					//msd_ave[dt-1][i][0] = 0; 
+					for (int j = i * nChain; j < (i + 1) * nChain; j++)
+					{
+						//msd_ave[dt] [ichain] [0, r1,r2,r3 ...]: 0 for average of N beeds
+						msd_ave[dt-1][i][j+1] = msd[dt-1][j][0];
+						msd_ave[dt-1][i][0] += msd_ave[dt-1][i][j+1];
+					}
+						msd_ave[dt-1][i][0] /= nChain;
+				}
+			}
+	}
+	else 
+	{
+		cout << "Wrong MSD Label!" << endl;
+		exit(1);
 	}
 	return msd_ave;
 }
 
-vec_doub3 LmpFile::msd(const int ifile, const vec_doub3 vec, vec_doub3 &msd_com, vec_doub3 &msd_ave, const string label)
-{
-	
-}
-
-
 //output
-void LmpFile::out_msd(const string foutname, const vec_doub3 vec, const vec_doub3 vec_ave, const string &label)
+void LmpFile::out_msd(const string foutname, const vec_doub3 vec_com, const vec_doub3 vec_ave, const string &label)
 {
 	if (label == "com")
 	{
 		double time;
 		//num_chain
-		int num = vec[0].size();
+		int num = vec_com[0].size();
 		ofstream fout(foutname);
 		fout << "time ";
 		cout << "time "; 
@@ -382,6 +449,7 @@ void LmpFile::out_msd(const string foutname, const vec_doub3 vec, const vec_doub
 					fout << "ave[" << ichain + 1 << "] ";
 				}
 			}
+			
 		}
 		cout << endl;
 		fout << endl;
@@ -409,16 +477,16 @@ void LmpFile::out_msd(const string foutname, const vec_doub3 vec, const vec_doub
 					}
 					else
 					{
-						cout << vec[dt-1][i][j+2] << " ";
-						//output << vec[dt-1][i][j+2] << " ";
-						fout << vec[dt-1][i][j+2] << " ";
+						cout << vec_com[dt-1][i][j+2] << " ";
+						//output << vec_com[dt-1][i][j+2] << " ";
+						fout << vec_com[dt-1][i][j+2] << " ";
 					}	
 					if (ifile == m_files[0] - 1)
 					{
-						cout << vec[dt-1][i][0];		// << " " << vec[dt-1][i][(dimension + 1) * Num_file + 1]/count[0][dt-1];
-						//output << vec[dt-1][i][0];		// << " " << vec[dt-1][i][(dimension + 1) * Num_file + 1]/count[0][dt-1];
+						cout << vec_com[dt-1][i][0];		// << " " << vec_com[dt-1][i][(dimension + 1) * Num_file + 1]/count[0][dt-1];
+						//output << vec_com[dt-1][i][0];		// << " " << vec_com[dt-1][i][(dimension + 1) * Num_file + 1]/count[0][dt-1];
 						if (m_files[1] != 1)
-							fout << vec[dt-1][i][0]; 	// << " " << vec[dt-1][i][(dimension + 1) * Num_file + 1]/count[0][dt-1];
+							fout << vec_com[dt-1][i][0]; 	// << " " << vec_com[dt-1][i][(dimension + 1) * Num_file + 1]/count[0][dt-1];
 					}
 				}
 			}
@@ -434,7 +502,7 @@ void LmpFile::out_msd(const string foutname, const vec_doub3 vec, const vec_doub
 	}
 	else 
 	{
-		cout << "Wrong Label!" << endl;
+		cout << "Wrong MSD Label!" << endl;
 		exit(1);
 	}
 }
@@ -477,23 +545,4 @@ string read_atoms(ifstream &fin, int iframe, int nAtoms, vec_doub3 &vec)
 	for (int clear = 0; clear < Num_obs; clear ++)	//clear information of obstacles
 		getline(fin, temp);
 	return head;
-}
-
-vec_doub3 read_data(const vec_doub3 vecAtom)
-{
-	int Num_frame = vecAtom.size();
-	int Num_beeds = vecAtom[0].size();
-	cout << "!!!!!!read_data!!!!!!!";
-	vec_doub3 rAtom(Num_frame, vector<vector<double> >(Num_beeds, vector<double> (dimension + 1, 0)));
-	for (int i = 0; i < Num_frame; i++)
-	{
-		for (int j = 0; j< Num_beeds; j++)
-		{
-			for (int dim = 0; dim < dimension + 1; dim++)
-			{
-				rAtom[i][j][dim] = vecAtom[i][j][dim+2];
-			}
-		}
-	}
-	return rAtom;
 }

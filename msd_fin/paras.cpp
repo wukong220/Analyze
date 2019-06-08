@@ -52,7 +52,7 @@ string time (clock_t start)
 	{
 		ss << inter[i+1];
 		ss >> str;  
-		if (inter[i+1] < 9)
+		if (inter[i+1] < 10)
 			st += "0" + str;    //using std::to_string;
 		else
 			st += str;

@@ -37,11 +37,12 @@ int main()
 	
 	//atom[iframe] [id] [id,type,xu,yu,zu...]
 	vec_doub3 vecAtom(Num_frame, vector<vector<double> >(Num_beeds, vector<double>(Num_info,0))); 
-	//rCM[iframe] [jchain] [x,y,z]
-	vec_doub3 rCM(Num_frame, vector<vector<double> >(Num_chains, vector<double>(dimension + 1,0)));	//each frame with centers of chain	
-	//msd[iframe] [jchain] [0,x,y,z]: 0 for sum of average, (dimension+1)for sum
-	vec_doub3 msdCM(Max_frame, vector<vector<double> >(Num_chains, vector<double>((dimension + 1) * Num_file + 1, 0))); 	//msd of CM for each chain
-	//cnt[0,ifile] [msd_frame]: 0 for sum of average; (Max_frame+1) for compare average 
+	//msdCOM[iframe] [jchain] [0,x1,y1,z1,r1 ...]: 0 for average of Num files, (dimension+1)for sum
+	vec_doub3 msdCOM(Max_frame, vector<vector<double> >(Num_chains, vector<double>((dimension + 1) * Num_file + 1, 0))); 	//msd of CM for each chain
+	//msd[iframe] [jatom] [0,x1,y1,z1,r1 ...]: 0 for average of Num files, (dimension+1)for sum
+	vec_doub3 msd(Max_frame, vector<vector<double> >(Num_beeds, vector<double>((dimension + 1) * Num_file + 1, 0)));	//msd of every atom
+	//msdAVE[iframe] [jchain] [0, r1,r2,r3 ...]: 0 for average of N beeds	
+	vec_doub3 msdAVE(Max_frame, vector<vector<double> >(Num_chains, vector<double>(N_chain + 1, 0))); 	//msd of CM for each chain
 
 	//LmpFile infiles;
 	LmpFile inFiles(filename);
@@ -54,12 +55,13 @@ int main()
 	{
 		vecAtom = inFiles.read_data(ifile, output, Num_beeds);		//read atom data from files, exluding closefiles
 		//cout << vecAtom;
-		rCM = inFiles.center(ifile, N_chain, vecAtom);			//positiion of CM from atom data of files
+		//rCM = inFiles.center(ifile, N_chain, vecAtom);			//positiion of CM from atom data of files
 		//cout << "rCM: \n" << rCM;
-		inFiles.msd_ave(ifile, rCM, msdCM);
+		//inFiles.msd_point(ifile, rCM, msdCOM);
 		//cout << "msd: \n" << msdCM;
+		msdAVE = inFiles.msd(ifile, vecAtom, msdCOM, msd); // 
 	}
-	inFiles.out_msd(foutname, msdCM);
+	inFiles.out_msd(foutname, msdCOM, msdAVE, "com");
 	cout << endl << inFiles;
 	cout << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logname << "\n" << endl;
 	output << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logname << "\n" << endl;	

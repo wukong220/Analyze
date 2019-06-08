@@ -30,14 +30,18 @@ public:
 	int files(){return m_files[1];};
 	
 	//ifile, atom, center
-	vec_doub3 read_data(const int ifile, ofstream &output, const int nAtoms, const vector<int> closefiles = {});	//ifile, closefile[i]
+	vec_doub3 read_data(const int ifile, ofstream &output, const int nAtoms, const vector<int> closefiles = { });	//ifile, closefile[i]
+	
 	//ifile, N_chain, atom[ifile][jatom][xu, yu, zu...]
-	vector<vector<vector<double> > > center(const int, const int, const vector<vector<vector<double> > > &);	//ifile, N_chain, atom
+	vec_doub3 center(const int ifile, const int nChain, const vec_doub3 & vec, const int d = 2);	//ifile, N_chain, atom
 	//ifile, rCM[ifile][jchain][x, y, z], count[ifile][dframe], msd[iframe][jchain][0, x, y, z]
-	vector<vector<vector<double> > > msd_ave(const int, const vector<vector<vector<double> > > , vector<vector<vector<double> > > &);	
-	void out_msd(const string, const vector<vector<vector<double> > >);
+	vec_doub3 msd_point(const int ifile, const vec_doub3 vec, vec_doub3 &msd);	
+	vec_doub3 msd(const int ifile, const vec_doub3 vec, vec_doub3 &msd_com, vec_doub3 &msd, const string label = "all");
+	
+	//continue
+	void out_msd(const string foutname, const vec_doub3 vec_com, const vec_doub3 vec_ave, const string &label = "all");
 };
 
-string read_atoms(ifstream &, int, int, vector<vector<vector<double> > > &); 	// fin, iframe, nAtoms, atom[i][j][k]
+string read_atoms(ifstream &, int, int, vec_doub3 &); 	// fin, iframe, nAtoms, atom[i][j][k]
 
 #endif

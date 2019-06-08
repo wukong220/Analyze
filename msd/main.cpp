@@ -7,23 +7,22 @@ const int dimension = 2;
 const double mass = 1.0;
 int Num_file = 20;
 
-int N_chain = 3;									//Polarization of single chain
+int N_chain = 30;									//Polarization of single chain
 int Num_chains = 1;								//Number of the chains
 int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 //vector<string> type{"1", "2"};								//atom types to read
 
 vector<int> closefiles{};				//closefiles
-string logname = "000.test";
-string foutname = "000.test";
+string logname = "000";
+string foutname = "000";
 string finname = "001";
 ofstream output;
 
 const double md_dt = 0.001;
 const int framestep = 5000;	
 int Num_frame = 1000;
-int dNM = 500;
+int dNM = 300;
 int Max_frame = Num_frame - dNM;
-
 
 
 int main() 
@@ -36,20 +35,15 @@ int main()
 	vector<string> filename = show(logname, finname, foutname, Num_chains, N_chain, Num_beeds, Max_frame);		//for single file
 	//vector<string> filename = show(logname, foutname, Num_chains, N_chain, Num_beeds, Max_frame);	//for serials files
 	
-	//vecAtom[iframe] [id] [id,type,xu,yu,zu...]
-	vec_doub3 vecAtom(Num_frame, vector<vector<double> >(Num_beeds, vector<double>(Num_info, 0))); 
-	//rCM[iframe] [jchain] [x,y,z]
-	vec_doub3 rCM(Num_frame, vector<vector<double> >(Num_chains, vector<double>(dimension + 1,0)));	//each frame with centers of chain	
-	//msd[iframe] [jchain] [0,x,y,z]: 0 for sum of average, (dimension+1)for sum
+	//atom[iframe] [id] [id,type,xu,yu,zu...]
+	vec_doub3 vecAtom(Num_frame, vector<vector<double> >(Num_beeds, vector<double>(Num_info,0))); 
+	//msdCOM[iframe] [jchain] [0,x1,y1,z1,r1 ...]: 0 for average of Num files, (dimension+1)for sum
 	vec_doub3 msdCOM(Max_frame, vector<vector<double> >(Num_chains, vector<double>((dimension + 1) * Num_file + 1, 0))); 	//msd of CM for each chain
-	//cnt[0,ifile] [msd_frame]: 0 for sum of average; (Max_frame+1) for compare average 
-
-	//rAtom[iframe] [jatom] [x,y,z]
-	vec_doub3 rAtom(Num_frame, vector<vector<double> >(Num_beeds, vector<double> (dimension + 1, 0)));
-	vec_doub3 msdDOT(Max_frame, vector<vector<double> >(Num_beeds, vector<double>((dimension + 1) * Num_file + 1, 0)));
-	//msd[iframe] [jchain] [0,x,y,z]: 0 for sum of average, (dimension + 1)for sum
+	//msd[iframe] [jatom] [0,x1,y1,z1,r1 ...]: 0 for average of Num files, (dimension+1)for sum
+	vec_doub3 msd(Max_frame, vector<vector<double> >(Num_beeds, vector<double>((dimension + 1) * Num_file + 1, 0)));	//msd of every atom
+	//msdAVE[iframe] [jchain] [0, r1,r2,r3 ...]: 0 for average of N beeds	
 	vec_doub3 msdAVE(Max_frame, vector<vector<double> >(Num_chains, vector<double>(N_chain + 1, 0))); 	//msd of CM for each chain
-	
+
 	//LmpFile infiles;
 	LmpFile inFiles(filename);
 	//cout << inFiles;
@@ -61,26 +55,13 @@ int main()
 	{
 		vecAtom = inFiles.read_data(ifile, output, Num_beeds);		//read atom data from files, exluding closefiles
 		//cout << vecAtom;
-		cout << "!!!!Outside!!!!!";
-		//inFiles.msd(ifile, vecAtom, msdCOM, msdAVE, "all");
-		rCM = inFiles.center(ifile, N_chain, vecAtom);			//positiion of CM from atom data of files
+		//rCM = inFiles.center(ifile, N_chain, vecAtom);			//positiion of CM from atom data of files
 		//cout << "rCM: \n" << rCM;
-		
-		inFiles.msd_point(ifile, rCM, msdCOM);
+		//inFiles.msd_point(ifile, rCM, msdCOM);
 		//cout << "msd: \n" << msdCM;
-		
-		
-		rAtom = read_data(vecAtom);		//read atom data from vectors
-		//cout << "rAtom: \n" << rAtom;
-		inFiles.msd_ave(ifile, rAtom, msdDOT, msdAVE);
-		//cout << "msdAVG: \n" << msdAVG;
-		
+		msdAVE = inFiles.msd(ifile, vecAtom, msdCOM, msd); // 
 	}
-	cin.get();
-	//cout << "msdcom msdave\n" << msdCOM << " " << msdAVE;
-	//inFiles.out_msd(foutname, msdCM, "com");
-	inFiles.out_msd(foutname, msdCOM, msdAVE);
-	
+	inFiles.out_msd(foutname, msdCOM, msdAVE, "com");
 	cout << endl << inFiles;
 	cout << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logname << "\n" << endl;
 	output << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logname << "\n" << endl;	
