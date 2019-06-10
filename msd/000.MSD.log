@@ -1,0 +1,27 @@
+
+"Output txt file name( 'MSD.000.txt' for default ): " 
+
+"Number of files( '2' for default ): "
+
+dimension = 2;
+mass =1;
+md_dt = 0.001;
+framestep = 5000;
+
+"Number of chains( '2' for default ): "
+"Number of atoms( '15' for single chain default ): "
+
+"Number of frames( '1000' for default ): "
+"Frames to delete( '300' for default ): "
+
+"Opening": 001u.lammpstrj……
+"ERROR": Cannot open 002u.lammpstrj
+
+Name                     Label Num     Max    
+001u.lammpstrj            001  1000    700     
+002u.lammpstrj                 0       0       
+
+"Writing": MSD.000.txt
+"Outputing": 000.MSD.log
+
+"Time": 00:00:00
