@@ -111,17 +111,17 @@ LmpFile::~LmpFile()
 ostream & operator<<(ostream & os, const LmpFile & file)
 {
 	//os.setf(ios::adjustfield);
-	cout << "Information: \n";
+	os << "Information: \n";
 	for(int i = 0; i < file.m_head.size(); i++)
 	{
 		if ((file.m_head[i] >= 'A' && file.m_head[i] <= 'Z')|| file.m_head[i] == ':')
 			continue;
 		else
-			cout << file.m_head[i];
+			os << file.m_head[i];
 	}
-	cout << "\n\n";
+	os << "\n\n";
 	
-	cout << "Effective Files: " << file.m_files[1] << endl;
+	os << "Effective Files: " << file.m_files[1] << endl;
 	os << setw(25) << left << "Name ";
 	os << setw(5) << "Label";
 	os << " ";
@@ -185,7 +185,6 @@ vec_doub3 LmpFile::read_data(const int ifile, ofstream &output, const int nAtoms
 		cout << "\"Opening\": " << m_fnamebel[ifile][0] << "……" << endl;
 		output << "\"Opening\": " << m_fnamebel[ifile][0] << "……" << endl;
 	}
-	
 	
 	for (int i = 0; i < m_frames[0][0]; i++)
 	{
@@ -426,48 +425,82 @@ vec_doub3 LmpFile::msd(const int ifile, const vec_doub3 vec, vec_doub3 &msd_com,
 //output
 void LmpFile::out_msd(const string foutname, const vec_doub3 vec_com, const vec_doub3 vec_ave, const string &label)
 {
-	if (label == "com")
+	double time;
+	//num_chains
+	int NumChains = vec_com[0].size();
+	int nChain = vec_ave[0][0].size() - 1;
+	ofstream fout(foutname);
+	fout << "time ";
+	cout << "time "; 
+	//output << "time ";
+	for (int ichain = 0; ichain < NumChains; ichain++)
 	{
-		double time;
-		//num_chain
-		int num = vec_com[0].size();
-		ofstream fout(foutname);
-		fout << "time ";
-		cout << "time "; 
-		//output << "time ";
-		for (int ichain = 0; ichain < num; ichain++)
+		if (label == "com")
 		{
 			for (int ifile = 0; ifile < m_files[0]; ifile++)
 			{
 				cout << "msd[" << ichain + 1 << "][" << m_fnamebel[ifile][1] << "] ";
 				//output << "msd[" << ichain + 1 << "][" << m_fnamebel[ifile][1] << "] ";
 				fout << "msd[" << ichain + 1 << "][" << m_fnamebel[ifile][1] << "] ";
-				if (ifile == m_files[0] - 1)
-				{
-					cout << "ave[" << ichain + 1 << "] ";
-					//output << "ave[" << ichain + 1 << "] ";
-					fout << "ave[" << ichain + 1 << "] ";
-				}
 			}
-			
+			if (m_files[1] > 1)
+			{
+				cout << "ave[" << ichain + 1 << "][files] ";
+				//output << "ave[" << ichain + 1 << "] ";
+				fout << "ave[" << ichain + 1 << "][files] ";				
+			}
+
 		}
+		else if (label == "ave")
+		{
+			for (int j = 0; j < nChain; j++)
+			{
+				cout << "msd[" << ichain + 1 << "][" << j + 1 << "] ";
+				//output << "msd[" << ichain + 1 << "][" << j + 1 << "] ";
+				fout << "msd[" << ichain + 1 << "][" << j + 1 << "] ";
+			}
+			if (m_files[1] > 1)
+			{
+				cout << "ave[" << ichain + 1 << "][atoms] ";
+				//output << "ave[" << ichain + 1 << "] ";
+				fout << "ave[" << ichain + 1 << "][atoms] ";				
+			}
+
+		}
+		else if (label == "all")
+		{
+			cout << "msd[" << ichain + 1 << "][com] "
+			<< "msd[" << ichain + 1 << "][ave]";
+			//output << "msd[" << ichain + 1 << "][" << j + 1 << "] ";
+			fout << "msd[" << ichain + 1 << "][com] "
+			<< "msd[" << ichain + 1 << "][ave]";
+		}
+		else
+		{
+			cout << "Wrong MSD Label!" << endl;
+			exit(1);
+		}
+	}
 		cout << endl;
 		fout << endl;
+
+	//extern int Max_frame = 20000;int framestep = 5000; double md_dt = 0.001;
+	for (int dt = 1; dt <= m_frames[0][1]; dt++)
+	{
+		time = dt * framestep * md_dt;
+		cout << time << " ";
+		//output << time << " ";
+		fout << time << " ";
 		
-		//extern int Max_frame = 20000;int framestep = 5000; double md_dt = 0.001;
-		for (int dt = 1; dt <= m_frames[0][1]; dt++)
+		if (label == "com")
 		{
-			time = dt * framestep * md_dt;
-			cout << time << " ";
-			//output << time << " ";
-			fout << time << " ";
-			
 			for (int ifile = 0; ifile < m_files[0]; ifile++)
 			{
 				if (m_fnamebel[ifile][1] == "  ")
 					continue;
-				for(int i = 0; i < num; i++)
+				for(int i = 0; i < NumChains; i++)
 				{	
+					
 					int j = (dimension + 1) * ifile + 1; 
 					if (m_fnamebel[ifile][1] == "000" && dt > m_frames[ifile + 1][1])	//suplement
 					{
@@ -483,28 +516,35 @@ void LmpFile::out_msd(const string foutname, const vec_doub3 vec_com, const vec_
 					}	
 					if (ifile == m_files[0] - 1)
 					{
-						cout << vec_com[dt-1][i][0];		// << " " << vec_com[dt-1][i][(dimension + 1) * Num_file + 1]/count[0][dt-1];
+						cout << vec_com[dt-1][i][0] << " ";		// << " " << vec_com[dt-1][i][(dimension + 1) * Num_file + 1]/count[0][dt-1];
 						//output << vec_com[dt-1][i][0];		// << " " << vec_com[dt-1][i][(dimension + 1) * Num_file + 1]/count[0][dt-1];
 						if (m_files[1] != 1)
-							fout << vec_com[dt-1][i][0]; 	// << " " << vec_com[dt-1][i][(dimension + 1) * Num_file + 1]/count[0][dt-1];
+							fout << vec_com[dt-1][i][0] << " "; 	// << " " << vec_com[dt-1][i][(dimension + 1) * Num_file + 1]/count[0][dt-1];
 					}
 				}
-			}
-			cout << endl;
-			//output << endl;
-			fout << endl;
+			}	
 		}
-		fout.close();
-	}
-	else if (label == "ave")
-	{
+		else if (label == "ave")
+		{
+			
+		}
+		else if (label == "all")
+		{
+			
+		}
+		else
+		{
+			cout << "Wrong MSD Label!" << endl;
+			exit(1);
+		}
 		
+		
+		cout << endl;
+		//output << endl;
+		fout << endl;
 	}
-	else 
-	{
-		cout << "Wrong MSD Label!" << endl;
-		exit(1);
-	}
+	fout.close();
+	
 }
 
 //read atom information -> atom[iframe][jatom][kinfo]

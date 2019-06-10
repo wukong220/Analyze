@@ -6,7 +6,7 @@
 LmpFile::LmpFile()
 {
 	stringstream ss, sl;
-	m_files = vector<int> {Num_file, Num_file, 0};		//cnt[Num_file, files, count]
+	m_files = vector<int> {Num_file, Num_file, 0};		//m_files[Num_file, files, count]
 	m_head = "none";
 	m_fnamebel = vector<vector<string> > (m_files[0], vector<string>(2));
 	m_frames = vector<vector<int> >(m_files[0] + 1, vector<int>{Num_frame, Num_frame - dNM});
@@ -253,7 +253,7 @@ vec_doub3 LmpFile::msd_point(const int ifile, const vec_doub3 vec, vec_doub3 &ms
 	//extern int Max_frame; 
 	//Num_chains
 	int num = vec[0].size();	//Num_chains
-	vector<int> cnt(m_frames[0][1], 0);
+	vector<vector<int> > cnt(m_frames[0][1], vector<int>(num, 0));
 	for (int dt = 1; dt <= m_frames[ifile + 1][1]; dt++)
 	{
 		for(int Tstart = 0; Tstart < min(m_frames[ifile + 1][1], m_frames[ifile + 1][0] - dt); Tstart++)
@@ -264,7 +264,7 @@ vec_doub3 LmpFile::msd_point(const int ifile, const vec_doub3 vec, vec_doub3 &ms
 					//extern int dimension = 2
 					int j = (dimension + 1) * ifile + 1;
 					//count[ifile+1][dt-1]++;
-					cnt[dt-1]++;
+					cnt[dt-1][i]++;
 					msd[dt-1][i][j+dimension] = 0;		//for different files
 					for (int dim = 0; dim < dimension; dim++)
 					{
@@ -282,27 +282,27 @@ vec_doub3 LmpFile::msd_point(const int ifile, const vec_doub3 vec, vec_doub3 &ms
 						{
 							if (m_frames[ifile + 1][1] == (m_frames[0][1]) && m_frames[ifile + 1][0] == m_frames[0][0])
 							{	
-								msd[dt-1][i][j+dimension] /= cnt[dt-1];
+								msd[dt-1][i][j+dimension] /= cnt[dt-1][i];
 								/*msd[dt-1][i][j+dimension] = 0;
 								for (int dim = 0; dim < dimension; dim++)
 								{
-									msd[dt-1][i][j+dim] /= cnt[dt-1]; 
+									msd[dt-1][i][j+dim] /= cnt[dt-1][i]; 
 									msd[dt-1][i][j+dimension] += msd[dt-1][i][j+dim];
 								}*/
 								//cout << "files[2]" << m_files[2] << endl;
 								msd[dt-1][i][0] = (msd[dt-1][i][0] * (m_files[2]) + msd[dt-1][i][j+2]) / (m_files[2] + 1);
 							}
-							//msd[dt-1][i][0] /= cnt[dt-1];
+							//msd[dt-1][i][0] /= cnt[dt-1][i];
 							if (dt == m_frames[0][1])
 								m_files[2]++;
 						}
 					}
 					else if (m_fnamebel[ifile][1] != "  " && Tstart == (min(m_frames[ifile + 1][1], m_frames[ifile + 1][0] - dt)-1))
 					{
-						msd[dt-1][i][j+dimension] /= cnt[dt-1];
+						msd[dt-1][i][j+dimension] /= cnt[dt-1][i];
 						/*for (int dim = 0; dim < dimension; dim++)
 						{
-							msd[dt-1][i][j+dim] /= cnt[dt-1]; 
+							msd[dt-1][i][j+dim] /= cnt[dt-1][i]; 
 							msd[dt-1][i][j+dimension] += msd[dt-1][i][j+dim];
 						}
 						msd[dt-1][i][j+2] = msd[dt-1][i][j] + msd[dt-1][i][j+1];*/
