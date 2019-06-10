@@ -64,7 +64,7 @@ int main()
 	}
 	inFiles.out_msd(foutname, msdCOM, msdAVE, label);
 	cout << endl << inFiles;		//necessary
-	output << endl << inFiles;
+	output << endl;// << inFiles;
 	cout << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logname << "\n" << endl;
 	output << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logname << "\n" << endl;	
 	//time
