@@ -17,6 +17,14 @@ framestep = 5000;
 "Opening": 001u.lammpstrj……
 "ERROR": Cannot open 002u.lammpstrj
 
+Information: 
+  id type xu yu zu vx vy vz c_orient[1] c_orient[2] c_orient[3] c_orient[4] c_shape[1] c_shape[2] c_shape[3] 
+
+Effective Files: 1
+Name                     Label Num     Max    
+001u.lammpstrj            001  1000    700     
+002u.lammpstrj                 0       0       
+
 "Writing": MSD.000.txt
 "Outputing": 000.MSD.log
 
