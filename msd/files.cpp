@@ -6,7 +6,7 @@
 LmpFile::LmpFile()
 {
 	stringstream ss, sl;
-	m_files = vector<int> {Num_file, Num_file, 0};		//m_files[Num_file, files, count]
+	m_files = vector<int> {Num_file, Num_file};		//m_files[Num_file, files, count]
 	m_head = "none";
 	m_fnamebel = vector<vector<string> > (m_files[0], vector<string>(2));
 	m_frames = vector<vector<int> >(m_files[0] + 1, vector<int>{Num_frame, Num_frame - dNM});
@@ -33,7 +33,7 @@ LmpFile::LmpFile(const vector<string> finname)
 {
 	stringstream ss, sl;
 	int num = finname.size();
-	m_files = vector<int>{num, num, 0};
+	m_files = vector<int>{num, num};
 	m_head = "none";
 	m_fnamebel = vector<vector<string> > (m_files[0], vector<string>(2));
 	m_frames = vector<vector<int> >(m_files[0] + 1, vector<int>{Num_frame, Num_frame - dNM});
@@ -77,7 +77,7 @@ LmpFile::LmpFile(const vector<string> finname)
 LmpFile::LmpFile(const vector<vector<string> > fnamebel)
 {
 	int num = fnamebel.size();
-	m_files = vector<int> {num, num, 0};
+	m_files = vector<int> {num, num};
 	m_head = "none";
 	m_fnamebel = fnamebel;
 	m_frames = vector<vector<int> >(m_files[0] + 1, vector<int>{Num_frame, Num_frame - dNM});
@@ -86,7 +86,7 @@ LmpFile::LmpFile(const vector<vector<string> > fnamebel)
 LmpFile::LmpFile(const vector<vector<string> > fnamebel, const int a)
 {
 	int num = fnamebel.size();
-	m_files = vector<int> {num, num, 0};
+	m_files = vector<int> {num, num};
 	m_head = "none";
 	m_fnamebel = fnamebel;
 	m_frames = vector<vector<int> >(m_files[0] + 1, vector<int>{a, a - dNM});
@@ -95,7 +95,7 @@ LmpFile::LmpFile(const vector<vector<string> > fnamebel, const int a)
 LmpFile::LmpFile(const vector<vector<string> > fnamebel, const vector<vector<int> > frames)
 {
 	int num = fnamebel.size();
-	m_files = vector<int> {num, num, 0};
+	m_files = vector<int> {num, num};
 	m_head = "none";
 	m_fnamebel = fnamebel;
 	m_fnamebel.insert(m_fnamebel.begin(), m_fnamebel[0]);
@@ -253,6 +253,7 @@ vec_doub3 LmpFile::msd_point(const int ifile, const vec_doub3 vec, vec_doub3 &ms
 	//extern int Max_frame; 
 	//Num_chains
 	int num = vec[0].size();	//Num_chains
+	m_files.insert(m_files.end(), num, 0);
 	vector<vector<int> > cnt(m_frames[0][1], vector<int>(num, 0));
 	for (int dt = 1; dt <= m_frames[ifile + 1][1]; dt++)
 	{
@@ -289,12 +290,12 @@ vec_doub3 LmpFile::msd_point(const int ifile, const vec_doub3 vec, vec_doub3 &ms
 									msd[dt-1][i][j+dim] /= cnt[dt-1][i]; 
 									msd[dt-1][i][j+dimension] += msd[dt-1][i][j+dim];
 								}*/
-								//cout << "files[2]" << m_files[2] << endl;
-								msd[dt-1][i][0] = (msd[dt-1][i][0] * (m_files[2]) + msd[dt-1][i][j+2]) / (m_files[2] + 1);
+								//cout << "files[ichain]" << m_files[i+2] << endl;
+								msd[dt-1][i][0] = (msd[dt-1][i][0] * (m_files[i+2]) + msd[dt-1][i][j+2]) / (m_files[i+2] + 1);
 							}
 							//msd[dt-1][i][0] /= cnt[dt-1][i];
 							if (dt == m_frames[0][1])
-								m_files[2]++;
+								m_files[i+2]++;
 						}
 					}
 					else if (m_fnamebel[ifile][1] != "  " && Tstart == (min(m_frames[ifile + 1][1], m_frames[ifile + 1][0] - dt)-1))
@@ -514,7 +515,8 @@ void LmpFile::out_msd(const string foutname, const vec_doub3 vec_com, const vec_
 						//output << vec_com[dt-1][i][j+2] << " ";
 						fout << vec_com[dt-1][i][j+2] << " ";
 					}	
-					if (ifile == m_files[0] - 1)
+					
+					if (ifile == m_files[0] - 1 )//&& m_files[0] > 1)
 					{
 						cout << vec_com[dt-1][i][0] << " ";		// << " " << vec_com[dt-1][i][(dimension + 1) * Num_file + 1]/count[0][dt-1];
 						//output << vec_com[dt-1][i][0];		// << " " << vec_com[dt-1][i][(dimension + 1) * Num_file + 1]/count[0][dt-1];
@@ -526,7 +528,14 @@ void LmpFile::out_msd(const string foutname, const vec_doub3 vec_com, const vec_
 		}
 		else if (label == "ave")
 		{
-			
+			for (int i = 0; i < NumChains; i++)
+			{
+				for (int j = 0; j < nChain; j++)
+				{
+					cout << vec_ave[dt-1][i][j] << " ";
+					fout << vec_ave[dt-1][i][j] << " ";
+				}
+			}
 		}
 		else if (label == "all")
 		{

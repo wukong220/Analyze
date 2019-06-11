@@ -7,15 +7,15 @@ const int dimension = 2;
 const double mass = 1.0;
 int Num_file = 2;
 
-int N_chain = 15;									//Polarization of single chain
-int Num_chains = 2;								//Number of the chains
+int N_chain = 10;									//Polarization of single chain
+int Num_chains = 3;								//Number of the chains
 int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 //vector<string> type{"1", "2"};								//atom types to read
 
 vector<int> closefiles{};				//closefiles
 string logname = "000";
 string foutname = "000";
-string finname ;//= "001";
+string finname = "002";
 ofstream output;
 
 const double md_dt = 0.001;
@@ -32,8 +32,8 @@ int main()
 	stringstream ss;
 	
 	clock_t start = clock();		//start time
-	//vector<string> filename = show(logname, finname, foutname, Num_chains, N_chain, Num_beeds, Max_frame);		//for single file
-	vector<string> filename = show(logname, foutname, Num_chains, N_chain, Num_beeds, Max_frame);	//for serials files
+	vector<string> filename = show(logname, finname, foutname, Num_chains, N_chain, Num_beeds, Max_frame);		//for single file
+	//vector<string> filename = show(logname, foutname, Num_chains, N_chain, Num_beeds, Max_frame);	//for serials files
 	
 	//atom[iframe] [id] [id,type,xu,yu,zu...]
 	vec_doub3 vecAtom(Num_frame, vector<vector<double> >(Num_beeds, vector<double>(Num_info,0))); 

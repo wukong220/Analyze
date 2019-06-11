@@ -49,9 +49,13 @@ int main()
 	stringstream ss;	
 	string str;
 	//output.open("test.text");
+	vector<int> test = {20, 20};
+	test.insert(test.end(), 3, 0);
+	cout << test;
+	
 	
  // vector<string> str(2);
-	while (1)
+/*	while (1)
 	{
 		cout << " Square: " << endl;
 		if(!sq())
