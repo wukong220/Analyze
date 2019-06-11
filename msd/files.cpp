@@ -516,7 +516,7 @@ void LmpFile::out_msd(const string foutname, const vec_doub3 vec_com, const vec_
 						fout << vec_com[dt-1][i][j+2] << " ";
 					}	
 					
-					if (ifile == m_files[0] - 1 )//&& m_files[0] > 1)
+					if (ifile == m_files[0] - 1 && m_files[0] > 1)
 					{
 						cout << vec_com[dt-1][i][0] << " ";		// << " " << vec_com[dt-1][i][(dimension + 1) * Num_file + 1]/count[0][dt-1];
 						//output << vec_com[dt-1][i][0];		// << " " << vec_com[dt-1][i][(dimension + 1) * Num_file + 1]/count[0][dt-1];

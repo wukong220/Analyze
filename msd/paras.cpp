@@ -195,6 +195,7 @@ vector<string> show(string &logname, string &finname, string &foutname, int &Num
 	cout << "\n\"Number of files( \'" << Num_file << "\' for default ): \"\n";
 	output << "\n\"Number of files( \'" << Num_file << "\' for default ): \"\n";
 	input(Num_file);
+	
 	vector<string> filename(Num_file); //constructor
 	cout << "\"Input file name( \'" << finname << "\' for default, without \'u.lammpstrj\' ):\" \n";
 	for (num = 0; num < Num_file; num++)
@@ -202,7 +203,7 @@ vector<string> show(string &logname, string &finname, string &foutname, int &Num
 		if(!input(filename[num]))
 			break;
 	}
-	if (num == 0)
+	if (num == 0 && finname != "\0")
 	{
 		Num_file = 1;
 		filename[0] = finname;
@@ -212,68 +213,6 @@ vector<string> show(string &logname, string &finname, string &foutname, int &Num
 	filename.resize(Num_file);
 	cout << "Number of files: " << filename.size() << endl;
 	
-	//LmpFile Files(filename);
-	//cout << Files;
-	//cin.get();
-	
-	cout << "\ndimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n"; //default information
-	output << "\ndimension = " << dimension << ";\nmass =" << mass << ";\nmd_dt = " << md_dt << ";\nframestep = " << framestep << ";\n\n";
-	cout << "\"Number of chains( \'" << Num_chains << "\' for default ): \"\n";
-	output << "\"Number of chains( \'" << Num_chains << "\' for default ): \"\n";
-	input(Num_chains);
-	cout << "\"Number of atoms( \'" << N_chain << "\' for single chain default ): \"\n";
-	output << "\"Number of atoms( \'" << N_chain << "\' for single chain default ): \"\n";
-	input(N_chain); 
-	Num_beeds = N_chain * Num_chains;
-	
-	cout << "\n\"Number of frames( \'" << Num_frame << "\' for default ): \"\n";
-	output << "\n\"Number of frames( \'" << Num_frame << "\' for default ): \"\n";
-	input(Num_frame);
-	cout << "\"Frames to delete( \'" << dNM << "\' for default ): \"\n";
-	output << "\"Frames to delete( \'" << dNM << "\' for default ): \"\n";
-	input(dNM);
-	Max_frame = Num_frame - dNM;
-	cout << "\n";
-	output << "\n";
-	return filename;
-}
-
-//for a serial files
-vector<string> show(string &logname, string &foutname, int &Num_chains, int &N_chain, int &Num_beeds, int &Max_frame)
-{	
-	string str;
-	int num;
-	cout << "\"Log file name( \'" << logname << ".MSD.log\' for default ): \" \n";
-	//output << "\"Log file name( \'" << logname << ".MSD.log\' for default ): \" \n";
-	if (!input(str))
-		str = logname;
-	logname = str + ".MSD.log";
-	//cout << logname << endl;
-	output.open(logname);
-		
-	cout << "\n\"Output txt file name( \'MSD." << foutname << ".txt\' for default ): \" \n";
-	output << "\n\"Output txt file name( \'MSD." << foutname << ".txt\' for default ): \" \n";
-	if (!input(str))
-		str = foutname;
-	foutname = "MSD." + str + ".txt";
-	//cout << foutname << endl;
-	
-	cout << "\n\"Number of files( \'" << Num_file << "\' for default ): \"\n";
-	output << "\n\"Number of files( \'" << Num_file << "\' for default ): \"\n";
-	input(Num_file);
-	vector<string> filename(Num_file); //constructor
-	cout << "\"Input file name( \'***\' for default, without \'u.lammpstrj\' ):\" \n";
-	for (num = 0; num < Num_file; num++)
-	{
-		if(!input(filename[num]))
-			break;
-	}
-	if (num != 0)
-		Num_file = num; 
-	filename.resize(Num_file);
-	cout << "Number of files: " << filename.size() << endl;
-	
-	//for test
 	//LmpFile Files(filename);
 	//cout << Files;
 	//cin.get();
