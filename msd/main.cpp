@@ -7,15 +7,16 @@ const int dimension = 2;
 const double mass = 1.0;
 int Num_file = 1;
 
-int N_chain = 3;								//Polarization of single chain
+int N_chain = 2;								//Polarization of single chain
 int Num_chains = 2;								//Number of the chains
 int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 //vector<string> type{"1", "2"};								//atom types to read
 
 vector<int> closefiles{};				//closefiles
 string logname = "000";
-string foutname = "000";
+string label = "ave";
 string finname;// = "002";
+string foutname = "000";
 ofstream output;
 
 const double md_dt = 0.001;
@@ -32,7 +33,7 @@ int main()
 	stringstream ss;
 	
 	clock_t start = clock();		//start time
-	vector<string> filename = show(logname, finname, foutname, Num_chains, N_chain, Num_beeds, Max_frame);		//for single file
+	vector<string> filename = show(logname, finname, label, foutname, Num_chains, N_chain, Num_beeds, Max_frame);		//for single file
 	//vector<string> filename = show(logname, foutname, Num_chains, N_chain, Num_beeds, Max_frame);	//for serials files
 	
 	//atom[iframe] [id] [id,type,xu,yu,zu...]
@@ -45,12 +46,11 @@ int main()
 	vec_doub3 msdAVE(Max_frame, vector<vector<double> >(Num_chains, vector<double>(N_chain + 1, 0))); 	//msd of CM for each chain
 
 	//LmpFile infiles;
-	LmpFile inFiles(filename);
+	LmpFile inFiles(filename, Num_beeds);
 	//cout << inFiles;
 	//cin.get();
 	
 	int f = inFiles.files();
-	string label = "ave";
 	//atom[iframe] [id] [id,type,xu,yu,zu...]
 	for(int ifile = 0; ifile < f; ifile++)
 	{
@@ -65,6 +65,8 @@ int main()
 	inFiles.out_msd(foutname, msdCOM, msdAVE, label);
 	cout << endl << inFiles;		//necessary
 	output << endl << inFiles;
+	
+	cout << "\"MSD\": " << label << endl;
 	cout << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logname << "\n" << endl;
 	output << "\"Writing\": " << foutname << endl << "\"Outputing\": " << logname << "\n" << endl;	
 	//time

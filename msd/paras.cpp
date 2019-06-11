@@ -173,10 +173,11 @@ ostream & operator<<(ostream & os, vec_doub3 &vec)
 
 //show information
 //for single file
-vector<string> show(string &logname, string &finname, string &foutname, int &Num_chains, int &N_chain, int &Num_beeds, int &Max_frame)
+vector<string> show(string &logname, string &finname, string &label, string &foutname, int &Num_chains, int &N_chain, int &Num_beeds, int &Max_frame)
 {
 	string str;
-	int num;
+	int num = 0;
+	vector<string> LABEL = {"com", "COM", "ave", "AVE", "all", "ALL", "\0"};
 	cout << "\"Log file name( \'" << logname << ".MSD.log\' for default ): \" \n";
 	//output << "\"Log file name( \'" << logname << ".MSD.log\' for default ): \" \n";
 	if (!input(str))
@@ -192,12 +193,29 @@ vector<string> show(string &logname, string &finname, string &foutname, int &Num
 	foutname = "MSD." + str + ".txt";
 	//cout << foutname << endl;
 	
+	cout << "Labe for MSD( \'" << label << "\' for defaule & \'com or ave or all\'): \"\n";
+	output << "Labe for MSD( \'" << label << "\' for defaule & \'com or ave or all\'): \"\n";
+	input(label);
+	for (int i = 0; i < LABEL.size(); i++)
+	{
+		if (label == LABEL[i])
+		{
+			num = 1;
+			break;
+		}
+	}
+	if (!num)
+	{
+		cout << "Wrong Label!" << endl;
+		exit(1);
+	}
+	
 	cout << "\n\"Number of files( \'" << Num_file << "\' for default ): \"\n";
 	output << "\n\"Number of files( \'" << Num_file << "\' for default ): \"\n";
 	input(Num_file);
 	
 	vector<string> filename(Num_file); //constructor
-	cout << "\"Input file name( \'" << finname << "\' for default, without \'u.lammpstrj\' ):\" \n";
+	cout << "\"Input file name( \'" << finname << "\' for default & without \'u.lammpstrj\' ):\" \n";
 	for (num = 0; num < Num_file; num++)
 	{
 		if(!input(filename[num]))

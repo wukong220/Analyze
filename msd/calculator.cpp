@@ -48,22 +48,26 @@ int main()
 	
 	stringstream ss;	
 	string str;
-	//output.open("test.text");q
+	//output.open("test.text");
+	vector<int> test = {20, 20};
+	test.insert(test.begin() + 2, 3, 0);
+	cout << test;
+	
 	
  // vector<string> str(2);
-	/*while (1)
+/*	while (1)
 	{
 		cout << " Square: " << endl;
 		if(!sq())
 			break;
-	};*/
-	
+	};
+	/*
 	while (1)
 	{
 		cout << " Sum: " << endl;
 		if(!sum())
 			break;
-	};
+	};*/
 	return 0;
 }
 

@@ -1,5 +1,6 @@
 
 "Output txt file name( 'MSD.000.txt' for default ): " 
+Labe for MSD( 'ave' for defaule & 'com or ave or all'): "
 
 "Number of files( '1' for default ): "
 
@@ -9,7 +10,7 @@ md_dt = 0.001;
 framestep = 5000;
 
 "Number of chains( '2' for default ): "
-"Number of atoms( '3' for single chain default ): "
+"Number of atoms( '2' for single chain default ): "
 
 "Number of frames( '1000' for default ): "
 "Frames to delete( '300' for default ): "
