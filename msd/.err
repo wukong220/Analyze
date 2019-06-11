@@ -1,5 +1,35 @@
-main.cpp:15:23: error: expected ';' after top level declarator
-vector<int> closefiles{};                               //closefiles
-                      ^
-                      ;
-1 error generated.
+In file included from files.cpp:1:
+./files.h:33:106: error: expected expression
+        vec_doub3 read_data(const int ifile, ofstream &output, const int nAtoms, const vector<int> closefiles = { });   //ifile, closefile[i]
+                                                                                                                ^
+files.cpp:9:24: error: expected '(' for function-style cast or type construction
+        m_files = vector<int> {Num_file, Num_file};             //m_files[Num_file, files, count]
+                  ~~~~~~~~~~~ ^
+files.cpp:12:61: error: expected '(' for function-style cast or type construction
+        m_frames = vector<vector<int> >(m_files[0] + 1, vector<int>{Num_frame, Num_frame - dNM});
+                                                        ~~~~~~~~~~~^
+files.cpp:36:23: error: expected '(' for function-style cast or type construction
+        m_files = vector<int>{num, num};
+                  ~~~~~~~~~~~^
+files.cpp:39:61: error: expected '(' for function-style cast or type construction
+        m_frames = vector<vector<int> >(m_files[0] + 1, vector<int>{Num_frame, Num_frame - dNM});
+                                                        ~~~~~~~~~~~^
+files.cpp:80:24: error: expected '(' for function-style cast or type construction
+        m_files = vector<int> {num, num};
+                  ~~~~~~~~~~~ ^
+files.cpp:83:61: error: expected '(' for function-style cast or type construction
+        m_frames = vector<vector<int> >(m_files[0] + 1, vector<int>{Num_frame, Num_frame - dNM});
+                                                        ~~~~~~~~~~~^
+files.cpp:89:24: error: expected '(' for function-style cast or type construction
+        m_files = vector<int> {num, num};
+                  ~~~~~~~~~~~ ^
+files.cpp:92:61: error: expected '(' for function-style cast or type construction
+        m_frames = vector<vector<int> >(m_files[0] + 1, vector<int>{a, a - dNM});
+                                                        ~~~~~~~~~~~^
+files.cpp:98:24: error: expected '(' for function-style cast or type construction
+        m_files = vector<int> {num, num};
+                  ~~~~~~~~~~~ ^
+files.cpp:153:6: warning: unused variable 'Num_atoms' [-Wunused-variable]
+        int Num_atoms = 1;
+            ^
+1 warning and 10 errors generated.
