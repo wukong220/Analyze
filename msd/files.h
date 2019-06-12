@@ -20,8 +20,8 @@ private:
 	
 public:
 	//constructors and destructors
-	LmpFile(const int);
-	LmpFile(const vector<string>, const int);
+	LmpFile();
+	LmpFile(const vector<string>);
 	LmpFile(const vector<vector<string> >, const int);
 	LmpFile(const vector<vector<string> >, const int, const int);
 	LmpFile(const vector<vector<string> >, const int, const vector<vector<int> >);

@@ -38,8 +38,8 @@ ostream & operator<<(ostream & os, vector<vector<double> > &vec);
 ostream & operator<<(ostream & os, vector<vector<string> > &vec);
 //just for fun
 ostream & operator<<(ostream & os, vector<vector<vector<double> > > &vec);	
-//input and show basic information
-vector<string> show(string &logname, string &finname, string &label, string &foutname, int &Num_chains, int &N_chain, int &Num_beeds, int &Max_frame);
+//show information
+vector<string> show(string &logname, string &finname, vector<string> &label, string &foutname, int &Num_chains, int &N_chain, int &Num_beeds, int &Max_frame);
 //for test
 
 #endif

@@ -46,28 +46,20 @@ int main()
 	double l=200;
 	double phi=0.4;
 	
-	stringstream ss;	
-	string str;
-	//output.open("test.text");
-	vector<int> test = {20, 20};
-	test.insert(test.begin() + 2, 3, 0);
-	cout << test;
-	
-	
  // vector<string> str(2);
-/*	while (1)
+	while (1)
 	{
 		cout << " Square: " << endl;
 		if(!sq())
 			break;
 	};
-	/*
+	
 	while (1)
 	{
 		cout << " Sum: " << endl;
 		if(!sum())
 			break;
-	};*/
+	};/**/
 	return 0;
 }
 
@@ -82,15 +74,20 @@ bool sq()
 {
 	string str;
 	stringstream ss;
-	vector<double> num(2);
+	vector<double> num(4);
 	double dx;
+	double dy=0;
 	getline(cin, str);
 	ss << str;
-	if (ss >> num[0] >> num[1])
+	ss >> num[0] >> num[1];
+	ss.clear();
+	getline(cin, str);
+	ss << str;
+	if (ss >> num[2] >> num[3])
 	{
-		dx = num[0] - num[1];
-		//cout << dx * dx << endl << endl;
-		cout << dx << endl;
+		dx = num[0] - num[2];
+		dy = num[1] - num[3];
+		cout << dx * dx + dy * dy << endl;
 	}
 	else 
 		return false;

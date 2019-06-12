@@ -1,8 +1,9 @@
-
 "Output txt file name( 'MSD.000.txt' for default ): " 
-Labe for MSD( 'all' for defaule & 'com or ave or all'): "
 
-"Number of files( '1' for default ): "
+Label for MSD( 'ave' for default & 'com or ave or all'): "
+Label for output( 'cut' for default & 'cut or all'): "
+
+"Number of files( '2' for default ): "
 
 dimension = 2;
 mass =1;
@@ -10,19 +11,21 @@ md_dt = 0.001;
 framestep = 5000;
 
 "Number of chains( '2' for default ): "
-"Number of atoms( '3' for single chain default ): "
+"Number of atoms( '2' for single chain default ): "
 
-"Number of frames( '1000' for default ): "
-"Frames to delete( '300' for default ): "
+"Number of frames( '4' for default ): "
+"Frames to delete( '1' for default ): "
 
 "Opening": 001u.lammpstrj……
+"ERROR": Cannot open 002u.lammpstrj
 
 Information: 
   id type xu yu zu vx vy vz c_orient[1] c_orient[2] c_orient[3] c_orient[4] c_shape[1] c_shape[2] c_shape[3] 
 
 Effective Files: 1
 Name                     Label Num     Max    
-001u.lammpstrj            001  1000    700     
+001u.lammpstrj            001  4       3       
+002u.lammpstrj                 0       0       
 
 "Writing": MSD.000.txt
 "Outputing": 000.MSD.log

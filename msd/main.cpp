@@ -5,24 +5,24 @@
 const int Num_info = 15;		//id type xu yu zu vx vy vz c_orient[1] c_orient[2] c_orient[3] c_orient[4] c_shape[1] c_shape[2] c_shape[3]
 const int dimension = 2;
 const double mass = 1.0;
-int Num_file = 1;
+int Num_file = 2;
 
-int N_chain = 3;								//Polarization of single chain
+int N_chain = 2;								//Polarization of single chain
 int Num_chains = 2;								//Number of the chains
 int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 //vector<string> type{"1", "2"};								//atom types to read
 
 vector<int> closefiles{};				//closefiles
 string logname = "000";
-vector<string> label = {"all", " "};		//msd, simplify
+vector<string> label = {"ave", "cut"};		//msd, simplify
 string finname;// = "002";
 string foutname = "000";
 ofstream output;
 
 const double md_dt = 0.001;
 const int framestep = 5000;	
-int Num_frame = 1000;
-int dNM = 300;
+int Num_frame = 4;
+int dNM = 1;
 int Max_frame = Num_frame - dNM;
 
 
@@ -33,7 +33,7 @@ int main()
 	stringstream ss;
 	
 	clock_t start = clock();		//start time
-	vector<string> filename = show(logname, finname, label[0], foutname, Num_chains, N_chain, Num_beeds, Max_frame);		//for single file
+	vector<string> filename = show(logname, finname, label, foutname, Num_chains, N_chain, Num_beeds, Max_frame);		//for single file
 	//vector<string> filename = show(logname, foutname, Num_chains, N_chain, Num_beeds, Max_frame);	//for serials files
 	
 	//atom[iframe] [id] [id,type,xu,yu,zu...]
@@ -46,7 +46,7 @@ int main()
 	vec_doub3 msdAVE(Max_frame, vector<vector<double> >(Num_chains, vector<double>(N_chain + 1, 0))); 	//msd of CM for each chain
 
 	//LmpFile infiles;
-	LmpFile inFiles(filename, Num_beeds);
+	LmpFile inFiles(filename);
 	//cout << inFiles;
 	//cin.get();
 	
@@ -56,10 +56,6 @@ int main()
 	{
 		vecAtom = inFiles.read_data(ifile, output, Num_beeds);		//read atom data from files, exluding closefiles
 		//cout << vecAtom;
-		//rCM = inFiles.center(ifile, N_chain, vecAtom);			//positiion of CM from atom data of files
-		//cout << "rCM: \n" << rCM;
-		//inFiles.msd_point(ifile, rCM, msdCOM);
-		//cout << "msd: \n" << msdCM;
 		msdAVE = inFiles.msd(ifile, vecAtom, msdCOM, msd, label[0]); // 
 	}
 	inFiles.out_msd(foutname, msdCOM, msdAVE, label);

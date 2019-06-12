@@ -15,20 +15,20 @@
 
 const int Num_info = 15;		//id type xu yu zu vx vy vz c_orient[1] c_orient[2] c_orient[3] c_orient[4] c_shape[1] c_shape[2] c_shape[3]
 
-const int N_chain = 3;									//Polarization of single chain
-const int Num_chains = 2;								//Number of the chains
+const int N_chain = 2;									//Polarization of single chain
+const int Num_chains = 1;								//Number of the chains
 const int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 
 const int dimension = 2;
-const int Num_file = 1;
+const int Num_file = 2;
 std::vector<int> closefiles{};				//closefiles
 std::string finname ;//= "001";				//empty or single input file
 std::string foutname = "MSD_chain_3.0.txt";		
 std::string outname = "MSD_chain_3.0.log";
 
 const double md_dt = 0.001;
-const int Num_frame = 1000;
-const int dNM = 300;
+const int Num_frame = 4;
+const int dNM = 1;
 const int Max_frame = Num_frame - dNM;
 const int framestep = 5000;
 
