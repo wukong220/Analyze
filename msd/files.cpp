@@ -437,7 +437,7 @@ void LmpFile::out_msd(const string foutname, const vec_doub3 vec_com, const vec_
 					fout << "msd[" << ichain + 1 << "][" << m_fnamebel[ifile][1] << "] ";
 				}
 			}
-			if (m_files[1] > 1 || label[1] == "cut")
+			if (m_files[0] > 1 || label[1] == "cut")
 			{
 				cout << "ave[" << ichain + 1 << "][files] ";
 				//output << "ave[" << ichain + 1 << "] ";
