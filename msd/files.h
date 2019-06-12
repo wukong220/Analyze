@@ -39,7 +39,7 @@ public:
 	vec_doub3 msd(const int ifile, const vec_doub3 vec, vec_doub3 &msd_com, vec_doub3 &msd, const string label = "all");
 	
 	//continue
-	void out_msd(const string foutname, const vec_doub3 vec_com, const vec_doub3 vec_ave, const string &label = "all");
+	void out_msd(const string foutname, const vec_doub3 vec_com, const vec_doub3 vec_ave, const vector<string> &label = {"all", "short"});
 };
 
 string read_atoms(ifstream &, int, int, vec_doub3 &); 	// fin, iframe, nAtoms, atom[i][j][k]
