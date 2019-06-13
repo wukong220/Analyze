@@ -56,7 +56,7 @@ int main()
 	{
 		vecAtom = inFiles.read_data(ifile, output, Num_beeds);		//read atom data from files, exluding closefiles
 		//cout << vecAtom;
-		msdAVE = inFiles.msd(ifile, vecAtom, msdCOM, msd, label[0]); // 
+		msdAVE = inFiles.msd(ifile, vecAtom, msd, msdCOM, label[0]); // 
 	}
 	inFiles.out_msd(foutname, msdCOM, msdAVE, label);
 	cout << endl << inFiles;		//necessary

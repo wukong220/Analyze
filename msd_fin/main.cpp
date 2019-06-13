@@ -5,7 +5,7 @@
 const int Num_info = 15;		//id type xu yu zu vx vy vz c_orient[1] c_orient[2] c_orient[3] c_orient[4] c_shape[1] c_shape[2] c_shape[3]
 const int dimension = 2;
 const double mass = 1.0;
-int Num_file = 2;
+int Num_file = 3;
 
 int N_chain = 2;								//Polarization of single chain
 int Num_chains = 2;								//Number of the chains
@@ -14,7 +14,7 @@ int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 
 vector<int> closefiles{};				//closefiles
 string logname = "000";
-vector<string> label = {"com", "all"};		//msd, simplify
+vector<string> label = {"all", "cut"};		//msd, simplify
 string finname;// = "002";
 string foutname = "000";
 ofstream output;
@@ -56,7 +56,7 @@ int main()
 	{
 		vecAtom = inFiles.read_data(ifile, output, Num_beeds);		//read atom data from files, exluding closefiles
 		//cout << vecAtom;
-		msdAVE = inFiles.msd(ifile, vecAtom, msdCOM, msd, label[0]); // 
+		msdAVE = inFiles.msd(ifile, vecAtom, msd, msdCOM, label[0]); // 
 	}
 	inFiles.out_msd(foutname, msdCOM, msdAVE, label);
 	cout << endl << inFiles;		//necessary

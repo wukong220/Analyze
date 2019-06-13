@@ -307,7 +307,7 @@ vec_doub3 LmpFile::msd_point(const int ifile, const vec_doub3 vec, vec_doub3 &ms
 	return msd;
 }
 
-vec_doub3 LmpFile::msd(const int ifile, const vec_doub3 vec, vec_doub3 &msd_com, vec_doub3 &msd, const string label) //, vec_doub3 &msd_ave
+vec_doub3 LmpFile::msd(const int ifile, const vec_doub3 vec, vec_doub3 &msd, vec_doub3 &msd_com, const string label) //, vec_doub3 &msd_ave
 {
 	string error = "Right";
 	int Num_frame = vec.size();
@@ -355,19 +355,22 @@ vec_doub3 LmpFile::msd(const int ifile, const vec_doub3 vec, vec_doub3 &msd_com,
 		{
 			for (int i = 0; i < NumChains; i++)
 			{
+				//m_fnamebel[ifile][1] != "000" "  "
 				//msd_ave[dt-1][i][0] = 0; 
 				for (int j = 0; j < nChain; j++)
 				{
 					int k = i * nChain + j;
 					//msd_ave[dt] [ichain] [0, r1,r2,r3 ...]: 0 for average of N beeds
-					msd_ave[dt-1][i][j+1] = msd[dt-1][k][0];
-					msd_ave[dt-1][i][0] += msd_ave[dt-1][i][j+1];
+					//if (m_fnamebel[ifile][1] != "  ")
+						msd_ave[dt-1][i][j+1] = msd[dt-1][k][0];
+					//if (m_fnamebel[ifile][1] != "000")
+						msd_ave[dt-1][i][0] += msd_ave[dt-1][i][j+1];
 				}
-				msd_ave[dt-1][i][0] /= nChain;
+				//if (m_fnamebel[ifile][1] != "000" && m_fnamebel[ifile][1] != "  ")
+					msd_ave[dt-1][i][0] /= nChain;
 			}
 		}
 		//for test[iframe] [jchain] [0]
-		// cannot deal with multiple files
 		/*vec_doub3 test(m_frames[0][0], vector<vector<double> >(NumChains, vector<double>(1, 0)));
 		test = center(ifile, nChain, msd, 0);	 //msd_ave[dt-1][i][0];		
 		for (int i = 0; i < m_frames[ifile + 1][1]; i++)

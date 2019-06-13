@@ -36,7 +36,7 @@ public:
 	vec_doub3 center(const int ifile, const int nChain, const vec_doub3 vec, const int d = 2);	//ifile, N_chain, atom
 	//ifile, rCM[ifile][jchain][x, y, z], count[ifile][dframe], msd[iframe][jchain][0, x, y, z]
 	vec_doub3 msd_point(const int ifile, const vec_doub3 vec, vec_doub3 &msd);	
-	vec_doub3 msd(const int ifile, const vec_doub3 vec, vec_doub3 &msd_com, vec_doub3 &msd, const string label = "all");
+	vec_doub3 msd(const int ifile, const vec_doub3 vec, vec_doub3 &msd, vec_doub3 &msd_com, const string label = "all");
 	
 	//continue
 	void out_msd(const string foutname, const vec_doub3 vec_com, const vec_doub3 vec_ave, const vector<string> &label = {"all", "short"});

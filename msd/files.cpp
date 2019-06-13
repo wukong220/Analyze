@@ -307,7 +307,7 @@ vec_doub3 LmpFile::msd_point(const int ifile, const vec_doub3 vec, vec_doub3 &ms
 	return msd;
 }
 
-vec_doub3 LmpFile::msd(const int ifile, const vec_doub3 vec, vec_doub3 &msd_com, vec_doub3 &msd, const string label) //, vec_doub3 &msd_ave
+vec_doub3 LmpFile::msd(const int ifile, const vec_doub3 vec, vec_doub3 &msd, vec_doub3 &msd_com, const string label) //, vec_doub3 &msd_ave
 {
 	string error = "Right";
 	int Num_frame = vec.size();
