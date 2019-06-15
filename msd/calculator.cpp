@@ -9,7 +9,7 @@
 #include <fstream>
 #include <vector>
 #include <cstdlib>
-#include <cmath>
+//#include <cmath>
 #include <ctime>
 #include <string>
 #include "paras.h"
@@ -34,33 +34,37 @@ ofstream output;
 
 bool sq();
 bool sum();
+bool squm();
 bool input(int &x);
 bool input(string &x);
+bool theta();
 void show();
 
 int main()
 {
-	double N=207;
-	double R0=10.0/2.0;
-	double S=PI*R0*R0;
-	double l=200;
-	double phi=0.4;
-	
- // vector<string> str(2);
 	while (1)
 	{
-		cout << " Square: " << endl;
-		if(!sq())
+		if(!theta())
 			break;
 	};
-	
-	while (1)
-	{
-		cout << " Sum: " << endl;
-		if(!sum())
-			break;
-	};/**/
 	return 0;
+}
+
+
+bool theta()
+{
+	double x;
+	double theta;
+	cout << "quataniam theta: " << endl;
+	if (cin >> x)
+	{
+		theta = 2 * acos(x);
+		cout << theta/3.1415 << "π" << endl;
+	}
+		
+	else 
+		return false;
+	return true;
 }
 
 void show()
@@ -72,6 +76,7 @@ void show()
 
 bool sq()
 {
+	cout << " Square: " << endl;
 	string str;
 	stringstream ss;
 	vector<double> num(4);
@@ -94,8 +99,28 @@ bool sq()
 	return true;
 }
 
-bool sum()
+bool squm()
 {
+	cout << " Square sum: " << endl;
+	string str;
+	stringstream ss;
+	vector<double> num(4);
+	double dx;
+	getline(cin, str);
+	ss << str;
+	if(ss >> num[0] >> num[1])
+		cout << num[0] * num[0] + num[1] * num[1] << endl;
+	else 
+	{
+		return false;
+	}
+	return true;
+}
+
+
+bool ave()
+{
+	cout << " Average: " << endl;
 	double sum = 0;
 	double x;
 	string str;
