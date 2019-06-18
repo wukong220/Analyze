@@ -12,16 +12,16 @@ class ellipse
 		vector<double> m_center;
 		vector<double> m_shape;
 		vector<double> m_orient;
-		vector<double> m_theta_b;	//theta, a, b
+		double m_theta;
 		vector<double> m_axis;
 	public:
 		ellipse();
-		ellipse(vector<double> shape, vector<double> orient, vector<double> center = {0, 0, 0});
+		ellipse(vector<double> shape, vector<double> orient = {0, 0, 0, 1}, vector<double> center = {0, 0, 0});
 		ellipse(vector<double> shape, double theta, vector<double> axis = {0, 0, 1}, vector<double> center= {0, 0, 0});
 		~ellipse();
 		void q2ax();
-		double x2y(doubel x);
-		
+		vector<double> x2y(double x);
+		vector<double> equ2();
 };
 
 
