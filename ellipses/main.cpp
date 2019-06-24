@@ -6,8 +6,9 @@ int main()
 {
 	ellipse eps;
 	vector<double> y;
-	y = eps.x2y(sin(3.1415/4));
+	y = eps.equa(sin(3.1415/3));
 	cout << y[0] << " " << y[1] << endl;
+	
 	
 	return 0;
 }

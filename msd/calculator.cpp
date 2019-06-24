@@ -12,25 +12,12 @@
 //#include <cmath>
 #include <ctime>
 #include <string>
-#include "paras.h"
+#include <cmath>
+//#include "paras.h"
+const double PI = 3.1415926;
 
 using namespace std;
 
-const double kB=1.3806485279*pow(10,-23);
-const double PI=3.141592653;
-
-const int Num_info = 15;		//id type xu yu zu vx vy vz c_orient[1] c_orient[2] c_orient[3] c_orient[4] c_shape[1] c_shape[2] c_shape[3]
-const int dimension = 2;
-const double mass = 1.0;
-int Num_file = 20;
-
-const double md_dt = 0.001;
-const int framestep = 5000;	
-int Num_frame = 20000;
-int dNM = 3000;
-int Max_frame = Num_frame - dNM;
-
-ofstream output;
 
 bool sq();
 bool sum();
@@ -39,15 +26,52 @@ bool input(int &x);
 bool input(string &x);
 bool theta();
 void show();
+double angle_dot(vector<double> a, vector<double> b);
+double angle_cross(vector<double> a, vector<double> b);
+ofstream output;
 
 int main()
 {
-	while (1)
+	double phi = 60 / 180 * PI;
+	double t;
+	cout << "Please Input PHI: " << endl;
+	cin >> t;
+	t = t/ 180 * PI;
+	vector<double> a = {cos(phi), sin(phi)};
+	vector<double> b = {cos(phi + t), sin(phi + t)};
+	vector<double> c = {cos(phi + t + PI), sin(phi + t + PI)};
+	
+	double x1, x2;
+	x1 = angle_dot(a, b);
+	x2 = angle_dot(a, c);
+	cout << " dot : " << x1 << "π " << x2 << "π" << endl;
+	
+	double y1, y2;
+	y1 = angle_cross(a, b);
+	y2 = angle_cross(a, c);
+	cout << " cross : " << y1 << "π " << y2 << "π"<< endl;
+	
+	/*while (1)
 	{
 		if(!theta())
 			break;
-	};
+	};*/
+	
 	return 0;
+}
+
+double angle_dot(vector<double> a, vector<double> b)
+{
+	double x;
+	x = abs(a[0] * b[0] + a[1] * b[1]);
+	return acos(x) / PI;
+}
+
+double angle_cross(vector<double> a, vector<double> b)
+{
+	double x;
+	x = abs(a[0] * b[1] - a[1] * b[0]);
+	return asin(x) / PI;
 }
 
 

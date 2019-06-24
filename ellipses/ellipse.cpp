@@ -40,27 +40,52 @@ void ellipse::q2ax()
 	m_axis = vector<double> {m_orient[0]/t, m_orient[1]/t, m_orient[2]/t};
 }
 
-vector<double> ellipse::x2y(double x)
+vector<double> ellipse::equa(double x, double l)
 {
- 	vector<double> y(2, 0);
-	double B1, B2, C1, C2;
-	double A, B, C;
-	double delta;
-	double ax = m_shape[0];
-	double by = m_shape[1];
+ 	vector<double> eff(8, 0);	//y0, y1, a, b, c, d, e,f
+	double Ay, By, Cy;
+	double a, b, c, d, e, f;
+	double delt;
+	double ax = m_shape[0] + l;
+	double ay = m_shape[1] + l;
 	double x0 = m_center[0];
 	double y0 = m_center[1];
-	//cout << ax << " " << by << " " << x0 << " " << y0 << " " << endl;
-	A = sin(m_theta) * sin(m_theta) / (ax * ax) + cos(m_theta) * cos(m_theta) / (by * by);
-	B1 = 2 * sin(m_theta) * (x0 + x * cos(m_theta))/(ax * ax);
-	B2 = 2 * cos(m_theta) * (y0 - x * sin(m_theta))/(by * by);
-	B = B1 + B2;
-	C1 = (x * x * cos(m_theta) * cos(m_theta) + 2 * x0 * cos(m_theta) * x + x0 * x0) / (ax * ax);
-	C2 = (x * x * sin(m_theta) * sin(m_theta) - 2 * y0 * sin(m_theta) * x + y0 * y0) / (by * by);
-	C = C1 + C2 - 1;
-	delta = B * B - 4 * A * C;
+	double theta = m_theta;
+	
+	//cout << ax << " " << ay << " " << x0 << " " << y0 << " " << endl;
+	//equation of ellipse: A y*y + B * y + C = 0
+	eff[2] = a = cos(theta) * cos(theta) /(ax * ax) + sin(theta) * sin(theta) / (ay * ay); 
+	eff[3] = b = sin(theta) * sin(theta) / (ax * ax) + cos(theta) * cos(theta) / (ay * ay);
+	eff[4] = c = sin(2 * theta) / (ax * ax) - sin(2 * theta) / (ay * ay);
+	eff[5] = d = 2 * x0 * cos(theta) / (ax * ax) - 2 * y0 * sin(theta) / (ay * ay);
+	eff[6] = 2 * x0 * sin(theta) / (ax * ax) + 2 * y0 * cos(theta) / (ay * ay);
+	eff[7] = (x0 * x0) / (ax * ax) + (y0 * y0) / (ay * ay) - 1;
+	
+	Ay = b;
+	By = c * x + e;
+	Cy = a * x * x + d * x + f;
+	delt = By * By - 4 * Ay * Cy;
+	
 	//cout << "A B C delta\n" << A << " " << B << " " << C << " " << delta << " "<< endl;
-	y[0] = (-B + sqrt(delta)) / (2 * A);
-	y[1] = (-B - sqrt(delta))/(2 * A);
-	return y;
+	eff[0] = (-By + sqrt(delty)) / (2 * Ay);
+	eff[1] = (-By - sqrt(delty))/(2 * Ay);
+	return eff;
+}
+
+double ellipse::deltx(vector<double> eff)
+{
+	double a, b, c, d, e, f;
+	double Ax, Bx, Cx;
+	double delt;
+	a = eff[0];
+	b = eff[1];
+	c = eff[2];
+	d = eff[3];
+	e = eff[4];
+	f = eff[5];
+	Ax = c * c - 4 * a * b;
+	Bx = 2 * c * e - 4 * b * d;
+	Cx = e * e - 4 * b * f;
+	delt = Bx * Bx - 4 * Ax * Cx; 
+	return delt;
 }
