@@ -32,7 +32,28 @@ ofstream output;
 
 int main()
 {
-	double phi = 60 / 180 * PI;
+	vector<double> a = {1, 2, 3, 4, 5};
+	vector<double> b = {5, 4, 3, 2, 1};
+	vector<double> c(5, 0);
+	c = a + b;
+	cout << c[0] << " " << c[3] << " " << c[4] << endl;
+	cin.get();
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*double phi = 60 / 180 * PI;
 	double t;
 	cout << "Please Input PHI: " << endl;
 	cin >> t;
@@ -50,7 +71,7 @@ int main()
 	y1 = angle_cross(a, b);
 	y2 = angle_cross(a, c);
 	cout << " cross : " << y1 << "π " << y2 << "π"<< endl;
-	
+	*/
 	/*while (1)
 	{
 		if(!theta())
