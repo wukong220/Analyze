@@ -9,7 +9,7 @@ file="main.cpp"
 #  nohup ./0$t.msd > 0$t.output &
 #done 
 
-name="0.0_5.0"
+name="0.1_3.0"
 
 g++ -std=c++0x paras.cpp files.cpp $file -o $name.msd
 nohup ./$name.msd > $name.output &

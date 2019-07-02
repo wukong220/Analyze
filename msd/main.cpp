@@ -2,26 +2,26 @@
 #include "paras.h"
 #include "files.h"
 
-const int Num_info = 5;		//id type xu yu zu vx vy vz c_orient[1] c_orient[2] c_orient[3] c_orient[4] c_shape[1] c_shape[2] c_shape[3]
+const int Num_info = 15;		//id type xu yu zu vx vy vz c_orient[1] c_orient[2] c_orient[3] c_orient[4] c_shape[1] c_shape[2] c_shape[3]
 const int dimension = 2;
 const double mass = 1.0;
-int Num_file = 1;
+int Num_file = 2;
 
-int N_chain = 25500;								//Polarization of single chain
+int N_chain = 30;								//Polarization of single chain
 int Num_chains = 1;								//Number of the chains
 int Num_beeds = N_chain * Num_chains; 			//Number of beeds
 //vector<string> type{"1", "2"};								//atom types to read
 
 vector<int> closefiles{};				//closefiles
-string logname = "000";
-vector<string> label = {"ave", "cut"};		//msd, simplify
-string finname = "loop";
-string foutname = "000";
+string logname = "0.1_3.0";				//eg. 0.1_3.0_1.0_1.0
+vector<string> label = {"all", "cut"};		//msd, simplify
+string finname = "";						//eg. ""
+string foutname = "0.1Phi_3.0S";		//eg. 0.1Phi_3.0S_1.0Kb_1.0Fa
 ofstream output;
 const double md_dt = 0.001;
-const int framestep = 10000;	
-int Num_frame = 1001;
-int dNM = 500;
+const int framestep = 5000;	
+int Num_frame = 2000;
+int dNM = 1000;
 int Max_frame = Num_frame - dNM;
 
 
